@@ -118,12 +118,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="events.cpp" />
+    <ClCompile Include="game_main.cpp" />
+    <ClCompile Include="game_system.cpp" />
+    <ClCompile Include="player.cpp" />
+    <ClCompile Include="screen.cpp" />
     <ClCompile Include="source.cpp" />
+    <ClCompile Include="update.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="ui_sprite.xml">
-      <SubType>Designer</SubType>
-    </Xml>
+    <ClInclude Include="events.h" />
+    <ClInclude Include="game.h" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="screen.h" />
+    <ClInclude Include="update.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

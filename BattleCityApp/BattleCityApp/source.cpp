@@ -1,16 +1,17 @@
-﻿#include <iostream>
-#include <string>
-#include <pugixml.hpp>
-using namespace std;
+﻿#include <SFML\Graphics.hpp>
+#include "game.h"
+#define TITLE "BattleCity"
 
 int main()
 {
-	pugi::xml_document doc;
-	doc.load_file("ui_sprite.xml");
+	// Declare and create a new render-window
+	sf::RenderWindow window(sf::VideoMode(200, 200), TITLE, sf::Style::Close);
 
-	int x = doc.child("sprite").child("element1").attribute("x").as_int();
-	cerr << x << endl;
+	// Create a new object of the game
+	Game game(window);
 
-	system("pause");
+	// Launch of the game
+	game.GameLaunch();
+
 	return 0;
 }
