@@ -32,13 +32,33 @@ public:
 			sprite->scale(sf::Vector2f(2.f, 2.f));
 	}
 
-	void insObj(const pugi::char_t* ui_name = "")
+	void reloadObj(const pugi::char_t* ui_name = "")
 	{
 		loadTexture(ui_name); //load texture
 
 		//set texture
-		sprite->setTexture(*this->texture);
+		this->sprite->setTexture(*this->texture);
 		return;
+	}
+
+	void setCoordObj(const float& x, const float& y)
+	{
+		//set coordinates
+		this->sprite->setPosition(x, y);
+		return;
+	}
+
+	void setCoordObj(const sf::Vector2f&  position)
+	{
+		//set coordinates
+		this->sprite->setPosition(position);
+		return;
+	}
+
+	const sf::Vector2f& getCoordObj()
+	{
+		//get coordinates
+		return this->sprite->getPosition();
 	}
 
 	~Object()
