@@ -121,6 +121,7 @@
     <ClCompile Include="events.cpp" />
     <ClCompile Include="game_main.cpp" />
     <ClCompile Include="game_system.cpp" />
+    <ClCompile Include="object.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="screen.cpp" />
     <ClCompile Include="source.cpp" />
@@ -129,6 +130,7 @@
   <ItemGroup>
     <ClInclude Include="events.h" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="object.hpp" />
     <ClInclude Include="player.h" />
     <ClInclude Include="screen.h" />
     <ClInclude Include="update.h" />
