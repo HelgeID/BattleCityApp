@@ -6,6 +6,7 @@
 class Game
 {
 	sf::RenderWindow &window;
+	sf::Texture* texture;
 
 public:
 	explicit Game(sf::RenderWindow &);
@@ -14,7 +15,8 @@ public:
 	void GameLaunch();
 
 private:
-	bool setIcon();
+	bool loadTexture();
+	bool loadIcon();
 };
 
 #endif

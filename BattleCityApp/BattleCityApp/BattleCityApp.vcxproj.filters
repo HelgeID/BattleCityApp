@@ -13,11 +13,8 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Заголовочные файлы\Objects">
-      <UniqueIdentifier>{5a3c9646-bb70-4237-9762-2493cfddf35a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Файлы исходного кода\Objects">
-      <UniqueIdentifier>{3108ecdb-058b-46b5-bddc-662d8e8722c8}</UniqueIdentifier>
+    <Filter Include="Заголовочные файлы\objects">
+      <UniqueIdentifier>{acc9ffb1-f8ff-499f-a4c7-039cd49af16c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -42,9 +39,6 @@
     <ClCompile Include="screen.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="object.cpp">
-      <Filter>Файлы исходного кода\Objects</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -63,7 +57,10 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="object.hpp">
-      <Filter>Заголовочные файлы\Objects</Filter>
+      <Filter>Заголовочные файлы\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="tank.hpp">
+      <Filter>Заголовочные файлы\objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

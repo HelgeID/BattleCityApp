@@ -1,71 +1,44 @@
 ﻿#include <SFML/Graphics.hpp>
-#include <pugixml.hpp>
 
 class Object
 {
-	sf::Sprite* sprite;
-	sf::Texture* texture;
-
-	void loadTexture(const pugi::char_t* ui_name)
-	{
-		int posX, posY;
-		pugi::xml_document doc;
-		doc.load_file("data/ui/ui_texture.xml");
-		posX = doc.child("sprite").child(ui_name).attribute("x").as_int();
-		posY = doc.child("sprite").child(ui_name).attribute("y").as_int();
-		this->texture->loadFromFile("data/graphics/texture/texture.png", sf::IntRect(posX, posY, 16, 16));
-		return;
-	}
+	sf::Texture &texture;
+	sf::Sprite* sprite = nullptr;
 
 public:
-	Object(const pugi::char_t* ui_name = "", bool zoom = false) : texture(new sf::Texture())
+	Object(sf::Texture &texture, bool zoom = false) : texture(texture)
 	{
-		loadTexture(ui_name); //load texture
+		sprite = new sf::Sprite();
+		sprite->setTexture(texture);
+		clearObj();
 
-		//init sprite and set texture
-		this->sprite = new sf::Sprite(*this->texture);
 		/*
-		   z00m false : 1x --> 16x16
-		   z00m true  : 2x --> 32x32
+		z00m false : 1x --> 16x16
+		z00m true  : 2x --> 32x32
 		*/
 		if (zoom)
 			sprite->scale(sf::Vector2f(2.f, 2.f));
 	}
 
-	void reloadObj(const pugi::char_t* ui_name = "")
+	void setObj(const int posX, const int posY)
 	{
-		loadTexture(ui_name); //load texture
-
-		//set texture
-		this->sprite->setTexture(*this->texture);
+		sf::IntRect rect(posX, posY, 16, 16);
+		sprite->setTextureRect(rect);
 		return;
 	}
 
-	void setCoordObj(const float& x, const float& y)
+	void clearObj()
 	{
-		//set coordinates
-		this->sprite->setPosition(x, y);
+		sf::Vector2u size = this->texture.getSize();
+		sf::IntRect rect(size.x - 16, size.y - 16, 16, 16);
+		sprite->setTextureRect(rect);
 		return;
 	}
 
-	void setCoordObj(const sf::Vector2f&  position)
-	{
-		//set coordinates
-		this->sprite->setPosition(position);
-		return;
-	}
-
-	const sf::Vector2f& getCoordObj()
-	{
-		//get coordinates
-		return this->sprite->getPosition();
-	}
+	sf::Sprite takeObj() const { return *sprite; }
 
 	~Object()
 	{
 		delete sprite;
-		delete texture;
 	}
-
-	sf::Sprite takeObj() const { return *sprite; }
 };

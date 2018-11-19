@@ -3,14 +3,16 @@
 #include "screen.h"
 
 Game::Game(sf::RenderWindow &window)
-	: window(window)
+	: window(window), texture(new sf::Texture())
 {
 	window.setFramerateLimit(30);
-	setIcon();
+	loadTexture();
+	loadIcon();
 }
 
 Game::~Game()
 {
+	delete texture;
 }
 
 //main loader game
