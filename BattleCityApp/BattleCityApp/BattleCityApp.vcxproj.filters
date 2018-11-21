@@ -36,7 +36,7 @@
     <ClCompile Include="game_main.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="screen.cpp">
+    <ClCompile Include="field.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
   </ItemGroup>
@@ -53,14 +53,14 @@
     <ClInclude Include="events.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="screen.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="object.hpp">
       <Filter>Заголовочные файлы\objects</Filter>
     </ClInclude>
     <ClInclude Include="tank.hpp">
       <Filter>Заголовочные файлы\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="field.h">
+      <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

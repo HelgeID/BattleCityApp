@@ -122,7 +122,7 @@
     <ClCompile Include="game_main.cpp" />
     <ClCompile Include="game_system.cpp" />
     <ClCompile Include="player.cpp" />
-    <ClCompile Include="screen.cpp" />
+    <ClCompile Include="field.cpp" />
     <ClCompile Include="source.cpp" />
     <ClCompile Include="update.cpp" />
   </ItemGroup>
@@ -131,7 +131,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="object.hpp" />
     <ClInclude Include="player.h" />
-    <ClInclude Include="screen.h" />
+    <ClInclude Include="field.h" />
     <ClInclude Include="tank.hpp" />
     <ClInclude Include="update.h" />
   </ItemGroup>

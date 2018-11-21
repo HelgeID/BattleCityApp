@@ -7,12 +7,24 @@ enum Color { YELLOW, WHITE, GREEN, RED };
 enum Model { modA, modB, modC, modD, modE, modF, modG, modH };
 enum Direction { UP, LEFT, DOWN, RIGHT };
 
+struct Settings
+{
+	Color col;
+	Model mod;
+	Direction dir;
+
+	float speed;
+	int coef_reload;
+};
+
 class Tank : public Object
 {
 public:
 	Tank(sf::Texture &texture, bool zoom = false) : Object(texture, zoom)
 	{
 	}
+
+	Settings optTank;
 
 	void loadTank(Color col, Model mod, Direction dir)
 	{
@@ -33,7 +45,22 @@ public:
 		coord.y += mod * 16;
 		coord.x += dir * 32;
 
-		this->setObj(coord.x, coord.y);
+		this->setSpriteObj(coord.x, coord.y);
+
+		optTank = { col, mod, dir, 0.f, 0};
+		switch (mod)
+		{
+		case modA: optTank.speed = 8000; optTank.coef_reload = 6; break;
+		case modB: optTank.speed = 7000; optTank.coef_reload = 6; break;
+		case modC: optTank.speed = 6000; optTank.coef_reload = 4; break;
+		case modD: optTank.speed = 5000; optTank.coef_reload = 4; break;
+		case modE: optTank.speed = 4000; optTank.coef_reload = 3; break;
+		case modF: optTank.speed = 3000; optTank.coef_reload = 3; break;
+		case modG: optTank.speed = 2000; optTank.coef_reload = 2; break;
+		case modH: optTank.speed = 1000; optTank.coef_reload = 2; break;
+		default:
+			break;
+		}
 
 		return;
 	}
@@ -41,10 +68,10 @@ public:
 	void reloadTank()
 	{
 		sf::IntRect rect = this->takeObj().getTextureRect();
-		int left = this->takeObj().getTextureRect().left;
+		int left = rect.left;
 		!(left % 32) ?
-			this->setObj(rect.left + 16, rect.top) :
-			this->setObj(rect.left - 16, rect.top);
+			this->setSpriteObj(rect.left + 16, rect.top) :
+			this->setSpriteObj(rect.left - 16, rect.top);
 
 		return;
 	}
