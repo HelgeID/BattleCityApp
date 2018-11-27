@@ -18,6 +18,8 @@ class GameField
 	void DrawTank(const int);
 
 	void Monitoring();
+	void Collision(Tank&);
+	void Collision(Tank&, Tank&);
 
 public:
 	explicit GameField(sf::RenderWindow &, sf::Texture &);

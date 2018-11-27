@@ -119,6 +119,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="events.cpp" />
+    <ClCompile Include="field_check.cpp" />
     <ClCompile Include="game_main.cpp" />
     <ClCompile Include="game_system.cpp" />
     <ClCompile Include="player.cpp" />
