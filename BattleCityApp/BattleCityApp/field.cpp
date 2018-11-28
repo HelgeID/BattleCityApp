@@ -24,28 +24,31 @@ void GameField::CreateTanks()
 
 	tank.push_back(tankObj);
 	tank.push_back(tankObj);
-	tank[0].loadTank(YELLOW, modA, LEFT); tank[0].setPosObj(0.f, 96.f);
-	tank[1].loadTank(RED, modF, RIGHT); tank[1].setPosObj(184.f, 96.f);
+	//tank[0].loadTank(YELLOW, modA, LEFT); tank[0].setPosObj(0.f, 96.f);
+	//tank[1].loadTank(RED, modF, RIGHT); tank[1].setPosObj(184.f, 96.f);
+	tank[0].loadTank(RED, modF, RIGHT); tank[0].setPosObj(0.f, 96.f);
+	tank[1].loadTank(YELLOW, modA, LEFT); tank[1].setPosObj(184.f, 96.f);
 }
 
-void GameField::DrawTank(const int index)
+void GameField::DrawTank(Tank &tank)
 {
-	float speed = tank[index].optTank.speed;
+	float speed = tank.optTank.speed;
 	float time = this->time / speed;
 
-	if (tank[index].optTank.dir == UP)
-		tank[index].moveObj(0.f, -0.1f*time);
-	else if (tank[index].optTank.dir == LEFT)
-		tank[index].moveObj(-0.1f*time, 0.f);
-	else if (tank[index].optTank.dir == DOWN)
-		tank[index].moveObj(0.f, 0.1f*time);
-	else if (tank[index].optTank.dir == RIGHT)
-		tank[index].moveObj(0.1f*time, 0.f);
+	if (tank.optTank.dir == UP)
+		tank.moveObj(0.f, -0.1f*time);
+	else if (tank.optTank.dir == LEFT)
+		tank.moveObj(-0.1f*time, 0.f);
+	else if (tank.optTank.dir == DOWN)
+		tank.moveObj(0.f, 0.1f*time);
+	else if (tank.optTank.dir == RIGHT)
+		tank.moveObj(0.1f*time, 0.f);
 
-	if (coef_reload == tank[index].optTank.coef_reload)
-		tank[index].reloadTank();
+	if (coef_reload == tank.optTank.coef_reload)
+		tank.reloadTank();
 
-	window.draw(tank[index].takeObj());
+	window.draw(tank.takeObj());
+	return;
 }
 
 void GameField::Monitoring()
@@ -55,12 +58,12 @@ void GameField::Monitoring()
 	if (coef_reload > 6)//todo max_coef_reload
 		coef_reload = 0;
 
-	std::for_each(tank.begin(), tank.end(), [&](Tank &element1) {
-		Collision(element1);
-		std::for_each(tank.begin(), tank.end(), [&](Tank &element2) {
-			Collision(element1, element2);
-		});
-	});
+	for (auto it1 = tank.begin(); it1 != tank.end(); ++it1) {
+		Collision(*it1);
+		for (auto it2(it1); it2 != tank.end(); ++it2) {
+			Collision(*it1, *it2);
+		}
+	}
 	return;
 }
 
@@ -69,8 +72,7 @@ void GameField::UpdateField()
 	window.clear();
 	time = (float)clock.getElapsedTime().asMicroseconds();
 
-	for (auto it = tank.begin(); it != tank.end(); ++it)
-		this->DrawTank(std::distance(tank.begin(), it));
+	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) { DrawTank(tank); });
 
 	Monitoring();
 	clock.restart();

@@ -23,14 +23,14 @@ void GameField::Collision(Tank &tank, Tank &tank_other)
 		return;
 
 	if (tank.takeObj().getGlobalBounds().intersects(tank_other.takeObj().getGlobalBounds())) {
-		if (tank.optTank.dir == DOWN)
-			tank.loadTank(tank.optTank.col, tank.optTank.mod, UP);
-		else if (tank.optTank.dir == UP)
-			tank.loadTank(tank.optTank.col, tank.optTank.mod, DOWN);
-		else if (tank.optTank.dir == RIGHT)
-			tank.loadTank(tank.optTank.col, tank.optTank.mod, LEFT);
-		else if (tank.optTank.dir == LEFT)
-			tank.loadTank(tank.optTank.col, tank.optTank.mod, RIGHT);
+		Direction dirReverse;
+		const Direction dirTank(tank.optTank.dir), dirTankOther(tank_other.optTank.dir);
+		tank.loadTank(tank.optTank.col, tank.optTank.mod, dirReverse = tank.ReverseDirection(dirTank));
+		DrawTank(tank);
+		if (dirTankOther == dirReverse) {
+			tank_other.loadTank(tank_other.optTank.col, tank_other.optTank.mod, dirTank);
+			DrawTank(tank_other);
+		}
 	}
 	return;
 }

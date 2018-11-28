@@ -75,4 +75,19 @@ public:
 
 		return;
 	}
+
+	Direction ReverseDirection(const Direction dir)
+	{
+		Direction dirReverse;
+		switch (dir)
+		{
+		case UP: dirReverse = DOWN; goto exit;
+		case LEFT: dirReverse = RIGHT; goto exit;
+		case DOWN: dirReverse = UP; goto exit;
+		case RIGHT: dirReverse = LEFT; goto exit;
+		default: goto exit;
+		}
+	exit:
+		return dirReverse;
+	}
 };
