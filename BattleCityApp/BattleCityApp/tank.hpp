@@ -50,7 +50,7 @@ public:
 		optTank = { col, mod, dir, 0.f, 0};
 		switch (mod)
 		{
-		case modA: optTank.speed = 8000; optTank.coef_reload = 6; break;
+		case modA: optTank.speed = 18000; optTank.coef_reload = 6; break;//8000
 		case modB: optTank.speed = 7000; optTank.coef_reload = 6; break;
 		case modC: optTank.speed = 6000; optTank.coef_reload = 4; break;
 		case modD: optTank.speed = 5000; optTank.coef_reload = 4; break;

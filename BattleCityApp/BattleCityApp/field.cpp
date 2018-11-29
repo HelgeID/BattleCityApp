@@ -51,6 +51,19 @@ void GameField::DrawTank(Tank &tank)
 	return;
 }
 
+void GameField::MoveTank(Tank& tank, float position)
+{
+	if (tank.optTank.dir == UP)
+		tank.moveObj(0.f, -position);
+	else if (tank.optTank.dir == LEFT)
+		tank.moveObj(-position, 0.f);
+	else if (tank.optTank.dir == DOWN)
+		tank.moveObj(0.f, position);
+	else if (tank.optTank.dir == RIGHT)
+		tank.moveObj(position, 0.f);
+	return;
+}
+
 void GameField::Monitoring()
 {
 	//coef_reload

@@ -16,6 +16,7 @@ class GameField
 	std::vector<Tank> tank;
 	void CreateTanks();
 	void DrawTank(Tank&);
+	void MoveTank(Tank&, float);
 
 	void Monitoring();
 	void Collision(Tank&);
