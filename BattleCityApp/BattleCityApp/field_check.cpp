@@ -27,7 +27,7 @@ void GameField::Collision(Tank &tank, Tank &tank_other)
 		bool r1_flag(false), r2_flag(false);
 		const Direction dirTank(tank.optTank.dir), dirTankOther(tank_other.optTank.dir);
 
-		if (((int)tank.takeObj().getPosition().x + 16 > (int)tank_other.takeObj().getPosition().x) && (dirTank == RIGHT || dirTankOther == LEFT)) {
+		if ((int)tank.takeObj().getPosition().x + 16 > (int)tank_other.takeObj().getPosition().x) {
 			if (dirTankOther != LEFT && dirTank == RIGHT)
 				r1_flag = true;
 			else if (dirTank != RIGHT && dirTankOther == LEFT)
@@ -37,30 +37,11 @@ void GameField::Collision(Tank &tank, Tank &tank_other)
 				r2_flag = true;
 			}
 		}
-		else if (((int)tank.takeObj().getPosition().x < (int)tank_other.takeObj().getPosition().x + 16) && (dirTank == LEFT || dirTankOther == RIGHT)) {
-			if (dirTankOther != RIGHT && dirTank == LEFT)
-				r1_flag = true;
-			else if (dirTank != LEFT && dirTankOther == RIGHT)
-				r2_flag = true;
-			else {
-				r1_flag = true;
-				r2_flag = true;
-			}
-		}
-		else if (((int)tank.takeObj().getPosition().y + 16 >(int)tank_other.takeObj().getPosition().y) && (dirTank == DOWN || dirTankOther == UP)) {
+
+		else if ((int)tank.takeObj().getPosition().y + 16 > (int)tank_other.takeObj().getPosition().y) {
 			if (dirTankOther != UP && dirTank == DOWN)
 				r1_flag = true;
 			else if (dirTank != DOWN && dirTankOther == UP)
-				r2_flag = true;
-			else {
-				r1_flag = true;
-				r2_flag = true;
-			}
-		}
-		else if (((int)tank.takeObj().getPosition().y < (int)tank_other.takeObj().getPosition().y + 16) && (dirTank == UP || dirTankOther == DOWN)) {
-			if (dirTankOther != DOWN && dirTank == UP)
-				r1_flag = true;
-			else if (dirTank != UP && dirTankOther == DOWN)
 				r2_flag = true;
 			else {
 				r1_flag = true;

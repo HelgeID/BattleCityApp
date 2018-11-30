@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <SFML/Graphics.hpp>
+#include <time.h>
 #include "object.hpp"
 
 enum Color { YELLOW, WHITE, GREEN, RED };
@@ -89,5 +90,15 @@ public:
 		}
 	exit:
 		return dirReverse;
+	}
+
+	Direction RandomReverseDirection(const Direction dir)
+	{
+		srand((unsigned)time(NULL));
+		int dirRnd;
+		do {
+			dirRnd = rand() % 4;
+		} while (dirRnd == dir);	
+		return (Direction)dirRnd;
 	}
 };
