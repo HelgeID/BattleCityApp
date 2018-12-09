@@ -4,6 +4,11 @@
 #include <SFML\Graphics.hpp>
 #include <vector>
 #include "tank.hpp"
+#include "map.h"
+
+//test
+#include <iostream>
+using namespace std;
 
 class GameField
 {
@@ -13,6 +18,9 @@ class GameField
 	float time;
 	int coef_reload;
 
+	Map map;
+	void FillField();
+
 	std::vector<Tank> tank;
 	void CreateTanks();
 	void DrawTank(Tank&);
@@ -21,6 +29,7 @@ class GameField
 	void Monitoring();
 	void Collision(Tank&);
 	void Collision(Tank&, Tank&);
+	void Logic(Tank&);
 
 public:
 	explicit GameField(sf::RenderWindow &, sf::Texture &);

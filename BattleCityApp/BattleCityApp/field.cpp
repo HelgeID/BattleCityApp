@@ -1,9 +1,12 @@
 ﻿#include "field.h"
+#include "general.hpp"
 #include <algorithm>
 
 GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	: window(window), texture(texture)
 {
+	window.clear(sf::Color(127, 127, 127));
+	FillField();
 	CreateTanks();
 }
 
@@ -11,47 +14,26 @@ GameField::~GameField()
 {
 }
 
+void GameField::FillField()
+{
+	sf::RectangleShape field;
+	field.setPosition(16, 8);
+	field.setSize(sf::Vector2f(208.0, 208.0));
+	field.setFillColor(sf::Color::Black);
+	window.draw(field);
+	return;
+}
+
 void GameField::CreateTanks()
 {
 	Tank tankObj(texture);
-	//tank.push_back(tankObj);
-	//tank.push_back(tankObj);
-	//tank.push_back(tankObj);
-	//tank[0].loadTank(YELLOW, modA, DOWN); tank[0].setPosObj(32.f, 0.f);
-	//tank[1].loadTank(GREEN, modC, DOWN); tank[1].setPosObj(64.f, 0.f);
-	//tank[2].loadTank(RED, modF, DOWN); tank[2].setPosObj(128.f, 0.f);
+	tank.push_back(tankObj);
 
-	//tank.push_back(tankObj);
-	//tank.push_back(tankObj);
-	//tank[0].loadTank(YELLOW, modA, LEFT); tank[0].setPosObj(0.f, 96.f);
-	//tank[1].loadTank(RED, modF, RIGHT); tank[1].setPosObj(184.f, 96.f);
-	//tank[0].loadTank(RED, modF, RIGHT); tank[0].setPosObj(0.f, 96.f);
-	//tank[1].loadTank(YELLOW, modA, LEFT); tank[1].setPosObj(184.f, 96.f);
-
-	tank.push_back(tankObj);
-	tank.push_back(tankObj);
-	tank.push_back(tankObj);
-	tank.push_back(tankObj);
-	tank.push_back(tankObj);
-	tank.push_back(tankObj);
-	tank.push_back(tankObj);
-	tank.push_back(tankObj);
-	tank.push_back(tankObj);
-	tank.push_back(tankObj);
-	tank.push_back(tankObj);
-	tank.push_back(tankObj);
-	tank[0].loadTank(RED, modF, RIGHT); tank[0].setPosObj(0.f, 96.f);
-	tank[1].loadTank(YELLOW, modA, LEFT); tank[1].setPosObj(184.f, 96.f);
-	tank[2].loadTank(GREEN, modF, RIGHT); tank[2].setPosObj(0.f, 64.f);
-	tank[3].loadTank(RED, modF, LEFT); tank[3].setPosObj(184.f, 64.f);
-	tank[4].loadTank(WHITE, modB, RIGHT); tank[4].setPosObj(0.f, 184.f);
-	tank[5].loadTank(GREEN, modC, LEFT); tank[5].setPosObj(184.f, 184.f);
-	tank[6].loadTank(RED, modF, DOWN); tank[6].setPosObj(96.f, 0.f);
-	tank[7].loadTank(YELLOW, modA, UP); tank[7].setPosObj(96.f, 184.f);
-	tank[8].loadTank(GREEN, modF, DOWN); tank[8].setPosObj(64.f, 0.f);
-	tank[9].loadTank(RED, modF, UP); tank[9].setPosObj(64.f, 184.f);
-	tank[10].loadTank(WHITE, modB, DOWN); tank[10].setPosObj(184.f, 0.f);
-	tank[11].loadTank(GREEN, modC, UP); tank[11].setPosObj(64.f, 184.f);
+	sf::Vector2f pos;
+	tank[0].loadTank(YELLOW, modA, RIGHT); pos = { 16.f, 8.f };
+	tank[0].setPosObj(pos.x, pos.y); map.SetValueMap(100, pos);
+	tank[0].mapPos.i = map.TakeIndex(pos, 'i');
+	tank[0].mapPos.j = map.TakeIndex(pos, 'j');
 	return;
 }
 
@@ -107,10 +89,9 @@ void GameField::Monitoring()
 
 void GameField::UpdateField()
 {
-	window.clear();
 	time = (float)clock.getElapsedTime().asMicroseconds();
 
-	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) { DrawTank(tank); });
+	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) { Logic(tank); });
 
 	Monitoring();
 	clock.restart();

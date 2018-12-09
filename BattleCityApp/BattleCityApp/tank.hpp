@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <time.h>
+#include "general.hpp"
 #include "object.hpp"
 
 enum Color { YELLOW, WHITE, GREEN, RED };
@@ -18,6 +19,11 @@ struct Settings
 	int coef_reload;
 };
 
+struct MapPosition
+{
+	int i, j;
+};
+
 class Tank : public Object
 {
 public:
@@ -26,6 +32,7 @@ public:
 	}
 
 	Settings optTank;
+	MapPosition mapPos;
 
 	void loadTank(Color col, Model mod, Direction dir)
 	{
@@ -51,7 +58,7 @@ public:
 		optTank = { col, mod, dir, 0.f, 0};
 		switch (mod)
 		{
-		case modA: optTank.speed = 18000; optTank.coef_reload = 6; break;//8000
+		case modA: optTank.speed = 8000; optTank.coef_reload = 6; break;
 		case modB: optTank.speed = 7000; optTank.coef_reload = 6; break;
 		case modC: optTank.speed = 6000; optTank.coef_reload = 4; break;
 		case modD: optTank.speed = 5000; optTank.coef_reload = 4; break;

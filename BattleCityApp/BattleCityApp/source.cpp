@@ -5,7 +5,7 @@
 int main()
 {
 	// Declare and create a new render-window
-	sf::RenderWindow window(sf::VideoMode(200, 200), TITLE, sf::Style::Close);
+	sf::RenderWindow window(sf::VideoMode(256, 224), TITLE, sf::Style::Close);
 
 	// Create a new object of the game
 	Game game(window);

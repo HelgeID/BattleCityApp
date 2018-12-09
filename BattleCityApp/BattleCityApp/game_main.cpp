@@ -1,4 +1,5 @@
 ﻿#include "game.h"
+#include "general.hpp"
 #include "events.h"
 #include "field.h"
 

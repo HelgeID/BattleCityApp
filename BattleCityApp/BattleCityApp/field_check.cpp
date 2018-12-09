@@ -1,18 +1,27 @@
 ﻿#include "field.h"
+#include "general.hpp"
 
 void GameField::Collision(Tank &tank)
 {
-	if (tank.takeObj().getPosition().y < 0.f) {
+	//move->UP
+	if (tank.takeObj().getPosition().y < 8.f) {
 		tank.loadTank(tank.optTank.col, tank.optTank.mod, DOWN);
+		tank.mapPos.i = tank.mapPos.i - 1;
 	}
-	else if (tank.takeObj().getPosition().y > (float)window.getSize().y - 16) {
+	//move->DOWN
+	else if (tank.takeObj().getPosition().y > (float)window.getSize().y - 24) {//16 + 8
 		tank.loadTank(tank.optTank.col, tank.optTank.mod, UP);
+		tank.mapPos.i = tank.mapPos.i + 1;
 	}
-	else if (tank.takeObj().getPosition().x < 0.f) {
+	//move->LEFT
+	else if (tank.takeObj().getPosition().x < 16.f) {
 		tank.loadTank(tank.optTank.col, tank.optTank.mod, RIGHT);
+		tank.mapPos.j = tank.mapPos.j - 1;
 	}
-	else if (tank.takeObj().getPosition().x > (float)window.getSize().x - 16) {
+	//move->RIGHT
+	else if (tank.takeObj().getPosition().x > (float)window.getSize().x - 48) {//16 + 32
 		tank.loadTank(tank.optTank.col, tank.optTank.mod, LEFT);
+		tank.mapPos.j = tank.mapPos.j + 1;
 	}
 	return;
 }
@@ -60,4 +69,75 @@ void GameField::Collision(Tank &tank, Tank &tank_other)
 		}
 	}
 	return;
+}
+
+void GameField::Logic(Tank &tank)
+{
+	sf::Vector2f currentTankPos = {
+		tank.takeObj().getPosition().x,
+		tank.takeObj().getPosition().y
+	};
+
+	sf::Vector2f currentMapPos = map.TakeCoord(
+		tank.mapPos.i,
+		tank.mapPos.j
+	);
+
+	if (tank.optTank.dir == UP) {
+		if (!map.GetNextUpValueMap(tank.mapPos.i, tank.mapPos.j)) {
+			map.SetValueMap(100, tank.mapPos.i - 1, tank.mapPos.j);
+		}
+		else {
+			DrawTank(tank);
+			if (currentTankPos.y >= currentMapPos.y - 16)
+				;
+			else {
+				map.SetValueMap(0, currentMapPos);
+				tank.mapPos.i--;
+			}
+		}
+	}
+	else if (tank.optTank.dir == LEFT) {
+		if (!map.GetNextLeftValueMap(tank.mapPos.i, tank.mapPos.j)) {
+			map.SetValueMap(100, tank.mapPos.i, tank.mapPos.j - 1);
+		}
+		else {
+			DrawTank(tank);
+			if (currentTankPos.x >= currentMapPos.x - 16)
+				;
+			else {
+				map.SetValueMap(0, currentMapPos);
+				tank.mapPos.j--;
+			}
+		}
+	}
+	else if (tank.optTank.dir == DOWN) {
+		if (!map.GetNextDownValueMap(tank.mapPos.i, tank.mapPos.j)) {
+			map.SetValueMap(100, tank.mapPos.i + 1, tank.mapPos.j);
+		}
+		else {
+			DrawTank(tank);
+			if (currentTankPos.y <= currentMapPos.y + 16)
+				;
+			else {
+				map.SetValueMap(0, currentMapPos);
+				tank.mapPos.i++;
+			}
+		}
+	}
+	else if (tank.optTank.dir == RIGHT) {
+		if (!map.GetNextRightValueMap(tank.mapPos.i, tank.mapPos.j)) {
+			map.SetValueMap(100, tank.mapPos.i, tank.mapPos.j + 1);
+		}
+		else {
+			DrawTank(tank);
+			if (currentTankPos.x <= currentMapPos.x + 16)
+				;
+			else {
+				map.SetValueMap(0, currentMapPos);
+				tank.mapPos.j++;
+			}
+		}
+	}
+
 }

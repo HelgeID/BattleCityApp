@@ -1,4 +1,5 @@
 ﻿#include <SFML/Graphics.hpp>
+#include "general.hpp"
 
 class Object
 {

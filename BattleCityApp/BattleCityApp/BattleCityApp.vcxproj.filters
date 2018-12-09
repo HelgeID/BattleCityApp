@@ -16,6 +16,9 @@
     <Filter Include="Заголовочные файлы\objects">
       <UniqueIdentifier>{acc9ffb1-f8ff-499f-a4c7-039cd49af16c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Заголовочные файлы\global variables">
+      <UniqueIdentifier>{a594556d-28bb-4231-8b28-dcea6fe13b7a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source.cpp">
@@ -42,6 +45,12 @@
     <ClCompile Include="field_check.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="map.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="general.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -64,6 +73,12 @@
     </ClInclude>
     <ClInclude Include="field.h">
       <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="map.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="general.hpp">
+      <Filter>Заголовочные файлы\global variables</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
