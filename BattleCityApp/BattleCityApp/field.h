@@ -4,11 +4,11 @@
 #include <SFML\Graphics.hpp>
 #include <vector>
 #include "tank.hpp"
+#include "block.hpp"
 #include "map.h"
 
 //test
 #include <iostream>
-using namespace std;
 
 class GameField
 {
@@ -20,6 +20,11 @@ class GameField
 
 	Map map;
 	void FillField();
+	void FillMap();
+	void ReadMap(std::vector<Block>::iterator&, const int, const int);
+
+	std::vector<Block> block;
+	void CreateBlocks();
 
 	std::vector<Tank> tank;
 	void CreateTanks();

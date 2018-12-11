@@ -2,3 +2,4 @@
 
 bool p_zoom = false;
 int p_size = 16;
+int p_level = 1;

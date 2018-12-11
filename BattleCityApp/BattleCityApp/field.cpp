@@ -1,12 +1,17 @@
 ﻿#include "field.h"
 #include "general.hpp"
 #include <algorithm>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	: window(window), texture(texture)
 {
 	window.clear(sf::Color(127, 127, 127));
 	FillField();
+	FillMap();
+	CreateBlocks();
 	CreateTanks();
 }
 
@@ -21,6 +26,70 @@ void GameField::FillField()
 	field.setSize(sf::Vector2f(208.0, 208.0));
 	field.setFillColor(sf::Color::Black);
 	window.draw(field);
+	return;
+}
+
+void GameField::FillMap()
+{
+	std::string FILENAME("");
+	switch (p_level) {
+		case 1: FILENAME = "data/levels/level1"; break;
+	}
+
+	std::ifstream infile(FILENAME.c_str());
+	char s_level_name[16];
+	char s_index[8]; char s_tape[8]; char s_value[8];
+	int h_value, indI, indJ;
+	infile >> s_level_name;
+	while (infile >> s_index >> s_tape >> s_value)
+	{
+		std::istringstream issV(s_value);
+		issV >> h_value;
+		issV.clear();
+		char* ptr = s_index;
+		char dash(' ');
+		std::string s_indI{ "" }, s_indJ{ "" };
+		while (*ptr != 0) {
+			if (*ptr == '-') {
+				dash = *ptr++;
+				continue;
+			}
+			dash == '-' ? s_indJ += *ptr : s_indI += *ptr;
+			ptr++;
+		}
+
+		std::istringstream issI(s_indI); issI >> indI;
+		std::istringstream issJ(s_indJ); issJ >> indJ;
+		map.SetValueMap(h_value, indI, indJ);
+	}
+
+	return;
+}
+
+void GameField::ReadMap(std::vector<Block>::iterator& it, const int i, const int j)
+{
+	sf::Vector2f pos = map.TakeCoord(i, j);
+	(*it).loadBlock(map.GetValueMap(i, j));
+	(*it).setPosObj(pos.x, pos.y);
+	window.draw((*it).takeObj());
+	return;
+}
+
+void GameField::CreateBlocks()
+{
+	Block blockObj(texture);
+	std::vector<Block>::iterator it;
+	for (int i(0); i < sizeMap; i++) {
+		for (int j(0); j < sizeMap; j++) {
+			if (map.GetValueMap(i, j) == 0)
+				continue;
+			else {
+				block.push_back(blockObj);
+				it = block.end() - 1;
+				ReadMap(it, i, j);
+			}
+		}
+	}
 	return;
 }
 

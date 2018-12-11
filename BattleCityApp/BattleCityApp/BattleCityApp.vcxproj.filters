@@ -80,5 +80,8 @@
     <ClInclude Include="general.hpp">
       <Filter>Заголовочные файлы\global variables</Filter>
     </ClInclude>
+    <ClInclude Include="block.hpp">
+      <Filter>Заголовочные файлы\objects</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

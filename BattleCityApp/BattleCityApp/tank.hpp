@@ -9,20 +9,23 @@ enum Color { YELLOW, WHITE, GREEN, RED };
 enum Model { modA, modB, modC, modD, modE, modF, modG, modH };
 enum Direction { UP, LEFT, DOWN, RIGHT };
 
-struct Settings
+namespace spaceTank
 {
-	Color col;
-	Model mod;
-	Direction dir;
+	struct Settings
+	{
+		Color col;
+		Model mod;
+		Direction dir;
 
-	float speed;
-	int coef_reload;
-};
+		float speed;
+		int coef_reload;
+	};
 
-struct MapPosition
-{
-	int i, j;
-};
+	struct MapPosition
+	{
+		int i, j;
+	};
+}
 
 class Tank : public Object
 {
@@ -31,8 +34,8 @@ public:
 	{
 	}
 
-	Settings optTank;
-	MapPosition mapPos;
+	spaceTank::Settings optTank;
+	spaceTank::MapPosition mapPos;
 
 	void loadTank(Color col, Model mod, Direction dir)
 	{

@@ -83,18 +83,32 @@ void GameField::Logic(Tank &tank)
 		tank.mapPos.j
 	);
 
+	auto conditionsLess = [&](Map& map, float& value1, float& value2, int& value3) {
+		DrawTank(tank);
+		if (value1 >= value2 - 16)
+			;
+		else {
+			map.SetValueMap(0, currentMapPos);
+			value3--;
+		}
+	};
+
+	auto conditionsMore = [&](Map& map, float& value1, float& value2, int& value3) {
+		DrawTank(tank);
+		if (value1 <= value2 + 16)
+			;
+		else {
+			map.SetValueMap(0, currentMapPos);
+			value3++;
+		}
+	};
+
 	if (tank.optTank.dir == UP) {
 		if (!map.GetNextUpValueMap(tank.mapPos.i, tank.mapPos.j)) {
 			map.SetValueMap(100, tank.mapPos.i - 1, tank.mapPos.j);
 		}
 		else {
-			DrawTank(tank);
-			if (currentTankPos.y >= currentMapPos.y - 16)
-				;
-			else {
-				map.SetValueMap(0, currentMapPos);
-				tank.mapPos.i--;
-			}
+			conditionsLess(map, currentTankPos.y, currentMapPos.y, tank.mapPos.i);
 		}
 	}
 	else if (tank.optTank.dir == LEFT) {
@@ -102,13 +116,7 @@ void GameField::Logic(Tank &tank)
 			map.SetValueMap(100, tank.mapPos.i, tank.mapPos.j - 1);
 		}
 		else {
-			DrawTank(tank);
-			if (currentTankPos.x >= currentMapPos.x - 16)
-				;
-			else {
-				map.SetValueMap(0, currentMapPos);
-				tank.mapPos.j--;
-			}
+			conditionsLess(map, currentTankPos.x, currentMapPos.x, tank.mapPos.j);
 		}
 	}
 	else if (tank.optTank.dir == DOWN) {
@@ -116,13 +124,7 @@ void GameField::Logic(Tank &tank)
 			map.SetValueMap(100, tank.mapPos.i + 1, tank.mapPos.j);
 		}
 		else {
-			DrawTank(tank);
-			if (currentTankPos.y <= currentMapPos.y + 16)
-				;
-			else {
-				map.SetValueMap(0, currentMapPos);
-				tank.mapPos.i++;
-			}
+			conditionsMore(map, currentTankPos.y, currentMapPos.y, tank.mapPos.i);
 		}
 	}
 	else if (tank.optTank.dir == RIGHT) {
@@ -130,13 +132,7 @@ void GameField::Logic(Tank &tank)
 			map.SetValueMap(100, tank.mapPos.i, tank.mapPos.j + 1);
 		}
 		else {
-			DrawTank(tank);
-			if (currentTankPos.x <= currentMapPos.x + 16)
-				;
-			else {
-				map.SetValueMap(0, currentMapPos);
-				tank.mapPos.j++;
-			}
+			conditionsMore(map, currentTankPos.x, currentMapPos.x, tank.mapPos.j);
 		}
 	}
 

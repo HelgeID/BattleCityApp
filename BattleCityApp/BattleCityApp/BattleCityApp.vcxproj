@@ -130,6 +130,7 @@
     <ClCompile Include="update.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="block.hpp" />
     <ClInclude Include="events.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="general.hpp" />
