@@ -83,5 +83,8 @@
     <ClInclude Include="block.hpp">
       <Filter>Заголовочные файлы\objects</Filter>
     </ClInclude>
+    <ClInclude Include="frame.hpp">
+      <Filter>Заголовочные файлы\objects</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

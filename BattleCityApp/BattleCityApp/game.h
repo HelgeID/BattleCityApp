@@ -17,6 +17,9 @@ public:
 private:
 	bool loadTexture();
 	bool loadIcon();
+
+	void zoomOn();
+	void zoomOff();
 };
 
 #endif

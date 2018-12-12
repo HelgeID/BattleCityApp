@@ -30,8 +30,8 @@ public:
 
 	void SetValueMap(const int value, sf::Vector2f coord)
 	{
-		int j = (int)(coord.x - 16) / 16;
-		int i = (int)(coord.y - 8) / 16;
+		int j = (int)(coord.x - 32) / 16;
+		int i = (int)(coord.y - 16) / 16;
 		this->map[i][j] = value;
 		return;
 	}
@@ -82,8 +82,8 @@ public:
 	sf::Vector2f TakeCoord(const int i, const int j) const
 	{
 		sf::Vector2f coord;
-		coord.x = float(j * 16 + 16);
-		coord.y = float(i * 16 + 8);
+		coord.x = float(j * 16 + 32);
+		coord.y = float(i * 16 + 16);
 		return coord;
 	}
 
@@ -92,9 +92,9 @@ public:
 		int index(0);
 
 		if (ch == 'j')
-			index = (int)(coord.x - 16) / 16;
+			index = (int)(coord.x - 32) / 16;
 		else if (ch == 'i')
-			index = (int)(coord.y - 8) / 16;
+			index = (int)(coord.y - 16) / 16;
 
 		return index;
 	}

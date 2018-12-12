@@ -18,13 +18,16 @@ class GameField
 	float time;
 	int coef_reload;
 
+	sf::RectangleShape field;
 	Map map;
 	void FillField();
 	void FillMap();
 	void ReadMap(std::vector<Block>::iterator&, const int, const int);
+	void DrawField();
 
 	std::vector<Block> block;
 	void CreateBlocks();
+	void DrawBlocks();
 
 	std::vector<Tank> tank;
 	void CreateTanks();
@@ -32,8 +35,9 @@ class GameField
 	void MoveTank(Tank&, float);
 
 	void Monitoring();
-	void Collision(Tank&);
-	void Collision(Tank&, Tank&);
+	void CollisionFrame(Tank&);
+	void CollisionBlocks(Tank&);
+	void CollisionTanks(Tank&, Tank&);
 	void Logic(Tank&);
 
 public:

@@ -7,6 +7,7 @@ Game::Game(sf::RenderWindow &window)
 	: window(window), texture(new sf::Texture())
 {
 	window.setFramerateLimit(60);
+	window.setVerticalSyncEnabled(true);
 	loadTexture();
 	loadIcon();
 }
@@ -19,6 +20,12 @@ Game::~Game()
 //main loader game
 void Game::GameLaunch()
 {
+	// initialization zoom
+	zoomOn();
+
+	// show frame
+	//p_showframe = true;
+
 	// initialization of objects
 	GameEvent gEvent(window);
 	GameField gField(window, *texture);

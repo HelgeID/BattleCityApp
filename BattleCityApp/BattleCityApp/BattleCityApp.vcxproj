@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClInclude Include="block.hpp" />
     <ClInclude Include="events.h" />
+    <ClInclude Include="frame.hpp" />
     <ClInclude Include="game.h" />
     <ClInclude Include="general.hpp" />
     <ClInclude Include="map.h" />

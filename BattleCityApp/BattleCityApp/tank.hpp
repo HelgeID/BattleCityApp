@@ -4,6 +4,7 @@
 #include <time.h>
 #include "general.hpp"
 #include "object.hpp"
+#include "frame.hpp"
 
 enum Color { YELLOW, WHITE, GREEN, RED };
 enum Model { modA, modB, modC, modD, modE, modF, modG, modH };
@@ -27,10 +28,10 @@ namespace spaceTank
 	};
 }
 
-class Tank : public Object
+class Tank : public Object, public Frame
 {
 public:
-	Tank(sf::Texture &texture, bool zoom = false) : Object(texture, zoom)
+	Tank(sf::Texture &texture, bool zoom = false) : Object(texture, zoom), Frame("tank")
 	{
 	}
 

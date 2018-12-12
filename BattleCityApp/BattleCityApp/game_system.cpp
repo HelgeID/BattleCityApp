@@ -1,4 +1,5 @@
 ﻿#include "game.h"
+#include "general.hpp"
 
 //System functions
 bool Game::loadTexture()
@@ -15,4 +16,33 @@ bool Game::loadIcon()
 		return EXIT_FAILURE;
 	window.setIcon(176, 176, icon.getPixelsPtr());
 	return EXIT_SUCCESS;
+}
+
+
+void Game::zoomOn()
+{
+	if (p_zoom == false)
+	{
+		sf::Vector2u vec;
+		vec.x = static_cast<float>(window.getSize().x);
+		vec.y = static_cast<float>(window.getSize().y);
+		vec.x *= 2; vec.y *= 2;
+		window.setSize(vec);
+		p_zoom = true;
+	}
+	return;
+}
+
+void Game::zoomOff()
+{
+	if (p_zoom == true)
+	{
+		sf::Vector2u vec;
+		vec.x = static_cast<float>(window.getSize().x);
+		vec.y = static_cast<float>(window.getSize().y);
+		vec.x /= 2; vec.y /= 2;
+		window.setSize(vec);
+		p_zoom = false;
+	}
+	return;
 }

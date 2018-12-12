@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "general.hpp"
 #include "object.hpp"
+#include "frame.hpp"
 
 enum Environment { Empty, Brick, Steel, Trees, Water, Ice };
 
@@ -14,7 +15,7 @@ namespace spaceBlock
 	};
 }
 
-class Block : public Object
+class Block : public Object, public Frame
 {
 private:
 	Environment TakeTape(const int& value)
@@ -47,7 +48,7 @@ private:
 	}
 
 public:
-	Block(sf::Texture &texture, bool zoom = false) : Object(texture, zoom)
+	Block(sf::Texture &texture, bool zoom = false) : Object(texture, zoom), Frame("block")
 	{
 	}
 

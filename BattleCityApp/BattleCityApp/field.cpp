@@ -13,6 +13,17 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	FillMap();
 	CreateBlocks();
 	CreateTanks();
+
+	//test "draw line"
+	//sf::Vector2f *posA(new sf::Vector2f()), *posB(new sf::Vector2f());
+	//sf::VertexArray line(sf::Lines, 2);
+	//posA->x = 0.f; posA->y = 0.f;
+	//posB->x = (float)window.getSize().x;
+	//posB->y = (float)window.getSize().y;
+	//line[0].position = *posA; line[0].color = sf::Color::Blue;
+	//line[1].position = *posB; line[1].color = sf::Color::Blue;
+	//window.draw(line);
+	//delete posA; delete posB;
 }
 
 GameField::~GameField()
@@ -21,11 +32,9 @@ GameField::~GameField()
 
 void GameField::FillField()
 {
-	sf::RectangleShape field;
-	field.setPosition(16, 8);
+	field.setPosition(32, 16);
 	field.setSize(sf::Vector2f(208.0, 208.0));
 	field.setFillColor(sf::Color::Black);
-	window.draw(field);
 	return;
 }
 
@@ -71,7 +80,13 @@ void GameField::ReadMap(std::vector<Block>::iterator& it, const int i, const int
 	sf::Vector2f pos = map.TakeCoord(i, j);
 	(*it).loadBlock(map.GetValueMap(i, j));
 	(*it).setPosObj(pos.x, pos.y);
-	window.draw((*it).takeObj());
+	(*it).setPosFrame(pos.x, pos.y);
+	return;
+}
+
+void GameField::DrawField()
+{
+	window.draw(field);
 	return;
 }
 
@@ -93,13 +108,33 @@ void GameField::CreateBlocks()
 	return;
 }
 
+void GameField::DrawBlocks()
+{
+	int index(0);
+	for (int i(0); i < sizeMap; i++) {
+		for (int j(0); j < sizeMap; j++) {
+			if (map.GetValueMap(i, j) == 0)
+				continue;
+			else {
+				if (index < block.size()) {
+					if (p_showframe)
+						window.draw(block[index++].frame);
+					else
+						window.draw(block[index++].takeObj());
+				}
+			}
+		}
+	}
+	return;
+}
+
 void GameField::CreateTanks()
 {
 	Tank tankObj(texture);
 	tank.push_back(tankObj);
 
 	sf::Vector2f pos;
-	tank[0].loadTank(YELLOW, modA, RIGHT); pos = { 16.f, 8.f };
+	tank[0].loadTank(YELLOW, modA, DOWN); pos = { 64.f, 16.f };
 	tank[0].setPosObj(pos.x, pos.y); map.SetValueMap(100, pos);
 	tank[0].mapPos.i = map.TakeIndex(pos, 'i');
 	tank[0].mapPos.j = map.TakeIndex(pos, 'j');
@@ -123,7 +158,12 @@ void GameField::DrawTank(Tank &tank)
 	if (coef_reload == tank.optTank.coef_reload)
 		tank.reloadTank();
 
-	window.draw(tank.takeObj());
+	tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
+
+	if (p_showframe)
+		window.draw(tank.frame);
+	else
+		window.draw(tank.takeObj());
 	return;
 }
 
@@ -148,9 +188,10 @@ void GameField::Monitoring()
 		coef_reload = 0;
 
 	for (auto it1 = tank.begin(); it1 != tank.end(); ++it1) {
-		Collision(*it1);
+		CollisionFrame(*it1);
+		CollisionBlocks(*it1);
 		for (auto it2(it1); it2 != tank.end(); ++it2) {
-			Collision(*it1, *it2);
+			CollisionTanks(*it1, *it2);
 		}
 	}
 	return;
@@ -160,7 +201,11 @@ void GameField::UpdateField()
 {
 	time = (float)clock.getElapsedTime().asMicroseconds();
 
-	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) { Logic(tank); });
+	window.clear(sf::Color(127, 127, 127));
+	DrawField();
+	DrawBlocks();
+
+	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) { Logic(tank); }); //DrawTank
 
 	Monitoring();
 	clock.restart();

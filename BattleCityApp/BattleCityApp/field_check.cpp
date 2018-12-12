@@ -1,32 +1,172 @@
 ﻿#include "field.h"
 #include "general.hpp"
 
-void GameField::Collision(Tank &tank)
+#define size 16
+
+class RecShape : public sf::RectangleShape
+{
+public:
+	RecShape()
+	{
+		this->setSize(sf::Vector2f(size, size));
+		this->setFillColor(sf::Color(127, 127, 127, 64));
+	}
+};
+
+std::vector<RecShape> vecRecShape;
+
+void GameField::CollisionFrame(Tank &tank)
 {
 	//move->UP
-	if (tank.takeObj().getPosition().y < 8.f) {
+	if (tank.takeObj().getPosition().y < field.getPosition().y) {
 		tank.loadTank(tank.optTank.col, tank.optTank.mod, DOWN);
+		tank.moveObj(0, 1);
 		tank.mapPos.i = tank.mapPos.i - 1;
 	}
 	//move->DOWN
-	else if (tank.takeObj().getPosition().y > (float)window.getSize().y - 24) {//16 + 8
+	else if (tank.takeObj().getPosition().y + 16 > field.getPosition().y + field.getSize().y) {
 		tank.loadTank(tank.optTank.col, tank.optTank.mod, UP);
+		tank.moveObj(0, -1);
 		tank.mapPos.i = tank.mapPos.i + 1;
 	}
 	//move->LEFT
-	else if (tank.takeObj().getPosition().x < 16.f) {
+	else if (tank.takeObj().getPosition().x < field.getPosition().x) {
 		tank.loadTank(tank.optTank.col, tank.optTank.mod, RIGHT);
+		tank.moveObj(1, 0);
 		tank.mapPos.j = tank.mapPos.j - 1;
 	}
 	//move->RIGHT
-	else if (tank.takeObj().getPosition().x > (float)window.getSize().x - 48) {//16 + 32
+	else if (tank.takeObj().getPosition().x + 16 > field.getPosition().x + field.getSize().x) {
 		tank.loadTank(tank.optTank.col, tank.optTank.mod, LEFT);
+		tank.moveObj(-1, 0);
 		tank.mapPos.j = tank.mapPos.j + 1;
 	}
 	return;
 }
 
-void GameField::Collision(Tank &tank, Tank &tank_other)
+void GameField::CollisionBlocks(Tank &tank)
+{
+	struct POS { sf::Vector2i cell; } *arrCell(nullptr);
+	RecShape recShape;
+
+	const int posX((int)tank.frame.getPosition().x);
+	const int posY((int)tank.frame.getPosition().y);
+
+	int posCenterX = posX + (size / 2);
+	int posCenterY = posY + (size / 2);
+	int posMatrixX = ((posX / size) + 1) * size;
+	int posMatrixY = ((posY / size) + 1) * size;
+
+	auto TakeCell = [&](sf::Vector2i& cell, const int offsetX, const int offsetY)
+	{
+		cell = sf::Vector2i(posMatrixX / size + offsetX, posMatrixY / size + offsetY);
+		vecRecShape.push_back(recShape);
+	};
+
+	auto TakeCellDef = [&](POS arrCell[], const size_t length)
+	{
+		TakeCell(arrCell[length - 4].cell, -1, -1);
+		TakeCell(arrCell[length - 3].cell, 0, -1);
+		TakeCell(arrCell[length - 2].cell, -1, 0);
+		TakeCell(arrCell[length - 1].cell, 0, 0);
+	};
+
+	if (posCenterX > posMatrixX && posCenterY > posMatrixY)
+	{
+		const size_t length(9);
+		arrCell = new POS[length];
+		TakeCell(arrCell[0].cell, 1, -1);
+		TakeCell(arrCell[1].cell, 1, 0);
+		TakeCell(arrCell[2].cell, 1, 1);
+		TakeCell(arrCell[3].cell, 0, 1);
+		TakeCell(arrCell[4].cell, -1, 1);
+		TakeCellDef(arrCell, length);
+	}
+	else if (posCenterX > posMatrixX && posCenterY < posMatrixY)
+	{
+		const size_t length(9);
+		arrCell = new POS[length];
+		TakeCell(arrCell[0].cell, -1, -2);
+		TakeCell(arrCell[1].cell, 0, -2);
+		TakeCell(arrCell[2].cell, 1, -2);
+		TakeCell(arrCell[3].cell, 1, -1);
+		TakeCell(arrCell[4].cell, 1, 0);
+		TakeCellDef(arrCell, length);
+	}
+	else if (posCenterX < posMatrixX && posCenterY < posMatrixY)
+	{
+		const size_t length(9);
+		arrCell = new POS[length];
+		TakeCell(arrCell[0].cell, -2, 0);
+		TakeCell(arrCell[1].cell, -2, -1);
+		TakeCell(arrCell[2].cell, -2, -2);
+		TakeCell(arrCell[3].cell, -1, -2);
+		TakeCell(arrCell[4].cell, 0, -2);
+		TakeCellDef(arrCell, length);
+	}
+	else if (posCenterX < posMatrixX && posCenterY > posMatrixY)
+	{
+		const size_t length(9);
+		arrCell = new POS[length];
+		TakeCell(arrCell[0].cell, 0, 1);
+		TakeCell(arrCell[1].cell, -1, 1);
+		TakeCell(arrCell[2].cell, -2, 1);
+		TakeCell(arrCell[3].cell, -2, 0);
+		TakeCell(arrCell[4].cell, -2, -1);
+		TakeCellDef(arrCell, length);
+	}
+	else if (posCenterX > posMatrixX && posCenterY == posMatrixY)
+	{
+		const size_t length(6);
+		arrCell = new POS[length];
+		TakeCell(arrCell[0].cell, 1, -1);
+		TakeCell(arrCell[1].cell, 1, 0);
+		TakeCellDef(arrCell, length);
+	}
+	else if (posCenterX < posMatrixX && posCenterY == posMatrixY)
+	{
+		const size_t length(6);
+		arrCell = new POS[length];
+		TakeCell(arrCell[0].cell, -2, -1);
+		TakeCell(arrCell[1].cell, -2, 0);
+		TakeCellDef(arrCell, length);
+	}
+	else if (posCenterX == posMatrixX && posCenterY > posMatrixY)
+	{
+		const size_t length(6);
+		arrCell = new POS[length];
+		TakeCell(arrCell[0].cell, 0, 1);
+		TakeCell(arrCell[1].cell, -1, 1);
+		TakeCellDef(arrCell, length);
+	}
+	else if (posCenterX == posMatrixX && posCenterY < posMatrixY)
+	{
+		const size_t length(6);
+		arrCell = new POS[length];
+		TakeCell(arrCell[0].cell, 0, -2);
+		TakeCell(arrCell[1].cell, -1, -2);
+		TakeCellDef(arrCell, length);
+	}
+	else
+	{
+		const size_t length(4);
+		arrCell = new POS[length];
+		TakeCellDef(arrCell, length);
+	}
+
+	POS *ptr = &*arrCell;
+	for (RecShape obj : vecRecShape) {
+		obj.setPosition((float)ptr->cell.x * size, (float)ptr->cell.y * size);
+		window.draw(obj);
+		ptr++;
+	}
+
+	delete[] arrCell;
+	vecRecShape.clear();
+	return;
+}
+
+void GameField::CollisionTanks(Tank &tank, Tank &tank_other)
 {
 	if (&tank == &tank_other)
 		return;
