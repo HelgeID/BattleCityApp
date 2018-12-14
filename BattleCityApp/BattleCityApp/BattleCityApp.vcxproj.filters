@@ -19,6 +19,9 @@
     <Filter Include="Заголовочные файлы\global variables">
       <UniqueIdentifier>{a594556d-28bb-4231-8b28-dcea6fe13b7a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы исходного кода\field">
+      <UniqueIdentifier>{c5fa210c-9942-4915-82da-822fa10eccb4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source.cpp">
@@ -42,14 +45,32 @@
     <ClCompile Include="field.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="field_check.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="map.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="general.cpp">
       <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="hit_brick.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="tile_map.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="part_bricks_map.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="field_draw.cpp">
+      <Filter>Файлы исходного кода\field</Filter>
+    </ClCompile>
+    <ClCompile Include="field_tank_funcs.cpp">
+      <Filter>Файлы исходного кода\field</Filter>
+    </ClCompile>
+    <ClCompile Include="field_map_funcs.cpp">
+      <Filter>Файлы исходного кода\field</Filter>
+    </ClCompile>
+    <ClCompile Include="field_collision.cpp">
+      <Filter>Файлы исходного кода\field</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -85,6 +106,12 @@
     </ClInclude>
     <ClInclude Include="frame.hpp">
       <Filter>Заголовочные файлы\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="tile_map.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="part_bricks_map.h">
+      <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

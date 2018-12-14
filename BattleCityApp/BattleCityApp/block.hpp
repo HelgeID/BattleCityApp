@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 #include <SFML/Graphics.hpp>
+#include <memory>
+#include <iostream>
 #include "general.hpp"
 #include "object.hpp"
 #include "frame.hpp"
@@ -15,8 +17,22 @@ namespace spaceBlock
 	};
 }
 
+//PartBrick
+struct PartBrick
+{
+	float x, y;
+	int type; //uses: 'H' & 'V'
+};
+class PartsBrickArr { public: PartBrick pbArr[16]; };
+
 class Block : public Object, public Frame
 {
+	std::shared_ptr<PartsBrickArr> partBrick;
+public:
+	const std::shared_ptr<PartsBrickArr>& takePartBrick() { return partBrick; }
+	void loadParamPartsBrick();
+	void onBrickDamage(std::vector<sf::RectangleShape>&, const int);
+
 private:
 	Environment TakeTape(const int& value)
 	{
@@ -48,7 +64,7 @@ private:
 	}
 
 public:
-	Block(sf::Texture &texture, bool zoom = false) : Object(texture, zoom), Frame("block")
+	Block(sf::Texture &texture) : Object(texture), Frame("block")
 	{
 	}
 
@@ -73,4 +89,9 @@ public:
 		delete coord;
 	}
 
+	void drawBlock(sf::RenderWindow &window)
+	{
+		window.draw(this->takeObj());
+		return;
+	}
 };

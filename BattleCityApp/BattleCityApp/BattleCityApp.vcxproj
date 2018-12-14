@@ -119,14 +119,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="events.cpp" />
-    <ClCompile Include="field_check.cpp" />
+    <ClCompile Include="field_collision.cpp" />
+    <ClCompile Include="field_draw.cpp" />
+    <ClCompile Include="field_map_funcs.cpp" />
+    <ClCompile Include="field_tank_funcs.cpp" />
     <ClCompile Include="game_main.cpp" />
     <ClCompile Include="game_system.cpp" />
     <ClCompile Include="general.cpp" />
+    <ClCompile Include="hit_brick.cpp" />
     <ClCompile Include="map.cpp" />
+    <ClCompile Include="part_bricks_map.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="source.cpp" />
+    <ClCompile Include="tile_map.cpp" />
     <ClCompile Include="update.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -137,9 +143,11 @@
     <ClInclude Include="general.hpp" />
     <ClInclude Include="map.h" />
     <ClInclude Include="object.hpp" />
+    <ClInclude Include="part_bricks_map.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="tank.hpp" />
+    <ClInclude Include="tile_map.h" />
     <ClInclude Include="update.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

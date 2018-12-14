@@ -1,10 +1,13 @@
 ﻿#pragma once
 
 #include <SFML/Graphics.hpp>
+#include <vector>
 #include <time.h>
 #include "general.hpp"
 #include "object.hpp"
 #include "frame.hpp"
+
+#define stringify( name ) # name
 
 enum Color { YELLOW, WHITE, GREEN, RED };
 enum Model { modA, modB, modC, modD, modE, modF, modG, modH };
@@ -26,12 +29,43 @@ namespace spaceTank
 	{
 		int i, j;
 	};
+
+	static const char* myDirNames[]
+	{
+		stringify(UP),
+		stringify(LEFT),
+		stringify(DOWN),
+		stringify(RIGHT)
+	};
 }
 
-class Tank : public Object, public Frame
+class TankBoom
+{
+protected:
+	int posDirX, posDirY;
+	bool incorrectDIR[4];
+
+public:
+	virtual void SetBoomCoord(int, int) = 0;
+	virtual bool CompareBoomCoord(int, int) = 0;
+
+	void ResetBoomParam()
+	{
+		posDirX = 0;
+		posDirY = 0;
+		incorrectDIR[0] = NULL;
+		incorrectDIR[1] = NULL;
+		incorrectDIR[2] = NULL;
+		incorrectDIR[3] = NULL;
+	}
+
+	TankBoom() { ResetBoomParam(); }
+};
+
+class Tank : public Object, public Frame, public TankBoom
 {
 public:
-	Tank(sf::Texture &texture, bool zoom = false) : Object(texture, zoom), Frame("tank")
+	Tank(sf::Texture &texture) : Object(texture), Frame("tank")
 	{
 	}
 
@@ -106,10 +140,36 @@ public:
 	Direction RandomReverseDirection(const Direction dir)
 	{
 		srand((unsigned)time(NULL));
-		int dirRnd;
-		do {
-			dirRnd = rand() % 4;
-		} while (dirRnd == dir);	
-		return (Direction)dirRnd;
+		incorrectDIR[dir] = true;
+		std::vector<int> vecRnd;
+
+		const int size = sizeof incorrectDIR / sizeof *incorrectDIR;
+		for (int idx(0); idx < size; ++idx)
+			if (!incorrectDIR[idx])
+				vecRnd.push_back(idx);
+
+		int r_idx = rand() % vecRnd.size();
+
+		if (!(rand() % 2) && dir != DOWN)
+			return DOWN;
+
+		return (Direction)vecRnd[r_idx];
+
+		//int dirRnd;
+		//do {
+		//	dirRnd = rand() % 4;
+		//} while (dirRnd == dir);
+		//return (Direction)dirRnd;
+	}
+
+	void SetBoomCoord(int posX, int posY) override
+	{
+		posDirX = posX;
+		posDirY = posY;
+	}
+
+	bool CompareBoomCoord(int posX, int posY) override
+	{
+		return (posDirX == posX && posDirY == posY);
 	}
 };

@@ -6,6 +6,8 @@
 #include "tank.hpp"
 #include "block.hpp"
 #include "map.h"
+#include "tile_map.h"
+#include "part_bricks_map.h"
 
 //test
 #include <iostream>
@@ -20,12 +22,18 @@ class GameField
 
 	sf::RectangleShape field;
 	Map map;
+	TileMap tmap;
+	Part_Bricks_Map pbmap;
 	void FillField();
 	void FillMap();
+	void LoadMap();
 	void ReadMap(std::vector<Block>::iterator&, const int, const int);
 	void DrawField();
+	void DrawMap();
+	void DrawBrickDamage();
 
 	std::vector<Block> block;
+	std::vector<sf::RectangleShape> partsBrickVec;
 	void CreateBlocks();
 	void DrawBlocks();
 

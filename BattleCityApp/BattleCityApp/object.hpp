@@ -9,17 +9,10 @@ class Object
 	sf::Sprite sprite;
 
 public:
-	Object(sf::Texture &texture, bool zoom = false) : texture(texture)
+	Object(sf::Texture &texture) : texture(texture)
 	{
 		sprite.setTexture(texture);
 		clearSpriteObj();
-
-		/*
-		z00m false : 1x --> 16x16
-		z00m true  : 2x --> 32x32
-		*/
-		if (zoom)
-			sprite.scale(sf::Vector2f(2.f, 2.f));
 	}
 
 	void setSpriteObj(const int posX, const int posY)
@@ -41,6 +34,11 @@ public:
 	{
 		sprite.setPosition(x, y);
 		return;
+	}
+
+	sf::Vector2f getPosObj() const
+	{
+		return sprite.getPosition();
 	}
 
 	void moveObj(const float x, const float y)
