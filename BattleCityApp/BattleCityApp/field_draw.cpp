@@ -60,7 +60,8 @@ void GameField::DrawTank(Tank &tank)
 {
 	float speed = tank.optTank.speed;
 	float time = this->time / speed;
-
+	
+	/* test todo del comment
 	if (tank.optTank.dir == UP)
 		tank.moveObj(0.f, -0.1f*time);
 	else if (tank.optTank.dir == LEFT)
@@ -69,6 +70,8 @@ void GameField::DrawTank(Tank &tank)
 		tank.moveObj(0.f, 0.1f*time);
 	else if (tank.optTank.dir == RIGHT)
 		tank.moveObj(0.1f*time, 0.f);
+
+	*/
 
 	if (coef_reload == tank.optTank.coef_reload)
 		tank.reloadTank();
@@ -79,5 +82,28 @@ void GameField::DrawTank(Tank &tank)
 		window.draw(tank.frame);
 	else
 		window.draw(tank.takeObj());
+	return;
+}
+
+//drawings a bullets
+void GameField::DrawBullets()
+{
+	float speed = BulletSpeed;
+	float time = this->time / speed;
+
+	const size_t bulletArrSize = sizeof(this->bulletArr) / sizeof(*this->bulletArr);
+	for (int i(0); i < bulletArrSize; ++i) {
+		if (this->bulletArr[i] != nullptr) {
+			this->bulletArr[i]->move(time);
+			this->bulletArr[i]->setPosFrame(
+				this->bulletArr[i]->takeObj().getPosition().x, 
+				this->bulletArr[i]->takeObj().getPosition().y
+			);
+			if (p_showframe)
+				window.draw(this->bulletArr[i]->frame);
+			else
+				window.draw(this->bulletArr[i]->takeObj());
+		}
+	}
 	return;
 }

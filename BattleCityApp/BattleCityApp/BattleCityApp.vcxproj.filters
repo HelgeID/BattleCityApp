@@ -72,6 +72,9 @@
     <ClCompile Include="field_collision.cpp">
       <Filter>Файлы исходного кода\field</Filter>
     </ClCompile>
+    <ClCompile Include="field_bullet_funcs.cpp">
+      <Filter>Файлы исходного кода\field</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -112,6 +115,9 @@
     </ClInclude>
     <ClInclude Include="part_bricks_map.h">
       <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="bullet.hpp">
+      <Filter>Заголовочные файлы\objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

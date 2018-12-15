@@ -119,6 +119,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="events.cpp" />
+    <ClCompile Include="field_bullet_funcs.cpp" />
     <ClCompile Include="field_collision.cpp" />
     <ClCompile Include="field_draw.cpp" />
     <ClCompile Include="field_map_funcs.cpp" />
@@ -137,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="block.hpp" />
+    <ClInclude Include="bullet.hpp" />
     <ClInclude Include="events.h" />
     <ClInclude Include="frame.hpp" />
     <ClInclude Include="game.h" />

@@ -11,7 +11,6 @@
 
 enum Color { YELLOW, WHITE, GREEN, RED };
 enum Model { modA, modB, modC, modD, modE, modF, modG, modH };
-enum Direction { UP, LEFT, DOWN, RIGHT };
 
 namespace spaceTank
 {
@@ -147,6 +146,9 @@ public:
 		for (int idx(0); idx < size; ++idx)
 			if (!incorrectDIR[idx])
 				vecRnd.push_back(idx);
+
+		if (vecRnd.size() == 0)
+			return UP;
 
 		int r_idx = rand() % vecRnd.size();
 

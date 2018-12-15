@@ -5,10 +5,15 @@ void GameField::CreateTanks()
 {
 	Tank tankObj(texture);
 	tank.push_back(tankObj);
+	tank.push_back(tankObj);
 
 	sf::Vector2f pos;
-	tank[0].loadTank(YELLOW, modA, DOWN); pos = { 64.f, 16.f };
+	tank[0].loadTank(YELLOW, modA, DOWN); pos = { 64.f, 16.f };//64, 16
 	tank[0].setPosObj(pos.x, pos.y);
+
+	tank[1].loadTank(YELLOW, modA, LEFT); pos = { 128.f, 80.f };//128, 80
+	tank[1].setPosObj(pos.x, pos.y);
+
 	//tank[0].mapPos.i = map.TakeIndex(pos, 'i');
 	//tank[0].mapPos.j = map.TakeIndex(pos, 'j');
 	return;
@@ -41,5 +46,7 @@ void GameField::Monitoring()
 			CollisionTanks(*it1, *it2);
 		}
 	}
+
+	CollisionBullets();
 	return;
 }

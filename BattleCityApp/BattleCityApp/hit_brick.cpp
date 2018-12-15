@@ -24,12 +24,14 @@ void Block::loadParamPartsBrick()
 				valY += 8;
 				if (index % 2 != 0) { valX += 4; valY = 0; }
 			}
+
+			this->partBrick->pbArr[index].presence = false;
 		}
 	}
 	return;
 }
 
-void Block::onBrickDamage(std::vector<sf::RectangleShape> &partsBrickVec, const int index)
+void Block::brickDamage(std::vector<sf::RectangleShape> &partsBrickVec, const int index)
 {
 	sf::RectangleShape damageElement;
 	damageElement.setFillColor(sf::Color::Black);
@@ -43,11 +45,231 @@ void Block::onBrickDamage(std::vector<sf::RectangleShape> &partsBrickVec, const 
 	}
 	damageElement.setSize(size);
 
+	this->partBrick->pbArr[index].presence = true;
+
 	const float posX(this->partBrick->pbArr[index].x);
 	const float posY(this->partBrick->pbArr[index].y);
 	damageElement.setPosition(posX, posY);
 
 	partsBrickVec.push_back(damageElement);
+
+	return;
+}
+
+struct INDEX { int in1, in2, out1, out2; };
+
+void Block::brickDamageAdditional(std::vector<sf::RectangleShape> &partsBrickVec, Part_Bricks_Map &pbmap)
+{
+	const INDEX groupeA = { 0,  2,  8,  10 };
+	const INDEX groupeB = { 1,  3, 12,  14 };
+	const INDEX groupeC = { 4,  6,  9,  11 };
+	const INDEX groupeD = { 5,  7, 13, 15 };
+	INDEX groupe[] = { groupeA, groupeB, groupeC, groupeD };
+
+	auto control = [&](const INDEX* groupe)
+	{
+		if (this->partBrick->pbArr[groupe->in1].presence && this->partBrick->pbArr[groupe->in2].presence)
+		{
+			if (!this->partBrick->pbArr[groupe->out1].presence)
+			{
+				this->brickDamage(partsBrickVec, groupe->out1);
+				pbmap.fillMap(partsBrickVec[partsBrickVec.size() - 1]);
+				std::cerr << "indxNUM(ADD): " << groupe->out1 << std::endl;
+			}
+			if (!this->partBrick->pbArr[groupe->out2].presence)
+			{
+				this->brickDamage(partsBrickVec, groupe->out2);
+				pbmap.fillMap(partsBrickVec[partsBrickVec.size() - 1]);
+				std::cerr << "indxNUM(ADD): " << groupe->out2 << std::endl;
+			}
+		}
+	};
+
+	auto reverse = [&](INDEX* groupe)
+	{
+		//in1 <-> out1
+		groupe->in1 = groupe->in1 ^ groupe->out1;
+		groupe->out1 = groupe->in1 ^ groupe->out1;
+		groupe->in1 ^= groupe->out1;
+
+		//in2 <-> out2
+		groupe->in2 = groupe->in2 ^ groupe->out2;
+		groupe->out2 = groupe->in2 ^ groupe->out2;
+		groupe->in2 ^= groupe->out2;
+	};
+
+	for (int i = 0; i < 4; ++i) {
+		control(const_cast<INDEX*>(&groupe[i]));
+		reverse(const_cast<INDEX*>(&groupe[i]));
+		control(const_cast<INDEX*>(&groupe[i]));
+	}
+
+	return;
+}
+
+void Block::overloadFrame(const Direction dir)
+{
+	//read data from frame
+	int posX1 = static_cast<int>(frame.getPosition().x);
+	int posY1 = static_cast<int>(frame.getPosition().y);
+	int posX2 = posX1 + static_cast<int>(frame.getSize().x);
+	int posY2 = posY1 + static_cast<int>(frame.getSize().y);
+
+	struct Check
+	{
+		static bool CheckPbArrFunc(const Block& obj, const int first, const int second)
+		{
+			bool Check1 = obj.partBrick->pbArr[first].presence;
+			bool Check2 = obj.partBrick->pbArr[second].presence;
+			return Check1 && Check2;
+		}
+
+		static bool CheckPbStateArrFunc(const Block& obj, const Direction dir)
+		{
+			if (dir == UP || dir == DOWN)
+				return (obj.partBrick->pbStateArr[0] && obj.partBrick->pbStateArr[1] && obj.partBrick->pbStateArr[2] && obj.partBrick->pbStateArr[3]);
+
+			if (dir == LEFT || dir == RIGHT)
+				return (obj.partBrick->pbStateArr[4] && obj.partBrick->pbStateArr[5] && obj.partBrick->pbStateArr[6] && obj.partBrick->pbStateArr[7]);
+		}
+	};
+
+	auto paramset = [&]()
+	{
+		float xSize = (float)posX2 - posX1;
+		float ySize = (float)posY2 - posY1;
+		frame.setSize(sf::Vector2f(xSize, ySize));
+		frame.setPosition(sf::Vector2f((float)posX1, (float)posY1));
+		return true;
+	};
+
+	int coeff(NULL); //coefficient passage of the array (pbArr)
+	auto offset = [&](int& II, int& JJ, const int indx, const bool det_dir, const int coeff)
+	{
+		if (!partBrick->pbStateArr[indx]) {
+			if (partBrick->pbArr[II].presence && partBrick->pbArr[JJ].presence) {
+				partBrick->pbStateArr[indx] = true;
+
+				if (dir == UP || dir == DOWN) {
+					if (!det_dir)
+						posY1 += 4;
+					else
+						posY2 -= 4;
+
+					return paramset();
+				}
+
+				if (dir == LEFT || dir == RIGHT) {
+					if (!det_dir)
+						posX1 += 4;
+					else
+						posX2 -= 4;
+
+					return paramset();
+				}
+
+			}
+		}
+		else {
+			II = II + coeff;
+			JJ = JJ + coeff;
+		}
+		return false;
+	};
+
+	auto offset2 = [&](const Direction dir, const bool Check1, const bool Check2)
+	{
+		if (Check1 || Check2) {
+			if (dir == UP || dir == DOWN) {
+				Check1 ? posX1 += 8 : NULL;
+				Check2 ? posX2 -= 8 : NULL;
+			}
+
+			if (dir == LEFT || dir == RIGHT) {
+				Check1 ? posY1 += 8 : NULL;
+				Check2 ? posY2 -= 8 : NULL;
+			}
+
+			return paramset();
+		}
+		return false;
+	};
+
+	//determination of the direction offsets
+	//UP, LEFT => true; DOWN, RIGHT => false; (0123 - value dir)
+	auto DetDir = [&](const Direction dir) { return (dir < 2); };
+
+	if (dir == DOWN) {
+		if (Check::CheckPbStateArrFunc(*this, dir))
+			;
+		else {
+			bool CheckL = (Check::CheckPbArrFunc(*this, 0, 2) && Check::CheckPbArrFunc(*this, 2, 4) && Check::CheckPbArrFunc(*this, 4, 6));
+			bool CheckR = (Check::CheckPbArrFunc(*this, 1, 3) && Check::CheckPbArrFunc(*this, 3, 5) && Check::CheckPbArrFunc(*this, 5, 7));
+			offset2(dir, CheckL, CheckR);
+		}
+
+		int II(0), JJ(1);
+		for (int indx = 0, coeff = 2; indx <= 3; indx = indx + 1) {
+			if (offset(II, JJ, indx, DetDir(dir), coeff))
+				break;
+		}
+
+		return;
+	}
+
+	if (dir == UP) {
+		if (Check::CheckPbStateArrFunc(*this, dir))
+			;
+		else {
+			bool CheckL = (Check::CheckPbArrFunc(*this, 6, 4) && Check::CheckPbArrFunc(*this, 4, 2) && Check::CheckPbArrFunc(*this, 2, 0));
+			bool CheckR = (Check::CheckPbArrFunc(*this, 7, 5) && Check::CheckPbArrFunc(*this, 5, 3) && Check::CheckPbArrFunc(*this, 3, 1));
+			offset2(dir, CheckL, CheckR);
+		}
+
+		int II(7), JJ(6);
+		for (int indx = 3, coeff = -2; indx >= 0; indx = indx - 1) {
+			if (offset(II, JJ, indx, DetDir(dir), coeff))
+				break;
+		}
+
+		return;
+	}
+
+	if (dir == RIGHT) {
+		if (Check::CheckPbStateArrFunc(*this, dir))
+			;
+		else {
+			bool CheckU = (Check::CheckPbArrFunc(*this, 8, 10) && Check::CheckPbArrFunc(*this, 10, 12) && Check::CheckPbArrFunc(*this, 12, 14));
+			bool CheckD = (Check::CheckPbArrFunc(*this, 9, 11) && Check::CheckPbArrFunc(*this, 11, 13) && Check::CheckPbArrFunc(*this, 13, 15));
+			offset2(dir, CheckU, CheckD);
+		}
+
+		int II(8), JJ(9);
+		for (int indx = 4, coeff = 2; indx <= 7; indx = indx + 1) {
+			if (offset(II, JJ, indx, DetDir(dir), coeff))
+				break;
+		}
+
+		return;
+	}
+
+	if (dir == LEFT) {
+		if (Check::CheckPbStateArrFunc(*this, dir))
+			;
+		else {
+			bool CheckU = (Check::CheckPbArrFunc(*this, 14, 12) && Check::CheckPbArrFunc(*this, 12, 10) && Check::CheckPbArrFunc(*this, 10, 8));
+			bool CheckD = (Check::CheckPbArrFunc(*this, 15, 13) && Check::CheckPbArrFunc(*this, 13, 11) && Check::CheckPbArrFunc(*this, 11, 9));
+			offset2(dir, CheckU, CheckD);
+		}
+
+		int II(15), JJ(14);
+		for (int indx = 7, coeff = -2; indx >= 4; indx = indx - 1) {
+			if (offset(II, JJ, indx, DetDir(dir), coeff))
+				break;
+		}
+
+		return;
+	}
 
 	return;
 }

@@ -5,6 +5,7 @@
 #include <vector>
 #include "tank.hpp"
 #include "block.hpp"
+#include "bullet.hpp"
 #include "map.h"
 #include "tile_map.h"
 #include "part_bricks_map.h"
@@ -42,14 +43,19 @@ class GameField
 	void DrawTank(Tank&);
 	void MoveTank(Tank&, float);
 
+	Bullet *bulletArr[4] = { nullptr, nullptr, nullptr, nullptr };
+	void CreateBullet(Tank&, sf::Vector2f);
+	void CreateBullet(Tank&);
+	void DrawBullets();
+
 	void Monitoring();
 	void CollisionFrame(Tank&);
 	void CollisionBlocks(Tank&);
 	void CollisionTanks(Tank&, Tank&);
-	void Logic(Tank&);
+	void CollisionBullets();
 
 public:
-	explicit GameField(sf::RenderWindow &, sf::Texture &);
+	explicit GameField(sf::RenderWindow&, sf::Texture&);
 	~GameField();
 
 	void UpdateField();

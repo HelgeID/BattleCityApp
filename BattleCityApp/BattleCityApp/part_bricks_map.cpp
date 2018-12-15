@@ -24,7 +24,7 @@ void Part_Bricks_Map::addElement(const VertexCoord::VertexCoord &coord)
 
 	for (int i = 0; i < size; i++) {
 		if (p_showframe)
-			vertex[i].color = sf::Color(127, 127, 127, 32);
+			vertex[i].color = sf::Color(12, 12, 12, 255);
 		else
 			vertex[i].color = sf::Color(0, 0, 0, 255);
 		vertices.append(vertex[i]);

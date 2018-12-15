@@ -24,7 +24,7 @@ void Game::GameLaunch()
 	zoomOn();
 
 	// show frame
-	//p_showframe = true;
+	p_showframe = true;
 
 	// initialization of objects
 	GameEvent gEvent(window);

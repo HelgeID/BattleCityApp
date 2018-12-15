@@ -3,17 +3,16 @@
 
 class Frame
 {
-	void initFrame()
+	void initFrame(const sf::Vector2f& size)
 	{
-		frame.setOutlineThickness(1);
-		frame.setSize(sf::Vector2f(14.0, 14.0));
+		frame.setSize(size);
 	}
 
 public:
 	sf::RectangleShape frame;
-	Frame(char* name = "")
+	Frame(char* name = "", sf::Vector2f size = sf::Vector2f(16.f, 16.f))
 	{
-		initFrame();
+		initFrame(size);
 		if (name == "tank") {
 			frame.setOutlineColor(sf::Color(127, 0, 0, 64));
 			frame.setFillColor(sf::Color(64, 0, 0, 64));
@@ -21,6 +20,10 @@ public:
 		else if (name == "block") {
 			frame.setOutlineColor(sf::Color(0, 0, 127, 64));
 			frame.setFillColor(sf::Color(0, 0, 64, 64));
+		}
+		else if (name == "bullet") {
+			frame.setOutlineColor(sf::Color(0, 127, 127, 64));
+			frame.setFillColor(sf::Color(0, 127, 64, 64));
 		}
 	}
 
@@ -30,7 +33,7 @@ public:
 
 	void setPosFrame(const float x, const float y)
 	{
-		frame.setPosition(x + 1, y + 1);
+		frame.setPosition(x, y);
 		return;
 	}
 

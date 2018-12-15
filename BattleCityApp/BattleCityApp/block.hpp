@@ -7,6 +7,8 @@
 #include "object.hpp"
 #include "frame.hpp"
 
+#include "part_bricks_map.h"
+
 enum Environment { Empty, Brick, Steel, Trees, Water, Ice };
 
 namespace spaceBlock
@@ -22,8 +24,15 @@ struct PartBrick
 {
 	float x, y;
 	int type; //uses: 'H' & 'V'
+	bool presence;
 };
-class PartsBrickArr { public: PartBrick pbArr[16]; };
+
+class PartsBrickArr
+{
+public:
+	PartBrick pbArr[16];
+	bool pbStateArr[8] = { false, false, false, false, false, false, false, false };
+};
 
 class Block : public Object, public Frame
 {
@@ -31,7 +40,9 @@ class Block : public Object, public Frame
 public:
 	const std::shared_ptr<PartsBrickArr>& takePartBrick() { return partBrick; }
 	void loadParamPartsBrick();
-	void onBrickDamage(std::vector<sf::RectangleShape>&, const int);
+	void brickDamage(std::vector<sf::RectangleShape>&, const int);
+	void brickDamageAdditional(std::vector<sf::RectangleShape>&, Part_Bricks_Map& );
+	void overloadFrame(const Direction);
 
 private:
 	Environment TakeTape(const int& value)
@@ -79,9 +90,9 @@ public:
 			case Empty: break;
 			case Brick: BrickCoord(*coord, value); break;
 			case Steel: SteelCoord(*coord, value); break;
-			case Trees: break;
-			case Water: break;
-			case Ice: break;
+			case Trees: break; //todo
+			case Water: break; //todo
+			case Ice: break; //todo
 
 		default: break;
 		}
@@ -94,4 +105,5 @@ public:
 		window.draw(this->takeObj());
 		return;
 	}
+
 };

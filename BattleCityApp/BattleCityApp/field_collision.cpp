@@ -1,7 +1,8 @@
 ﻿#include "field.h"
 #include "general.hpp"
+#include "map.h"
 
-#define size 16
+static const int size = 16;
 
 class RecShape : public sf::RectangleShape
 {
@@ -277,6 +278,108 @@ void GameField::CollisionTanks(Tank &tank, Tank &tank_other)
 		if (r2_flag == true) {
 			tank_other.loadTank(tank_other.optTank.col, tank_other.optTank.mod, tank.ReverseDirection(dirTankOther));
 			MoveTank(tank_other, 2);
+		}
+	}
+	return;
+}
+
+void GameField::CollisionBullets()
+{
+	auto create = [&](const float value)
+	{
+		const size_t ArrSize(8);
+		auto GET_ARR = [&](int arr[], const float value)
+		{
+			for (size_t i(0); i < ArrSize; i++) {
+				int value(fabs(value + i));
+				arr[i] = value;
+			}
+			return arr;
+		};
+
+		int *arr = new int[ArrSize];
+		return GET_ARR(arr, value);
+	};
+
+	struct PartBrickParam
+	{
+		float x, y;
+		sf::Vector2f size;
+	} objPBP;
+	sf::RectangleShape frame;
+
+	auto check_intersects = [&](const int indxBlock, const int indxBullet, const int indxNUM, const Direction dir)
+	{
+		objPBP.x = block[indxBlock].takePartBrick()->pbArr[indxNUM].x;
+		objPBP.y = block[indxBlock].takePartBrick()->pbArr[indxNUM].y;
+
+		block[indxBlock].takePartBrick()->pbArr[indxNUM].type == 'H' ? objPBP.size.x = 8.f, objPBP.size.y = 4.f : NULL;
+		block[indxBlock].takePartBrick()->pbArr[indxNUM].type == 'V' ? objPBP.size.x = 4.f, objPBP.size.y = 8.f : NULL;
+
+		frame.setPosition(objPBP.x, objPBP.y);
+		frame.setSize(objPBP.size);
+
+		if (block[indxBlock].takePartBrick()->pbArr[indxNUM].presence == false &&
+			this->bulletArr[indxBullet]->frame.getGlobalBounds().intersects(frame.getGlobalBounds())) {
+			//apply hit on the block
+			{
+				//directly damage
+				block[indxBlock].brickDamage(partsBrickVec, indxNUM);
+				pbmap.fillMap(partsBrickVec[partsBrickVec.size() - 1]);
+				std::cerr << "indxNUM: " << indxNUM << std::endl;
+			}
+			//additional damage
+			block[indxBlock].brickDamageAdditional(partsBrickVec, pbmap);
+
+			//overload frame
+			block[indxBlock].overloadFrame(dir);
+			return true;
+		}
+
+		return false;
+	};
+
+
+	const size_t bulletArrSize = sizeof(this->bulletArr) / sizeof(*this->bulletArr);
+	for (int indxBullet(0); indxBullet < bulletArrSize; ++indxBullet) {
+		if (this->bulletArr[indxBullet] != nullptr) {
+			int indexI = map.TakeIndex(this->bulletArr[indxBullet]->crossing_coord(), 'i');
+			int indexY = map.TakeIndex(this->bulletArr[indxBullet]->crossing_coord(), 'j');
+			int indxBlock = (indexI*sizeMap + indexY);
+			bool crossing = (this->bulletArr[indxBullet]->frame.getGlobalBounds().intersects((*(&block[0] + indxBlock)).frame.getGlobalBounds()));
+			if (crossing == true) {
+				if (block[indxBlock].type == Brick) {
+					int* array = nullptr;
+					Direction dir = this->bulletArr[indxBullet]->takeDir();
+					switch (dir)
+					{
+						// "|7| |0| |15| |8|" - first elements of array
+					case UP:		array = create(-7.f);
+						break;
+					case DOWN:		array = create(0.f);
+						break;
+					case LEFT:		array = create(-15.f);
+						break;
+					case RIGHT:		array = create(8.f);
+						break;
+					}
+
+					int indxPBP(0);
+					while (indxPBP < 8)
+					{
+						int indexA = *(array + indxPBP++);
+						int indexB = *(array + indxPBP++);
+
+						if (check_intersects(indxBlock, indxBullet, indexA, dir) | check_intersects(indxBlock, indxBullet, indexB, dir)) {
+							delete this->bulletArr[indxBullet];
+							this->bulletArr[indxBullet] = nullptr;
+							break;
+						}
+					}
+
+					delete[] array;
+				}
+			}
 		}
 	}
 	return;

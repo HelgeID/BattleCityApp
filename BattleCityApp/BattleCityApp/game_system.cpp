@@ -4,8 +4,13 @@
 //System functions
 bool Game::loadTexture()
 {
-	if (!this->texture->loadFromFile("data/graphics/texture/texture.png", sf::IntRect(0, 0, 400, 256)))
+	sf::Image image;
+	if (!image.loadFromFile("data/graphics/texture/texture.png"))
 		return EXIT_FAILURE;
+
+	image.createMaskFromColor(image.getPixel(0, 0));
+	this->texture->loadFromImage(image, sf::IntRect(0, 0, 400, 256));
+	
 	return EXIT_SUCCESS;
 }
 
