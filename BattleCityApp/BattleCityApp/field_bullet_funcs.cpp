@@ -21,6 +21,10 @@ void GameField::CreateBullet(Tank& tank, sf::Vector2f offset = sf::Vector2f(0.f,
 		case DOWN: bulletObj = _createBulletDOWN(point, texture); break;
 		case RIGHT: bulletObj = _createBulletRIGHT(point, texture); break;
 	}
+	
+	tank.optTankShooting.bulletActivFlag = true;
+	bulletObj->bulletActivFlag = &tank.optTankShooting.bulletActivFlag;
+	bulletObj->indexTank = tank.takeIndex();
 
 	const size_t bulletArrSize = sizeof(this->bulletArr) / sizeof(*this->bulletArr);
 	for (int i(0); i < bulletArrSize; ++i) {
@@ -29,6 +33,7 @@ void GameField::CreateBullet(Tank& tank, sf::Vector2f offset = sf::Vector2f(0.f,
 			break;
 		}
 	}
+
 	return;
 }
 

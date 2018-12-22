@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include <SFML/Graphics.hpp>
-#include <vector>
 #include <time.h>
+#include <algorithm>
 #include "general.hpp"
 #include "object.hpp"
 #include "frame.hpp"
@@ -22,6 +22,14 @@ namespace spaceTank
 
 		float speed;
 		int coef_reload;
+
+	};
+
+	struct SettingsShooting
+	{
+		bool bulletActivFlag;
+		sf::Clock clockTank;
+		sf::Time timeShooting;
 	};
 
 	struct MapPosition
@@ -63,12 +71,26 @@ public:
 
 class Tank : public Object, public Frame, public TankBoom
 {
+	int indexTank;
+
+	bool preReverseArr[4] = { false, false, false, false };
+	sf::Vector2f prePosReverse;
 public:
-	Tank(sf::Texture &texture) : Object(texture), Frame("tank")
+	Tank(sf::Texture &texture) : Object(texture), Frame("tank"), indexTank(0)
 	{
 	}
 
+	Tank& operator=(const Tank& obj)
+	{
+		if (this == &obj)
+			return *this;
+		this->~Tank();
+		new (this) Tank(obj);
+		return *this;
+	}
+
 	spaceTank::Settings optTank;
+	spaceTank::SettingsShooting optTankShooting;
 	spaceTank::MapPosition mapPos;
 
 	void loadTank(Color col, Model mod, Direction dir)
@@ -93,6 +115,8 @@ public:
 		this->setSpriteObj(coord.x, coord.y);
 
 		optTank = { col, mod, dir, 0.f, 0};
+		optTankShooting.bulletActivFlag = false;
+
 		switch (mod)
 		{
 		case modA: optTank.speed = 8000; optTank.coef_reload = 6; break;
@@ -108,6 +132,34 @@ public:
 		}
 
 		return;
+	}
+
+	void loadIndex(std::vector<Tank>& tank)
+	{
+		const size_t size = tank.size();
+		for (int index(0); index < size; ++index) {
+			// -What-
+			auto searchResult = std::find_if(tank.begin(), tank.end(),
+				[&](const Tank& obj) -> bool { return obj.indexTank == index + 1; });
+			if (searchResult == std::end(tank)) {
+				// -Where-
+				int set_index;
+				for (int index(0); index < size; ++index) {
+					if (tank[index].indexTank != 0)
+						continue;
+					set_index = index;
+					break;
+				}
+				// -Set-
+				tank[set_index].indexTank = index + 1;
+			}
+		}
+		return;
+	}
+
+	int takeIndex() const
+	{
+		return indexTank;
 	}
 
 	void reloadTank()
@@ -138,17 +190,29 @@ public:
 
 	Direction RandomReverseDirection(const Direction dir)
 	{
+		//disabled randomness (Random == Reverse)
+		//return ReverseDirection(dir);
+
 		srand((unsigned)time(NULL));
-		incorrectDIR[dir] = true;
+
+		if ((posDirX != (int)round(prePosReverse.x)) | (posDirY != (int)round(prePosReverse.y)))
+		{
+			prePosReverse.x = posDirX;
+			prePosReverse.y = posDirY;
+			preReverseArr[3] = preReverseArr[2] = preReverseArr[1] = preReverseArr[0] = false;
+		}
+
+		preReverseArr[dir] = incorrectDIR[dir] = true;
 		std::vector<int> vecRnd;
 
 		const int size = sizeof incorrectDIR / sizeof *incorrectDIR;
 		for (int idx(0); idx < size; ++idx)
-			if (!incorrectDIR[idx])
+			if (!incorrectDIR[idx] && !preReverseArr[idx]) { 
 				vecRnd.push_back(idx);
-
+			}
+				
 		if (vecRnd.size() == 0)
-			return UP;
+			return ReverseDirection(dir);
 
 		int r_idx = rand() % vecRnd.size();
 
@@ -156,12 +220,6 @@ public:
 			return DOWN;
 
 		return (Direction)vecRnd[r_idx];
-
-		//int dirRnd;
-		//do {
-		//	dirRnd = rand() % 4;
-		//} while (dirRnd == dir);
-		//return (Direction)dirRnd;
 	}
 
 	void SetBoomCoord(int posX, int posY) override

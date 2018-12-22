@@ -61,7 +61,6 @@ void GameField::DrawTank(Tank &tank)
 	float speed = tank.optTank.speed;
 	float time = this->time / speed;
 	
-	/* test todo del comment
 	if (tank.optTank.dir == UP)
 		tank.moveObj(0.f, -0.1f*time);
 	else if (tank.optTank.dir == LEFT)
@@ -70,8 +69,6 @@ void GameField::DrawTank(Tank &tank)
 		tank.moveObj(0.f, 0.1f*time);
 	else if (tank.optTank.dir == RIGHT)
 		tank.moveObj(0.1f*time, 0.f);
-
-	*/
 
 	if (coef_reload == tank.optTank.coef_reload)
 		tank.reloadTank();

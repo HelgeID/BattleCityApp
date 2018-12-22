@@ -5,7 +5,7 @@
 #include "object.hpp"
 #include "frame.hpp"
 
-#define BulletSpeed 18000
+#define BulletSpeed 3000
 
 class Bullet : public Object, public Frame
 {
@@ -39,6 +39,9 @@ public:
 
 		this->setPosObj(pos.x, pos.y);
 	}
+
+	bool* bulletActivFlag;
+	int indexTank; //who owns the bullet
 
 	void move(const float time = 10)
 	{

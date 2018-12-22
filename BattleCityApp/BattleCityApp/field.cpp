@@ -19,8 +19,10 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	//block[16].brickDamage(partsBrickVec, 0);
 	//pbmap.fillMap(partsBrickVec[partsBrickVec.size() - 1]);
 	//--------------------------------------
-	CreateBullet(tank[0], sf::Vector2f(0.f, 0.f));
-	CreateBullet(tank[1], sf::Vector2f(0.f, 0.f));
+
+	//CreateBullet
+	//CreateBullet(tank[0], sf::Vector2f(0.f, 0.f));
+	//CreateBullet(tank[1], sf::Vector2f(0.f, 0.f));
 }
 
 GameField::~GameField()
@@ -42,7 +44,10 @@ void GameField::UpdateField()
 	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) { DrawTank(tank); }); //DrawTank
 	DrawBullets();
 
-	Monitoring();
+	objTankCollision.MonitoringCollision(*this);
+	objBulletCollision.MonitoringCollision(*this);
+	objShootingBullets.MonitoringShootingBullets(*this);
+
 	clock.restart();
 
 	//--------------------------------------

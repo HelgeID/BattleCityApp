@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <SFML/Graphics.hpp>
+#include <vector>
 #include "general.hpp"
 
 enum Direction { UP, LEFT, DOWN, RIGHT };

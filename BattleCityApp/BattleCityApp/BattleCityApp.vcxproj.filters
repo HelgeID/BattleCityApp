@@ -69,10 +69,16 @@
     <ClCompile Include="field_map_funcs.cpp">
       <Filter>Файлы исходного кода\field</Filter>
     </ClCompile>
-    <ClCompile Include="field_collision.cpp">
+    <ClCompile Include="field_bullet_funcs.cpp">
       <Filter>Файлы исходного кода\field</Filter>
     </ClCompile>
-    <ClCompile Include="field_bullet_funcs.cpp">
+    <ClCompile Include="field_collision_tank.cpp">
+      <Filter>Файлы исходного кода\field</Filter>
+    </ClCompile>
+    <ClCompile Include="field_collision_bullet.cpp">
+      <Filter>Файлы исходного кода\field</Filter>
+    </ClCompile>
+    <ClCompile Include="field_shooting_bullets.cpp">
       <Filter>Файлы исходного кода\field</Filter>
     </ClCompile>
   </ItemGroup>

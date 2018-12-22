@@ -120,9 +120,11 @@
   <ItemGroup>
     <ClCompile Include="events.cpp" />
     <ClCompile Include="field_bullet_funcs.cpp" />
-    <ClCompile Include="field_collision.cpp" />
+    <ClCompile Include="field_collision_bullet.cpp" />
+    <ClCompile Include="field_collision_tank.cpp" />
     <ClCompile Include="field_draw.cpp" />
     <ClCompile Include="field_map_funcs.cpp" />
+    <ClCompile Include="field_shooting_bullets.cpp" />
     <ClCompile Include="field_tank_funcs.cpp" />
     <ClCompile Include="game_main.cpp" />
     <ClCompile Include="game_system.cpp" />

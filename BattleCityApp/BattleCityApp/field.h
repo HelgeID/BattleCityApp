@@ -2,7 +2,6 @@
 #define SCREEN_H
 
 #include <SFML\Graphics.hpp>
-#include <vector>
 #include "tank.hpp"
 #include "block.hpp"
 #include "bullet.hpp"
@@ -42,17 +41,54 @@ class GameField
 	void CreateTanks();
 	void DrawTank(Tank&);
 	void MoveTank(Tank&, float);
+	void ControlTank_onFrame(Tank&);
 
 	Bullet *bulletArr[4] = { nullptr, nullptr, nullptr, nullptr };
 	void CreateBullet(Tank&, sf::Vector2f);
 	void CreateBullet(Tank&);
 	void DrawBullets();
 
-	void Monitoring();
-	void CollisionFrame(Tank&);
-	void CollisionBlocks(Tank&);
-	void CollisionTanks(Tank&, Tank&);
-	void CollisionBullets();
+	//monitoring tanks
+	class TankCollision
+	{
+	public:
+		void MonitoringCollision(GameField&);
+	private:
+		void CollisionFrame(GameField&);
+		void CollisionBlocks(GameField&);
+		void CollisionTanks(GameField&);
+	} objTankCollision;
+
+	//monitoring bullets
+	class BulletCollision
+	{
+	public:
+		void MonitoringCollision(GameField&);
+	private:
+		void CollisionFrame(GameField&);
+		void CollisionBlocks(GameField&);
+		void CollisionTanks(GameField&);
+		void CollisionBullets(GameField&);
+		void CollisionActor1(GameField&);
+		void CollisionActor2(GameField&);
+	} objBulletCollision;
+
+	//monitoring shooting bullets
+	class ShootingBullets
+	{
+	public:
+		void MonitoringShootingBullets(GameField&);
+	} objShootingBullets;
+
+	//destroy objects
+	template<class T, class I, class = typename std::enable_if<std::is_integral<I>::value>::type>
+	void RemovalObj(std::vector<T> &obj, I index)
+	{
+		//std::vector<T> used to create objects
+		const auto &iter = obj.cbegin() + index;
+		obj.erase(iter);
+		return;
+	}
 
 public:
 	explicit GameField(sf::RenderWindow&, sf::Texture&);
