@@ -10,6 +10,7 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	FillMap();
 	LoadMap();
 	CreateBlocks();
+	CreateActors();
 	CreateTanks();
 
 	//--------------------------------------
@@ -27,6 +28,8 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 
 GameField::~GameField()
 {
+	delete firstPlayer;
+	delete secondPlayer;
 }
 
 void GameField::UpdateField()
@@ -41,12 +44,15 @@ void GameField::UpdateField()
 	DrawBrickDamage();
 	//--------------------------------------
 
+	DrawActors();
 	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) { DrawTank(tank); }); //DrawTank
 	DrawBullets();
 
 	objTankCollision.MonitoringCollision(*this);
 	objBulletCollision.MonitoringCollision(*this);
 	objShootingBullets.MonitoringShootingBullets(*this);
+
+	MonitoringKeys();
 
 	clock.restart();
 

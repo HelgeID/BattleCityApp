@@ -2,6 +2,7 @@
 #define SCREEN_H
 
 #include <SFML\Graphics.hpp>
+#include "actor.hpp"
 #include "tank.hpp"
 #include "block.hpp"
 #include "bullet.hpp"
@@ -47,6 +48,13 @@ class GameField
 	void CreateBullet(Tank&, sf::Vector2f);
 	void CreateBullet(Tank&);
 	void DrawBullets();
+
+	//actors
+	Actor *firstPlayer;
+	Actor *secondPlayer;
+	void CreateActors();
+	void DrawActors();
+	void MonitoringKeys();
 
 	//monitoring tanks
 	class TankCollision

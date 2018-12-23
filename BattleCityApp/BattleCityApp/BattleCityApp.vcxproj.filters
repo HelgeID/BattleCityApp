@@ -81,6 +81,9 @@
     <ClCompile Include="field_shooting_bullets.cpp">
       <Filter>Файлы исходного кода\field</Filter>
     </ClCompile>
+    <ClCompile Include="field_actor_funcs.cpp">
+      <Filter>Файлы исходного кода\field</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -123,6 +126,9 @@
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="bullet.hpp">
+      <Filter>Заголовочные файлы\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="actor.hpp">
       <Filter>Заголовочные файлы\objects</Filter>
     </ClInclude>
   </ItemGroup>

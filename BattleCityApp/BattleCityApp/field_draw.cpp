@@ -55,6 +55,18 @@ void GameField::DrawBlocks()
 	return;
 }
 
+//drawing players
+void GameField::DrawActors()
+{
+	//first player
+	firstPlayer->Presence() ?
+		p_showframe ? window.draw(firstPlayer->frame) : window.draw(firstPlayer->takeObj()) : NULL;
+	//second player
+	secondPlayer->Presence() ?
+		p_showframe ? window.draw(secondPlayer->frame) : window.draw(secondPlayer->takeObj()) : NULL;
+	return;
+}
+
 //drawing a tank(enemy)
 void GameField::DrawTank(Tank &tank)
 {
