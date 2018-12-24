@@ -9,6 +9,7 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	FillField();
 	FillMap();
 	LoadMap();
+	InitOutside();
 	CreateBlocks();
 	CreateActors();
 	CreateTanks();
@@ -48,11 +49,21 @@ void GameField::UpdateField()
 	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) { DrawTank(tank); }); //DrawTank
 	DrawBullets();
 
+	window.draw(outsideUP);
+	window.draw(outsideDOWN);
+	window.draw(outsideLEFT);
+	window.draw(outsideRIGHT);
+
 	objTankCollision.MonitoringCollision(*this);
 	objBulletCollision.MonitoringCollision(*this);
 	objShootingBullets.MonitoringShootingBullets(*this);
 
 	MonitoringKeys();
+	CHECK_ACTOR_ON_COLLISION_ACTOR(firstPlayer, secondPlayer);
+	CHECK_ACTOR_ON_COLLISION_FRAME(firstPlayer, secondPlayer);
+	CHECK_ACTOR_ON_COLLISION_ENEMIES(firstPlayer, secondPlayer);
+	CHECK_ACTOR_ON_COLLISION_BULLET(firstPlayer, secondPlayer);
+	CHECK_ACTOR_ON_COLLISION_BLOCKS(firstPlayer, secondPlayer);
 
 	clock.restart();
 

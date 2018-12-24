@@ -157,6 +157,12 @@ public:
 		return;
 	}
 
+	void loadIndex(const int indexTank)
+	{
+		this->indexTank = indexTank;
+		return;
+	}
+
 	int takeIndex() const
 	{
 		return indexTank;

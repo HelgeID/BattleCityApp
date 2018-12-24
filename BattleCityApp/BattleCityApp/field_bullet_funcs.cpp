@@ -7,7 +7,8 @@ Bullet* _createBulletLEFT(const sf::Vector2f, sf::Texture&);
 Bullet* _createBulletDOWN(const sf::Vector2f, sf::Texture&);
 Bullet* _createBulletRIGHT(const sf::Vector2f, sf::Texture&);
 
-void GameField::CreateBullet(Tank& tank, sf::Vector2f offset = sf::Vector2f(0.f, 0.f))
+template <typename T>
+void GameField::CreateBullet(T& tank, sf::Vector2f offset = sf::Vector2f(0.f, 0.f))
 {
 	const Direction dir(tank.optTank.dir);
 	sf::Vector2f point; //central point of the sprite 
@@ -37,7 +38,8 @@ void GameField::CreateBullet(Tank& tank, sf::Vector2f offset = sf::Vector2f(0.f,
 	return;
 }
 
-void GameField::CreateBullet(Tank& tank) { CreateBullet(tank, sf::Vector2f(0.f, 0.f)); }
+void GameField::CreateBullet(Tank& tank) { CreateBullet<Tank>(tank, sf::Vector2f(0.f, 0.f)); }
+void GameField::CreateBullet(Actor& player) { CreateBullet<Actor>(player, sf::Vector2f(0.f, 0.f)); }
 
 Bullet* _createBulletUP(const sf::Vector2f point, sf::Texture &texture)
 {

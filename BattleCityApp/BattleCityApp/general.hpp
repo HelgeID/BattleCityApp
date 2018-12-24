@@ -16,3 +16,6 @@ extern bool Key_Left;
 extern bool Key_Right;
 extern bool Key_Up;
 extern bool Key_Down;
+
+extern bool Key_F;
+extern bool Key_Ctrl; //RControl

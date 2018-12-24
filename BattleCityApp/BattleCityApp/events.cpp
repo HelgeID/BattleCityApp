@@ -35,5 +35,7 @@ void GameEvent::UpdateEvent()
 	(sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) ? Key_Up = true : Key_Up = false;
 	(sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) ? Key_Down = true : Key_Down = false;
 
+	(sf::Keyboard::isKeyPressed(sf::Keyboard::F)) ? Key_F = true : Key_F = false;
+	(sf::Keyboard::isKeyPressed(sf::Keyboard::RControl)) ? Key_Ctrl = true : Key_Ctrl = false;
 	return;
 }

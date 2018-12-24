@@ -21,7 +21,7 @@ class GameField
 	float time;
 	int coef_reload;
 
-	sf::RectangleShape field;
+	sf::RectangleShape field, outsideUP, outsideDOWN, outsideLEFT, outsideRIGHT;
 	Map map;
 	TileMap tmap;
 	Part_Bricks_Map pbmap;
@@ -29,6 +29,7 @@ class GameField
 	void FillMap();
 	void LoadMap();
 	void ReadMap(std::vector<Block>::iterator&, const int, const int);
+	void InitOutside();
 	void DrawField();
 	void DrawMap();
 	void DrawBrickDamage();
@@ -44,9 +45,14 @@ class GameField
 	void MoveTank(Tank&, float);
 	void ControlTank_onFrame(Tank&);
 
-	Bullet *bulletArr[4] = { nullptr, nullptr, nullptr, nullptr };
-	void CreateBullet(Tank&, sf::Vector2f);
+	Bullet *bulletArr[6] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+
+	template <typename T>
+	void CreateBullet(T&, sf::Vector2f);
+
 	void CreateBullet(Tank&);
+	void CreateBullet(Actor&);
+
 	void DrawBullets();
 
 	//actors
@@ -54,7 +60,15 @@ class GameField
 	Actor *secondPlayer;
 	void CreateActors();
 	void DrawActors();
+	friend void MoveFirstPlayer(GameField&, const Direction);
+	friend void MoveSecondPlayer(GameField&, const Direction);
 	void MonitoringKeys();
+
+	void CHECK_ACTOR_ON_COLLISION_ACTOR(Actor*, Actor*);
+	void CHECK_ACTOR_ON_COLLISION_FRAME(Actor*, Actor*);
+	void CHECK_ACTOR_ON_COLLISION_ENEMIES(Actor*, Actor*);
+	void CHECK_ACTOR_ON_COLLISION_BULLET(Actor*, Actor*);
+	void CHECK_ACTOR_ON_COLLISION_BLOCKS(Actor*, Actor*);
 
 	//monitoring tanks
 	class TankCollision

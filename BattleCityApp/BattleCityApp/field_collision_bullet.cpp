@@ -153,6 +153,8 @@ void GameField::BulletCollision::CollisionTanks(GameField& gField)
 			if (gField.bulletArr[indxBullet]->frame.getGlobalBounds().intersects(it->frame.getGlobalBounds())) {
 				if (gField.bulletArr[indxBullet]->indexTank == it->takeIndex())
 					continue;
+				if (gField.bulletArr[indxBullet]->indexTank == 100 || gField.bulletArr[indxBullet]->indexTank == 200)
+					; //todo
 
 				//say the tank that the bullet hit the target
 				*gField.bulletArr[indxBullet]->bulletActivFlag = false;

@@ -137,3 +137,36 @@ void GameField::ReadMap(std::vector<Block>::iterator& it, const int i, const int
 	(*it).loadParamPartsBrick();
 	return;
 }
+
+void GameField::InitOutside()
+{
+	const float X1(field.getPosition().x);
+	const float Y1(field.getPosition().y);
+	const float X2(field.getPosition().x + field.getSize().x);
+	const float Y2(field.getPosition().y + field.getSize().y);
+
+	outsideUP.setPosition(sf::Vector2f(X1 - 32, Y1 - 16));
+	outsideUP.setSize(sf::Vector2f(X2 + 32, Y1 - 1));
+	outsideDOWN.setPosition(sf::Vector2f(X1 - 32, Y2 + 1));
+	outsideDOWN.setSize(sf::Vector2f(X2 + 32, Y2 + 16));
+	outsideLEFT.setPosition(sf::Vector2f(X1 - 32, Y1 - 16));
+	outsideLEFT.setSize(sf::Vector2f(X1 - 1, Y2 + 16));
+	outsideRIGHT.setPosition(sf::Vector2f(X2 + 1, Y1 - 16));
+	outsideRIGHT.setSize(sf::Vector2f(X2 + 32, Y2 + 16));
+
+	//set color
+	outsideUP.setFillColor(sf::Color(124, 124, 124, 50));
+	outsideUP.setOutlineThickness(0.5f);
+	outsideUP.setOutlineColor(sf::Color::Red);
+	outsideDOWN.setFillColor(sf::Color(124, 124, 124, 50));
+	outsideDOWN.setOutlineThickness(0.5f);
+	outsideDOWN.setOutlineColor(sf::Color::Red);
+	outsideLEFT.setFillColor(sf::Color(124, 124, 124, 50));
+	outsideLEFT.setOutlineThickness(0.5f);
+	outsideLEFT.setOutlineColor(sf::Color::Red);
+	outsideRIGHT.setFillColor(sf::Color(124, 124, 124, 50));
+	outsideRIGHT.setOutlineThickness(0.5f);
+	outsideRIGHT.setOutlineColor(sf::Color::Red);
+
+	return;
+}

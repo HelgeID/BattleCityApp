@@ -15,3 +15,6 @@ bool Key_Left = false;
 bool Key_Right = false;
 bool Key_Up = false;
 bool Key_Down = false;
+
+bool Key_F = false;
+bool Key_Ctrl = false;
