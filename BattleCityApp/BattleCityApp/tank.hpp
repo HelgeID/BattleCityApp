@@ -80,6 +80,10 @@ public:
 	{
 	}
 
+	Tank(sf::Texture &texture, const char* actorName) : Object(texture), Frame(actorName), indexTank(0)
+	{
+	}
+
 	Tank& operator=(const Tank& obj)
 	{
 		if (this == &obj)

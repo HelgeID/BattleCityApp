@@ -56,14 +56,10 @@ void GameField::UpdateField()
 
 	objTankCollision.MonitoringCollision(*this);
 	objBulletCollision.MonitoringCollision(*this);
+	objPlayerCollision.MonitoringCollision(*this);
 	objShootingBullets.MonitoringShootingBullets(*this);
 
 	MonitoringKeys();
-	CHECK_ACTOR_ON_COLLISION_ACTOR(firstPlayer, secondPlayer);
-	CHECK_ACTOR_ON_COLLISION_FRAME(firstPlayer, secondPlayer);
-	CHECK_ACTOR_ON_COLLISION_ENEMIES(firstPlayer, secondPlayer);
-	CHECK_ACTOR_ON_COLLISION_BULLET(firstPlayer, secondPlayer);
-	CHECK_ACTOR_ON_COLLISION_BLOCKS(firstPlayer, secondPlayer);
 
 	clock.restart();
 

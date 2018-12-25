@@ -1,10 +1,11 @@
 ﻿#include "general.hpp"
 
 bool p_zoom = false;
-int p_size = 16;
 int p_level = 1;
 
 bool p_showframe = false;
+
+int SizeCell = 16;
 
 bool KeyActive = false;
 bool Key_A = false;

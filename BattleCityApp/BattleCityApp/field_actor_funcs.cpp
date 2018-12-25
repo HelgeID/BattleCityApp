@@ -1,12 +1,10 @@
 ﻿#include "field.h"
 #include "general.hpp"
 
-#define speedActor (1.f)
-
 void GameField::CreateActors()
 {
-	firstPlayer = new Actor(texture, true);
-	secondPlayer = new Actor(texture, true);
+	firstPlayer = new Player(texture, "first player", true);
+	secondPlayer = new Player(texture, "second player", true);
 
 	sf::Vector2f posFP(64.f, 208.f);
 	firstPlayer->loadTank(YELLOW, modA, UP);
@@ -27,14 +25,15 @@ void MoveFirstPlayer(GameField& gField, const Direction nextDir)
 	const Direction currentDir = gField.firstPlayer->optTank.dir;
 	switch (currentDir)
 	{
-	case UP: posY = -speedActor; break;
-	case LEFT: posX = -speedActor; break;
-	case DOWN: posY = speedActor; break;
-	case RIGHT: posX = speedActor; break;
+	case UP: posY = -PlayerSpeed; break;
+	case LEFT: posX = -PlayerSpeed; break;
+	case DOWN: posY = PlayerSpeed; break;
+	case RIGHT: posX = PlayerSpeed; break;
 	}
 	currentDir != nextDir ?
 		gField.firstPlayer->loadTank(gField.firstPlayer->optTank.col, gField.firstPlayer->optTank.mod, nextDir) :
 		gField.firstPlayer->moveObj(posX, posY);
+
 	return;
 }
 
@@ -44,14 +43,15 @@ void MoveSecondPlayer(GameField& gField, const Direction nextDir)
 	const Direction currentDir = gField.secondPlayer->optTank.dir;
 	switch (currentDir)
 	{
-	case UP: posY = -speedActor; break;
-	case LEFT: posX = -speedActor; break;
-	case DOWN: posY = speedActor; break;
-	case RIGHT: posX = speedActor; break;
+	case UP: posY = -PlayerSpeed; break;
+	case LEFT: posX = -PlayerSpeed; break;
+	case DOWN: posY = PlayerSpeed; break;
+	case RIGHT: posX = PlayerSpeed; break;
 	}
 	currentDir != nextDir ?
 		gField.secondPlayer->loadTank(gField.secondPlayer->optTank.col, gField.secondPlayer->optTank.mod, nextDir) :
 		gField.secondPlayer->moveObj(posX, posY);
+
 	return;
 }
 
@@ -105,136 +105,5 @@ void GameField::MonitoringKeys()
 		std::cout << std::endl;
 	}
 		
-	return;
-}
-
-auto boom = [](Tank& tank1, Tank& tank2)
-{
-	sf::FloatRect bulletRectPlayer1 = tank1.takeObj().getGlobalBounds();
-	sf::FloatRect bulletRectPlayer2 = tank2.takeObj().getGlobalBounds();
-
-	const bool fX(bulletRectPlayer1.left > bulletRectPlayer2.left);
-	const bool fY(bulletRectPlayer1.top > bulletRectPlayer2.top);
-
-	if (tank2.optTank.dir == UP) {
-		if (tank1.optTank.dir == UP) {
-			fY == true ? tank1.moveObj(0.f, 1.f) :
-				tank2.moveObj(0.f, 1.f);
-		}
-		else if (tank1.optTank.dir == LEFT) {
-			fX == true ? tank1.moveObj(1.f, 0.f) :
-				!fY ? tank2.moveObj(0.f, 1.f) : NULL;
-		}
-		else if (tank1.optTank.dir == DOWN) {
-			!fY ? tank1.moveObj(0.f, -1.f),
-				tank2.moveObj(0.f, 1.f) : NULL;
-		}
-		else if (tank1.optTank.dir == RIGHT) {
-			!fX ? tank1.moveObj(-1.f, 0.f) :
-				!fY ? tank2.moveObj(0.f, 1.f) : NULL;
-		}
-	}
-	else if (tank2.optTank.dir == LEFT) {
-		if (tank1.optTank.dir == UP) {
-			fY == true ? tank1.moveObj(0.f, 1.f) :
-				!fX ? tank2.moveObj(1.f, 0.f) : NULL;
-		}
-		else if (tank1.optTank.dir == LEFT) {
-			fX == true ? tank1.moveObj(1.f, 0.f) :
-				tank2.moveObj(1.f, 0.f);
-		}
-		else if (tank1.optTank.dir == DOWN) {
-			!fY ? tank1.moveObj(0.f, -1.f) :
-				!fX ? tank2.moveObj(1.f, 0.f) : NULL;
-		}
-		else if (tank1.optTank.dir == RIGHT) {
-			!fX ? tank1.moveObj(-1.f, 0.f),
-				tank2.moveObj(1.f, 0.f) : NULL;
-		}
-	}
-	else if (tank2.optTank.dir == DOWN) {
-		if (tank1.optTank.dir == UP) {
-			fY == true ? tank1.moveObj(0.f, 1.f),
-				tank2.moveObj(0.f, -1.f) : NULL;
-		}
-		else if (tank1.optTank.dir == LEFT) {
-			fX == true ? tank1.moveObj(1.f, 0.f) :
-				fY == true ? tank2.moveObj(0.f, -1.f) : NULL;
-		}
-		else if (tank1.optTank.dir == DOWN) {
-			!fY ? tank1.moveObj(0.f, -1.f) :
-				tank2.moveObj(0.f, -1.f);
-		}
-		else if (tank1.optTank.dir == RIGHT) {
-			!fX ? tank1.moveObj(-1.f, 0.f) :
-				fY == true ? tank2.moveObj(0.f, -1.f) : NULL;
-		}
-	}
-	else if (tank2.optTank.dir == RIGHT) {
-		if (tank1.optTank.dir == UP) {
-			fY == true ? tank1.moveObj(0.f, 1.f) :
-				fX == true ? tank2.moveObj(-1.f, 0.f) : NULL;
-		}
-		else if (tank1.optTank.dir == LEFT) {
-			fX == true ? tank1.moveObj(1.f, 0.f),
-				tank2.moveObj(-1.f, 0.f) : NULL;
-		}
-		else if (tank1.optTank.dir == DOWN) {
-			!fY ? tank1.moveObj(0.f, -1.f) :
-				fX == true ? tank2.moveObj(-1.f, 0.f) : NULL;
-		}
-		else if (tank1.optTank.dir == RIGHT) {
-			!fX ? tank1.moveObj(-1.f, 0.f) :
-				tank2.moveObj(-1.f, 0.f);
-		}
-	}
-};
-
-void GameField::CHECK_ACTOR_ON_COLLISION_ACTOR(Actor *player1, Actor *player2)
-{
-	if (player1->takeObj().getGlobalBounds().intersects(player2->takeObj().getGlobalBounds()))
-	{
-		if (Key_A || Key_D || Key_W || Key_S)
-			boom(*player1, *player2);
-		if (Key_Left || Key_Right || Key_Up || Key_Down)
-			boom(*player2, *player1);
-	}
-}
-
-void GameField::CHECK_ACTOR_ON_COLLISION_BLOCKS(Actor *player1, Actor *player2)
-{
-
-}
-
-void GameField::CHECK_ACTOR_ON_COLLISION_BULLET(Actor *player1, Actor *player2)
-{
-
-}
-
-void GameField::CHECK_ACTOR_ON_COLLISION_ENEMIES(Actor *player1, Actor *player2)
-{
-
-}
-
-void GameField::CHECK_ACTOR_ON_COLLISION_FRAME(Actor *player1, Actor *player2)
-{
-	auto collisionframe = [&](Actor *player)
-	{
-		if (player->takeObj().getGlobalBounds().intersects(outsideUP.getGlobalBounds()))
-			player->moveObj(0.f, 1.f);
-		else if (player->takeObj().getGlobalBounds().intersects(outsideDOWN.getGlobalBounds()))
-			player->moveObj(0.f, -1.f);
-		else if (player->takeObj().getGlobalBounds().intersects(outsideLEFT.getGlobalBounds()))
-			player->moveObj(1.f, 0.f);
-		else if (player->takeObj().getGlobalBounds().intersects(outsideRIGHT.getGlobalBounds()))
-			player->moveObj(-1.f, 0.f);
-	};
-
-	if (player1->Presence())
-		collisionframe(player1);
-
-	if (player2->Presence())
-		collisionframe(player2);
-
 	return;
 }

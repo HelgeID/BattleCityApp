@@ -49,26 +49,36 @@ class GameField
 
 	template <typename T>
 	void CreateBullet(T&, sf::Vector2f);
-
 	void CreateBullet(Tank&);
-	void CreateBullet(Actor&);
-
+	void CreateBullet(Player&);
 	void DrawBullets();
 
+	std::vector<RecShape> vecRecShape;
+	template<typename T> void FormArrayCells(T **, const sf::Vector2i, const sf::Vector2i, RecShape&);
+	template<typename T> void DisbandArrayCells(T **);
+
+	void CheckOnCollisionFrame(Tank&); //for the tanks
+	void CheckOnCollisionBlocks(Tank&, const bool fPL = false); //for the tanks
+	void CheckOnCollisionTanks(Tank&, Tank&); //for the tanks
+	void CheckOnCollisionFrame(Bullet&); //for the bullets
+	void CheckOnCollisionBlocks(Bullet&); //for the bullets
+	void CheckOnCollisionTanks(Bullet&); //for the bullets
+	void CheckOnCollisionBullets(Bullet&, Bullet&); //for the bullets
+	void CheckOnCollisionPlayers(Bullet&); //for the bullets
+	void CheckOnCollisionFrame(Player&); //for the players
+	void CheckOnCollisionBlocks(Player&); //for the players
+	void CheckOnCollisionTanks(Player&); //for the players
+	void CheckOnCollisionBullets(Player&); //for the players
+	void CheckOnCollisionPlayers(Player&, Player&); //for the players
+
 	//actors
-	Actor *firstPlayer;
-	Actor *secondPlayer;
+	Player *firstPlayer;
+	Player *secondPlayer;
 	void CreateActors();
 	void DrawActors();
 	friend void MoveFirstPlayer(GameField&, const Direction);
 	friend void MoveSecondPlayer(GameField&, const Direction);
 	void MonitoringKeys();
-
-	void CHECK_ACTOR_ON_COLLISION_ACTOR(Actor*, Actor*);
-	void CHECK_ACTOR_ON_COLLISION_FRAME(Actor*, Actor*);
-	void CHECK_ACTOR_ON_COLLISION_ENEMIES(Actor*, Actor*);
-	void CHECK_ACTOR_ON_COLLISION_BULLET(Actor*, Actor*);
-	void CHECK_ACTOR_ON_COLLISION_BLOCKS(Actor*, Actor*);
 
 	//monitoring tanks
 	class TankCollision
@@ -91,9 +101,21 @@ class GameField
 		void CollisionBlocks(GameField&);
 		void CollisionTanks(GameField&);
 		void CollisionBullets(GameField&);
-		void CollisionActor1(GameField&);
-		void CollisionActor2(GameField&);
+		void CollisionPlayers(GameField&);
 	} objBulletCollision;
+
+	//monitoring players
+	class PlayerCollision
+	{
+	public:
+		void MonitoringCollision(GameField&);
+	private:
+		void CollisionFrame(GameField&);
+		void CollisionBlocks(GameField&);
+		void CollisionTanks(GameField&);
+		void CollisionBullets(GameField&);
+		void CollisionPlayers(GameField&);
+	} objPlayerCollision;
 
 	//monitoring shooting bullets
 	class ShootingBullets

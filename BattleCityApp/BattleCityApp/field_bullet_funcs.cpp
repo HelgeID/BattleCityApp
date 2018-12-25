@@ -28,9 +28,10 @@ void GameField::CreateBullet(T& tank, sf::Vector2f offset = sf::Vector2f(0.f, 0.
 	bulletObj->indexTank = tank.takeIndex();
 
 	const size_t bulletArrSize = sizeof(this->bulletArr) / sizeof(*this->bulletArr);
-	for (int i(0); i < bulletArrSize; ++i) {
-		if (this->bulletArr[i] == nullptr) {
-			this->bulletArr[i] = bulletObj;
+	for (int indxBullet(0); indxBullet < bulletArrSize; ++indxBullet) {
+		if (this->bulletArr[indxBullet] == nullptr) {
+			bulletObj->indxBullet = indxBullet;
+			this->bulletArr[indxBullet] = bulletObj;
 			break;
 		}
 	}
@@ -39,7 +40,7 @@ void GameField::CreateBullet(T& tank, sf::Vector2f offset = sf::Vector2f(0.f, 0.
 }
 
 void GameField::CreateBullet(Tank& tank) { CreateBullet<Tank>(tank, sf::Vector2f(0.f, 0.f)); }
-void GameField::CreateBullet(Actor& player) { CreateBullet<Actor>(player, sf::Vector2f(0.f, 0.f)); }
+void GameField::CreateBullet(Player& player) { CreateBullet<Player>(player, sf::Vector2f(0.f, 0.f)); }
 
 Bullet* _createBulletUP(const sf::Vector2f point, sf::Texture &texture)
 {

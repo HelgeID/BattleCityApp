@@ -5,7 +5,7 @@
 #include "object.hpp"
 #include "frame.hpp"
 
-#define BulletSpeed 3000
+#define BulletSpeed 1000
 
 class Bullet : public Object, public Frame
 {
@@ -42,6 +42,7 @@ public:
 
 	bool* bulletActivFlag;
 	int indexTank; //who owns the bullet
+	int indxBullet; //position in the array 
 
 	void move(const float time = 10)
 	{

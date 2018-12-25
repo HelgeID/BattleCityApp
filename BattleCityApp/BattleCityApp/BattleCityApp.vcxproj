@@ -121,8 +121,8 @@
     <ClCompile Include="events.cpp" />
     <ClCompile Include="field_actor_funcs.cpp" />
     <ClCompile Include="field_bullet_funcs.cpp" />
-    <ClCompile Include="field_collision_bullet.cpp" />
-    <ClCompile Include="field_collision_tank.cpp" />
+    <ClCompile Include="collision.cpp" />
+    <ClCompile Include="monitoring_collision.cpp" />
     <ClCompile Include="field_draw.cpp" />
     <ClCompile Include="field_map_funcs.cpp" />
     <ClCompile Include="field_shooting_bullets.cpp" />
@@ -131,13 +131,10 @@
     <ClCompile Include="game_system.cpp" />
     <ClCompile Include="general.cpp" />
     <ClCompile Include="hit_brick.cpp" />
-    <ClCompile Include="map.cpp" />
     <ClCompile Include="part_bricks_map.cpp" />
-    <ClCompile Include="player.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="source.cpp" />
     <ClCompile Include="tile_map.cpp" />
-    <ClCompile Include="update.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="actor.hpp" />
@@ -150,11 +147,9 @@
     <ClInclude Include="map.h" />
     <ClInclude Include="object.hpp" />
     <ClInclude Include="part_bricks_map.h" />
-    <ClInclude Include="player.h" />
     <ClInclude Include="field.h" />
     <ClInclude Include="tank.hpp" />
     <ClInclude Include="tile_map.h" />
-    <ClInclude Include="update.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

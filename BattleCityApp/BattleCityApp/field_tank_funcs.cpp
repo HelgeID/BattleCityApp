@@ -38,6 +38,7 @@ void GameField::MoveTank(Tank& tank, float position)
 	return;
 }
 
+//todo
 void GameField::ControlTank_onFrame(Tank& tank)
 {
 	tank.takeObj().getPosition().y < field.getPosition().y ? tank.moveObj(0.f, 2.f) : NULL;

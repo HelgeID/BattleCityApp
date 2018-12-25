@@ -5,12 +5,14 @@
 #include "general.hpp"
 #include "tank.hpp"
 
-class Actor : public Tank
+#define PlayerSpeed (0.5f)
+
+class Player : public Tank
 {
 private:
 	bool presenceflag;
 public:
-	Actor(sf::Texture &texture,  const bool presenceflag) : Tank(texture), presenceflag(false)
+	Player(sf::Texture &texture, const char* actorName, const bool presenceflag) : Tank(texture, actorName), presenceflag(false)
 	{
 		this->presenceflag = presenceflag;
 	}

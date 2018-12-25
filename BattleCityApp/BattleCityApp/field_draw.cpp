@@ -58,11 +58,18 @@ void GameField::DrawBlocks()
 //drawing players
 void GameField::DrawActors()
 {
-	//first player
-	firstPlayer->Presence() ?
+	if (coef_reload == firstPlayer->optTank.coef_reload && (Key_A || Key_D || Key_W || Key_S))
+		firstPlayer->reloadTank();
+	if (coef_reload == secondPlayer->optTank.coef_reload && (Key_Left || Key_Right || Key_Up || Key_Down))
+		secondPlayer->reloadTank();
+
+	//frames position
+	firstPlayer->setPosFrame(firstPlayer->takeObj().getPosition().x, firstPlayer->takeObj().getPosition().y);
+	secondPlayer->setPosFrame(secondPlayer->takeObj().getPosition().x, secondPlayer->takeObj().getPosition().y);
+	
+	firstPlayer->Presence() ? //first
 		p_showframe ? window.draw(firstPlayer->frame) : window.draw(firstPlayer->takeObj()) : NULL;
-	//second player
-	secondPlayer->Presence() ?
+	secondPlayer->Presence() ? //second
 		p_showframe ? window.draw(secondPlayer->frame) : window.draw(secondPlayer->takeObj()) : NULL;
 	return;
 }
@@ -84,7 +91,8 @@ void GameField::DrawTank(Tank &tank)
 
 	if (coef_reload == tank.optTank.coef_reload)
 		tank.reloadTank();
-
+	
+	//frames position
 	tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
 
 	if (p_showframe)

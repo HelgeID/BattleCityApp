@@ -22,15 +22,12 @@
     <Filter Include="Файлы исходного кода\field">
       <UniqueIdentifier>{c5fa210c-9942-4915-82da-822fa10eccb4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Файлы исходного кода\collision">
+      <UniqueIdentifier>{f271161d-9b0a-4361-b420-b3e20893d368}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="player.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="update.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="events.cpp">
@@ -43,9 +40,6 @@
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="field.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
-    <ClCompile Include="map.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
     <ClCompile Include="general.cpp">
@@ -72,27 +66,21 @@
     <ClCompile Include="field_bullet_funcs.cpp">
       <Filter>Файлы исходного кода\field</Filter>
     </ClCompile>
-    <ClCompile Include="field_collision_tank.cpp">
-      <Filter>Файлы исходного кода\field</Filter>
-    </ClCompile>
-    <ClCompile Include="field_collision_bullet.cpp">
-      <Filter>Файлы исходного кода\field</Filter>
-    </ClCompile>
     <ClCompile Include="field_shooting_bullets.cpp">
       <Filter>Файлы исходного кода\field</Filter>
     </ClCompile>
     <ClCompile Include="field_actor_funcs.cpp">
       <Filter>Файлы исходного кода\field</Filter>
     </ClCompile>
+    <ClCompile Include="collision.cpp">
+      <Filter>Файлы исходного кода\collision</Filter>
+    </ClCompile>
+    <ClCompile Include="monitoring_collision.cpp">
+      <Filter>Файлы исходного кода\collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="player.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
-    <ClInclude Include="update.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
     <ClInclude Include="events.h">
