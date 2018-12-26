@@ -90,20 +90,22 @@ void GameField::MonitoringKeys()
 		MoveSecondPlayer(*this, DOWN);
 	}
 
-	if (Key_F == true && !firstPlayer->optTankShooting.bulletActivFlag) {
+	if (Key_F == true && !firstPlayer->optTankShooting.bulletActivFlag && time_firstPlayer.asSeconds() > 2.f) {
 		CreateBullet(*firstPlayer);
+		time_firstPlayer = clock_firstPlayer.restart();
 		for (int i(0); i < 6; i++)
 			bulletArr[i] != nullptr ? std::cout << bulletArr[i]->indexTank << "-" : std::cout << "X" << "-";
 		std::cout << std::endl;
 	}
 		
 
-	if (Key_Ctrl == true && !secondPlayer->optTankShooting.bulletActivFlag) {
+	if (Key_Ctrl == true && !secondPlayer->optTankShooting.bulletActivFlag && time_secondPlayer.asSeconds() > 2.f) {
 		CreateBullet(*secondPlayer);
+		time_secondPlayer = clock_secondPlayer.restart();
 		for (int i(0); i < 6; i++)
 			bulletArr[i] != nullptr ? std::cout << bulletArr[i]->indexTank << "-" : std::cout << "X" << "-";
 		std::cout << std::endl;
 	}
-		
+
 	return;
 }

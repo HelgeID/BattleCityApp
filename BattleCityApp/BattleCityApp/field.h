@@ -21,6 +21,9 @@ class GameField
 	float time;
 	int coef_reload;
 
+	sf::Clock clock_firstPlayer, clock_secondPlayer;
+	sf::Time time_firstPlayer, time_secondPlayer;
+
 	sf::RectangleShape field, outsideUP, outsideDOWN, outsideLEFT, outsideRIGHT;
 	Map map;
 	TileMap tmap;

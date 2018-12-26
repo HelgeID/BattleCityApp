@@ -184,33 +184,38 @@ void GameField::CheckOnCollisionBlocks(Tank& tank, const bool fPL)
 						window.draw(block[index].frame);
 
 					auto crossing = [&](int index) { return tank.takeObj().getGlobalBounds().intersects((*(&block[0] + index)).frame.getGlobalBounds()); };
-					if (crossing(index)) {
-						//processing player
-						if (fPL == true) {
-							while (crossing(index)) {
-								MoveTank(tank, -1.f);
-								tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
+					if (block[index].type == Brick || block[index].type == Steel)
+					{
+						if (crossing(index)) {
+							//processing player
+							if (fPL == true) {
+								while (crossing(index)) {
+									MoveTank(tank, -1.f);
+									tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
+								}
+							}
+							//processing enemie
+							else
+							{
+								const bool bulletActivFlag(tank.optTankShooting.bulletActivFlag);
+								tank.SetBoomCoord(posX, posY);
+								tank.loadTank(
+									tank.optTank.col,
+									tank.optTank.mod,
+									tank.optTank.dir = tank.RandomReverseDirection(tank.optTank.dir)
+								);
+								tank.optTankShooting.bulletActivFlag = bulletActivFlag;
+								tank.setPosObj((float)posX, (float)posY);
+
+								std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
+								std::cerr << " :" << posX << " :" << posY << std::endl;
 							}
 						}
-						//processing enemie
-						else
-						{
-							const bool bulletActivFlag(tank.optTankShooting.bulletActivFlag);
-							tank.SetBoomCoord(posX, posY);
-							tank.loadTank(
-								tank.optTank.col,
-								tank.optTank.mod,
-								tank.optTank.dir = tank.RandomReverseDirection(tank.optTank.dir)
-							);
-							tank.optTankShooting.bulletActivFlag = bulletActivFlag;
-							tank.setPosObj((float)posX, (float)posY);
-
-							std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
-							std::cerr << " :" << posX << " :" << posY << std::endl;
-						}
+						if (!tank.CompareBoomCoord(posX, posY) && !fPL)
+							tank.ResetBoomParam();
 					}
-					if (!tank.CompareBoomCoord(posX, posY) && !fPL)
-						tank.ResetBoomParam();
+
+					//todo type
 				}
 			}
 			ptr++;
@@ -409,6 +414,14 @@ void GameField::CheckOnCollisionBlocks(Bullet& bullet)
 			}
 
 			delete[] array;
+		}
+
+		if (block[indxBlock].type == Steel) {
+			//say the tank that the bullet hit the target
+			*bulletArr[indxBullet]->bulletActivFlag = false;
+			//remove the bullet
+			delete bulletArr[indxBullet];
+			bulletArr[indxBullet] = nullptr;
 		}
 	}
 	return;

@@ -12,7 +12,7 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	InitOutside();
 	CreateBlocks();
 	CreateActors();
-	//CreateTanks();
+	CreateTanks();
 
 	//--------------------------------------
 	//block[14].brickDamage(partsBrickVec, 0);
@@ -36,6 +36,8 @@ GameField::~GameField()
 void GameField::UpdateField()
 {
 	time = (float)clock.getElapsedTime().asMicroseconds();
+	time_firstPlayer = clock_firstPlayer.getElapsedTime();
+	time_secondPlayer = clock_secondPlayer.getElapsedTime();
 
 	window.clear(sf::Color(127, 127, 127));
 	DrawField();
