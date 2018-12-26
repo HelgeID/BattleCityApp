@@ -12,7 +12,7 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	InitOutside();
 	CreateBlocks();
 	CreateActors();
-	CreateTanks();
+	//CreateTanks();
 
 	//--------------------------------------
 	//block[14].brickDamage(partsBrickVec, 0);

@@ -32,6 +32,10 @@ class PartsBrickArr
 public:
 	PartBrick pbArr[16];
 	bool pbStateArr[8] = { false, false, false, false, false, false, false, false };
+	std::unique_ptr<bool> pbStateL{ new bool(false) };
+	std::unique_ptr<bool> pbStateR{ new bool(false) };
+	std::unique_ptr<bool> pbStateU{ new bool(false) };
+	std::unique_ptr<bool> pbStateD{ new bool(false) };
 };
 
 class Block : public Object, public Frame

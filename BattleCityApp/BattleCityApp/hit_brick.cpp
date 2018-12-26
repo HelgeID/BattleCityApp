@@ -117,11 +117,13 @@ void Block::overloadFrame(const Direction dir)
 
 	struct Check
 	{
-		static bool CheckPbArrFunc(const Block& obj, const int first, const int second)
+		static bool CheckPbArrFunc(const Block& obj, const int first, const int second, const int third, const int fourth)
 		{
 			bool Check1 = obj.partBrick->pbArr[first].presence;
 			bool Check2 = obj.partBrick->pbArr[second].presence;
-			return Check1 && Check2;
+			bool Check3 = obj.partBrick->pbArr[third].presence;
+			bool Check4 = obj.partBrick->pbArr[fourth].presence;
+			return Check1 && Check2 && Check3 && Check4;
 		}
 
 		static bool CheckPbStateArrFunc(const Block& obj, const Direction dir)
@@ -134,17 +136,19 @@ void Block::overloadFrame(const Direction dir)
 		}
 	};
 
-	auto paramset = [&]()
+	auto paramset = [&](const int nothing = 0)
 	{
 		float xSize = (float)posX2 - posX1;
 		float ySize = (float)posY2 - posY1;
-		frame.setSize(sf::Vector2f(xSize, ySize));
-		frame.setPosition(sf::Vector2f((float)posX1, (float)posY1));
+		nothing ? frame.setSize(sf::Vector2f(xSize, ySize)) : 
+			frame.setSize(sf::Vector2f((float)nothing, (float)nothing));
+		nothing ? frame.setPosition(sf::Vector2f((float)posX1, (float)posY1)) : 
+			frame.setPosition(sf::Vector2f((float)nothing, (float)nothing));
 		return true;
 	};
 
 	int coeff(NULL); //coefficient passage of the array (pbArr)
-	auto offset = [&](int& II, int& JJ, const int indx, const bool det_dir, const int coeff)
+	auto offset1 = [&](int& II, int& JJ, const int indx, const bool det_dir, const int coeff)
 	{
 		if (!partBrick->pbStateArr[indx]) {
 			if (partBrick->pbArr[II].presence && partBrick->pbArr[JJ].presence) {
@@ -156,7 +160,7 @@ void Block::overloadFrame(const Direction dir)
 					else
 						posY2 -= 4;
 
-					return paramset();
+					return paramset(1);
 				}
 
 				if (dir == LEFT || dir == RIGHT) {
@@ -165,7 +169,7 @@ void Block::overloadFrame(const Direction dir)
 					else
 						posX2 -= 4;
 
-					return paramset();
+					return paramset(1);
 				}
 
 			}
@@ -179,18 +183,18 @@ void Block::overloadFrame(const Direction dir)
 
 	auto offset2 = [&](const Direction dir, const bool Check1, const bool Check2)
 	{
-		if (Check1 || Check2) {
+		if (Check1 == true || Check2 == true) {
 			if (dir == UP || dir == DOWN) {
-				Check1 ? posX1 += 8 : NULL;
-				Check2 ? posX2 -= 8 : NULL;
+				*partBrick->pbStateL = Check1 ? posX1 += 8 : NULL;
+				*partBrick->pbStateR = Check2 ? posX2 -= 8 : NULL;
 			}
 
 			if (dir == LEFT || dir == RIGHT) {
-				Check1 ? posY1 += 8 : NULL;
-				Check2 ? posY2 -= 8 : NULL;
+				*partBrick->pbStateU = Check1 ? posY1 += 8 : NULL;
+				*partBrick->pbStateD = Check2 ? posY2 -= 8 : NULL;
 			}
 
-			return paramset();
+			return paramset(1);
 		}
 		return false;
 	};
@@ -199,76 +203,104 @@ void Block::overloadFrame(const Direction dir)
 	//UP, LEFT => true; DOWN, RIGHT => false; (0123 - value dir)
 	auto DetDir = [&](const Direction dir) { return (dir < 2); };
 
+	bool CheckL = (Check::CheckPbArrFunc(*this, 0, 2, 4, 6));
+	bool CheckR = (Check::CheckPbArrFunc(*this, 1, 3, 5, 7));
+	bool CheckU = (Check::CheckPbArrFunc(*this, 8, 10, 12, 14));
+	bool CheckD = (Check::CheckPbArrFunc(*this, 9, 11, 13, 15));
+
 	if (dir == DOWN) {
 		if (Check::CheckPbStateArrFunc(*this, dir))
 			;
 		else {
-			bool CheckL = (Check::CheckPbArrFunc(*this, 0, 2) && Check::CheckPbArrFunc(*this, 2, 4) && Check::CheckPbArrFunc(*this, 4, 6));
-			bool CheckR = (Check::CheckPbArrFunc(*this, 1, 3) && Check::CheckPbArrFunc(*this, 3, 5) && Check::CheckPbArrFunc(*this, 5, 7));
-			offset2(dir, CheckL, CheckR);
+			if (*partBrick->pbStateL || *partBrick->pbStateR)
+				;
+			else
+				offset2(dir, CheckL, CheckR);
 		}
+
+		(Check::CheckPbArrFunc(*this, 0, 1, 2, 3)) ?
+			*partBrick->pbStateU = true : NULL;
 
 		int II(0), JJ(1);
 		for (int indx = 0, coeff = 2; indx <= 3; indx = indx + 1) {
-			if (offset(II, JJ, indx, DetDir(dir), coeff))
+			if (offset1(II, JJ, indx, DetDir(dir), coeff))
 				break;
 		}
 
-		return;
+		goto add_checking;
 	}
 
 	if (dir == UP) {
 		if (Check::CheckPbStateArrFunc(*this, dir))
 			;
 		else {
-			bool CheckL = (Check::CheckPbArrFunc(*this, 6, 4) && Check::CheckPbArrFunc(*this, 4, 2) && Check::CheckPbArrFunc(*this, 2, 0));
-			bool CheckR = (Check::CheckPbArrFunc(*this, 7, 5) && Check::CheckPbArrFunc(*this, 5, 3) && Check::CheckPbArrFunc(*this, 3, 1));
-			offset2(dir, CheckL, CheckR);
+			if (*partBrick->pbStateL || *partBrick->pbStateR)
+				;
+			else
+				offset2(dir, CheckL, CheckR);
 		}
+
+		(Check::CheckPbArrFunc(*this, 4, 5, 6, 7)) ?
+			*partBrick->pbStateD = true : NULL;
 
 		int II(7), JJ(6);
 		for (int indx = 3, coeff = -2; indx >= 0; indx = indx - 1) {
-			if (offset(II, JJ, indx, DetDir(dir), coeff))
+			if (offset1(II, JJ, indx, DetDir(dir), coeff))
 				break;
 		}
 
-		return;
+		goto add_checking;
 	}
 
 	if (dir == RIGHT) {
 		if (Check::CheckPbStateArrFunc(*this, dir))
 			;
 		else {
-			bool CheckU = (Check::CheckPbArrFunc(*this, 8, 10) && Check::CheckPbArrFunc(*this, 10, 12) && Check::CheckPbArrFunc(*this, 12, 14));
-			bool CheckD = (Check::CheckPbArrFunc(*this, 9, 11) && Check::CheckPbArrFunc(*this, 11, 13) && Check::CheckPbArrFunc(*this, 13, 15));
-			offset2(dir, CheckU, CheckD);
+			if (*partBrick->pbStateU || *partBrick->pbStateD)
+				;
+			else
+				offset2(dir, CheckU, CheckD);
 		}
+
+		(Check::CheckPbArrFunc(*this, 8, 9, 10, 11)) ?
+			*partBrick->pbStateL = true : NULL;
 
 		int II(8), JJ(9);
 		for (int indx = 4, coeff = 2; indx <= 7; indx = indx + 1) {
-			if (offset(II, JJ, indx, DetDir(dir), coeff))
+			if (offset1(II, JJ, indx, DetDir(dir), coeff))
 				break;
 		}
 
-		return;
+		goto add_checking;
 	}
 
 	if (dir == LEFT) {
 		if (Check::CheckPbStateArrFunc(*this, dir))
 			;
 		else {
-			bool CheckU = (Check::CheckPbArrFunc(*this, 14, 12) && Check::CheckPbArrFunc(*this, 12, 10) && Check::CheckPbArrFunc(*this, 10, 8));
-			bool CheckD = (Check::CheckPbArrFunc(*this, 15, 13) && Check::CheckPbArrFunc(*this, 13, 11) && Check::CheckPbArrFunc(*this, 11, 9));
-			offset2(dir, CheckU, CheckD);
+			if (*partBrick->pbStateU || *partBrick->pbStateD)
+				;
+			else
+				offset2(dir, CheckU, CheckD);
 		}
+
+		(Check::CheckPbArrFunc(*this, 12, 13, 14, 15)) ?
+			*partBrick->pbStateR = true : NULL;
 
 		int II(15), JJ(14);
 		for (int indx = 7, coeff = -2; indx >= 4; indx = indx - 1) {
-			if (offset(II, JJ, indx, DetDir(dir), coeff))
+			if (offset1(II, JJ, indx, DetDir(dir), coeff))
 				break;
 		}
 
-		return;
+		goto add_checking;
+	}
+
+	//Add Checking
+add_checking:
+	{
+		if (CheckL && CheckR && CheckU && CheckD)
+			paramset();
 	}
 
 	return;

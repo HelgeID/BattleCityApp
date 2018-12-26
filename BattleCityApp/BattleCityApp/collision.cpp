@@ -361,7 +361,7 @@ void GameField::CheckOnCollisionBlocks(Bullet& bullet)
 					std::cerr << "indxNUM: " << indxNUM << std::endl;
 				}
 				//additional damage
-				//gField.block[indxBlock].brickDamageAdditional(gField.partsBrickVec, gField.pbmap);
+				block[indxBlock].brickDamageAdditional(partsBrickVec, pbmap);
 
 				//overload frame
 				block[indxBlock].overloadFrame(dir);

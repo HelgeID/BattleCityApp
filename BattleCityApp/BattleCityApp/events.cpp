@@ -16,7 +16,8 @@ void GameEvent::UpdateEvent()
 	while (window.pollEvent(event))
 	{
 		if (event.type == sf::Event::Closed)
-			window.close();
+			//window.close();
+			!p_showframe ? p_showframe = true : p_showframe = false;
 		if (event.type == sf::Event::KeyPressed)
 			KeyActive = true;
 		if (event.type == sf::Event::KeyReleased)
