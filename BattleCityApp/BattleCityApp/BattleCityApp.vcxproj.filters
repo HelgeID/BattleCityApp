@@ -119,5 +119,11 @@
     <ClInclude Include="actor.hpp">
       <Filter>Заголовочные файлы\objects</Filter>
     </ClInclude>
+    <ClInclude Include="animation.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="animation_game.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

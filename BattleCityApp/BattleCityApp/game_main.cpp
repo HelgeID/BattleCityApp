@@ -21,7 +21,7 @@ Game::~Game()
 void Game::GameLaunch()
 {
 	// initialization zoom
-	zoomOn();
+	//zoomOn();
 
 	// show frame
 	//p_showframe = true;

@@ -124,3 +124,14 @@ void GameField::DrawBullets()
 	}
 	return;
 }
+
+//drawings a bullets boom anim
+void GameField::DrawBulletsBoom()
+{
+	const size_t bulletBoomSize = sizeof(this->bulletBoom) / sizeof(*this->bulletBoom);
+	for (int i(0); i < bulletBoomSize; ++i) {
+		if (bulletBoom[i] != nullptr)
+			window.draw(bulletBoom[i]->TakeAnim());
+	}
+	return;
+}

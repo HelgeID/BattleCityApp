@@ -299,6 +299,15 @@ void GameField::CheckOnCollisionFrame(Bullet& bullet)
 
 	auto CollisionFrame = [&]
 	{
+		//create anim
+		sf::Vector2f point(
+			bulletArr[indxBullet]->takeObj().getPosition().x,
+			bulletArr[indxBullet]->takeObj().getPosition().y
+		);
+		point.x = point.x - 8;
+		point.y = point.y - 8;
+		CreateAnim(point);
+
 		//say the tank that the bullet hit the target
 		*bulletArr[indxBullet]->bulletActivFlag = false;
 		//remove the bullet
@@ -404,6 +413,15 @@ void GameField::CheckOnCollisionBlocks(Bullet& bullet)
 				int indexB = *(array + indxPBP++);
 
 				if (check_intersects(indxBlock, indxBullet, indexA, dir) | check_intersects(indxBlock, indxBullet, indexB, dir)) {
+					//create anim
+					sf::Vector2f point(
+						bulletArr[indxBullet]->takeObj().getPosition().x,
+						bulletArr[indxBullet]->takeObj().getPosition().y
+					);
+					point.x = point.x - 8;
+					point.y = point.y - 8;
+					CreateAnim(point);
+
 					//say the tank that the bullet hit the target
 					*bulletArr[indxBullet]->bulletActivFlag = false;
 					//remove the bullet
@@ -417,6 +435,14 @@ void GameField::CheckOnCollisionBlocks(Bullet& bullet)
 		}
 
 		if (block[indxBlock].type == Steel) {
+			sf::Vector2f point(
+				bulletArr[indxBullet]->takeObj().getPosition().x,
+				bulletArr[indxBullet]->takeObj().getPosition().y
+			);
+			point.x = point.x - 8;
+			point.y = point.y - 8;
+			CreateAnim(point);
+
 			//say the tank that the bullet hit the target
 			*bulletArr[indxBullet]->bulletActivFlag = false;
 			//remove the bullet
@@ -439,6 +465,15 @@ void GameField::CheckOnCollisionTanks(Bullet& bullet)
 			if (bulletArr[indxBullet]->indexTank == 100 || bulletArr[indxBullet]->indexTank == 200)
 				; //todo
 
+			//create anim
+			sf::Vector2f point(
+				bulletArr[indxBullet]->takeObj().getPosition().x,
+				bulletArr[indxBullet]->takeObj().getPosition().y
+			);
+			point.x = point.x - 8;
+			point.y = point.y - 8;
+			CreateAnim(point);
+
 			//say the tank that the bullet hit the target
 			*bulletArr[indxBullet]->bulletActivFlag = false;
 			//remove the bullet
@@ -458,6 +493,23 @@ void GameField::CheckOnCollisionBullets(Bullet& bullet1, Bullet& bullet2)
 
 	if (bulletArr[indxBullet1] != nullptr && bulletArr[indxBullet2] != nullptr)
 		if (bulletArr[indxBullet1]->frame.getGlobalBounds().intersects(bulletArr[indxBullet2]->frame.getGlobalBounds())) {
+			//create anim1, anim2
+			sf::Vector2f point1(
+				bulletArr[indxBullet1]->takeObj().getPosition().x,
+				bulletArr[indxBullet1]->takeObj().getPosition().y
+			);
+			point1.x = point1.x - 8;
+			point1.y = point1.y - 8;
+			CreateAnim(point1);
+
+			sf::Vector2f point2(
+				bulletArr[indxBullet2]->takeObj().getPosition().x,
+				bulletArr[indxBullet2]->takeObj().getPosition().y
+			);
+			point2.x = point2.x - 8;
+			point2.y = point2.y - 8;
+			CreateAnim(point2);
+
 			//say the tanks that the bullet hit the target
 			*bulletArr[indxBullet1]->bulletActivFlag = false; *bulletArr[indxBullet2]->bulletActivFlag = false;
 			//remove the bullets

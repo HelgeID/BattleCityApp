@@ -138,6 +138,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="actor.hpp" />
+    <ClInclude Include="animation.h" />
+    <ClInclude Include="animation_game.h" />
     <ClInclude Include="block.hpp" />
     <ClInclude Include="bullet.hpp" />
     <ClInclude Include="events.h" />

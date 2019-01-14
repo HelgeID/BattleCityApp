@@ -50,6 +50,7 @@ void GameField::UpdateField()
 	DrawActors();
 	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) { DrawTank(tank); }); //DrawTank
 	DrawBullets();
+	DrawBulletsBoom();
 
 	window.draw(outsideUP);
 	window.draw(outsideDOWN);
@@ -62,6 +63,7 @@ void GameField::UpdateField()
 	objShootingBullets.MonitoringShootingBullets(*this);
 
 	MonitoringKeys();
+	MonitoringAnim();
 
 	clock.restart();
 

@@ -2,6 +2,7 @@
 #define SCREEN_H
 
 #include <SFML\Graphics.hpp>
+#include <memory>
 #include "actor.hpp"
 #include "tank.hpp"
 #include "block.hpp"
@@ -9,6 +10,7 @@
 #include "map.h"
 #include "tile_map.h"
 #include "part_bricks_map.h"
+#include "animation_game.h"
 
 //test
 #include <iostream>
@@ -49,12 +51,16 @@ class GameField
 	void ControlTank_onFrame(Tank&);
 
 	Bullet *bulletArr[6] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+	std::unique_ptr<AnimBoom> bulletBoom[6] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 
 	template <typename T>
 	void CreateBullet(T&, sf::Vector2f);
 	void CreateBullet(Tank&);
 	void CreateBullet(Player&);
 	void DrawBullets();
+	void DrawBulletsBoom();
+	void CreateAnim(sf::Vector2f);
+	void MonitoringAnim();
 
 	std::vector<RecShape> vecRecShape;
 	template<typename T> void FormArrayCells(T **, const sf::Vector2i, const sf::Vector2i, RecShape&);
