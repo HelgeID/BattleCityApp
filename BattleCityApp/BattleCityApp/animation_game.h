@@ -17,7 +17,7 @@ class AnimBirth : Animation, public Time
 	enum AnimFlag { zero, one, two } animFlag;
 
 public:
-	AnimBirth(sf::Texture& texture, const sf::Vector2f position, const float maxTime = 6.f)
+	AnimBirth(sf::Texture& texture, const sf::Vector2f position, const float maxTime = 4.f)
 	{
 		this->SetTexture(texture);
 		this->maxTime = maxTime;
@@ -28,7 +28,7 @@ public:
 		animation->AddFrame(sf::IntRect(272, 96, 16, 16));
 		animFlag = zero;
 
-		obj = new AnimatedObject(sf::seconds(0.15), true, true);
+		obj = new AnimatedObject(sf::seconds(0.12), true, true);
 
 		obj->setPosition(position);
 		obj->PlayAnimation(*animation);
@@ -49,15 +49,15 @@ public:
 		if (!obj->IsPlaying())
 			obj->PlayAnimation();
 
-		if (animFlag == zero && elapsedTime.asSeconds() >= 2.f) {
-			obj->StopAnimation();
+		if (animFlag == zero && elapsedTime.asSeconds() >= 1.3f) {
+			//obj->StopAnimation();
 			animation->DelHeadFrame();
 			animation->AddFrame(sf::IntRect(288, 96, 16, 16));
 			animFlag = one;
 		}
 
-		else if (animFlag == one && elapsedTime.asSeconds() >= 4.f) {
-			obj->StopAnimation();
+		else if (animFlag == one && elapsedTime.asSeconds() >= 2.6f) {
+			//obj->StopAnimation();
 			animation->DelHeadFrame();
 			animation->AddFrame(sf::IntRect(304, 96, 16, 16));
 			animFlag = two;
@@ -73,7 +73,7 @@ public:
 	{
 		return *obj;
 	}
-};
+} static *animBirth;
 
 class AnimSkin : Animation, public Time
 {
@@ -118,7 +118,7 @@ public:
 	{
 		return *obj;
 	}
-};
+} static *animSkin;
 
 class AnimBoom : Animation, public Time
 {
@@ -174,4 +174,4 @@ public:
 	{
 		return *obj;
 	}
-};
+} static *animBoom;

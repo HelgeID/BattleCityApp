@@ -1,0 +1,17 @@
+**********************************************
+** Blocks **
+**********************************************
+Empty, 0
+Brick, 10
+Brick_Right, 11
+Brick_Down, 12
+Brick_Left, 13
+Brick_Up, 14
+Steel, 20
+Steel_Right, 21
+Steel_Down, 22
+Steel_Left, 23
+Steel_Up, 24
+Trees, 30
+Water, 40
+Ice, 50

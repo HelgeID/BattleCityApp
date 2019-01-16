@@ -21,10 +21,16 @@ Game::~Game()
 void Game::GameLaunch()
 {
 	// initialization zoom
-	//zoomOn();
+	zoomOn();
 
 	// show frame
 	//p_showframe = true;
+
+	// parameters
+	//undying_enemy = true;
+	//undying_players = true;
+	//undying_hit_on_player = true;
+	blocking_firing = true;
 
 	// initialization of objects
 	GameEvent gEvent(window);

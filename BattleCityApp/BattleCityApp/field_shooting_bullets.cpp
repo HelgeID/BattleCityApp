@@ -4,6 +4,9 @@
 
 void GameField::ShootingBullets::MonitoringShootingBullets(GameField& gField)
 {
+	if (blocking_firing)
+		return;
+
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_int_distribution<int> dist(4, 8); //results between 4 and 8 inclusive

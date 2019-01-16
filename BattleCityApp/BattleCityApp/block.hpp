@@ -11,6 +11,15 @@
 
 enum Environment { Empty, Brick, Steel, Trees, Water, Ice };
 
+//constants for determining the ordinal position in a texture (0 - 24), (25 - 49), ...
+// level[index] = value + const; // in LoadMap()
+#define EmptyConst  ""
+#define BrickConst  6
+#define SteelConst  21
+#define TreesConst  37
+#define WaterConst  26
+#define IceConst    18
+
 namespace spaceBlock
 {
 	struct MapPosition
@@ -51,17 +60,7 @@ public:
 private:
 	Environment TakeTape(const int& value)
 	{
-		if (value / 10 == 1)
-			return Brick;
-		else if (value / 20 == 1)
-			return Steel;
-		else if (value / 30 == 1)
-			return Trees;
-		else if (value / 40 == 1)
-			return Water;
-		else if (value / 50 == 1)
-			return Ice;
-		return Empty;
+		return Environment(value / 10);
 	}
 
 	struct COORD { int x; int y; };
@@ -75,6 +74,30 @@ private:
 	void SteelCoord(COORD& coord, const int value)
 	{
 		coord.x = value % 20 * 16 + 256; coord.y = 16;
+		return;
+	}
+
+	void TreesCoord(COORD& coord, const int value)
+	{
+		if (value != 30)
+			return;
+		coord.x = 272; coord.y = 32;
+		return;
+	}
+
+	void WaterCoord(COORD& coord, const int value)
+	{
+		if (value != 40)
+			return;
+		coord.x = 256; coord.y = 32;
+		return;
+	}
+
+	void IceCoord(COORD& coord, const int value)
+	{
+		if (value != 50)
+			return;
+		coord.x = 288; coord.y = 32;
 		return;
 	}
 
@@ -94,9 +117,9 @@ public:
 			case Empty: break;
 			case Brick: BrickCoord(*coord, value); break;
 			case Steel: SteelCoord(*coord, value); break;
-			case Trees: break; //todo
-			case Water: break; //todo
-			case Ice: break; //todo
+			case Trees: TreesCoord(*coord, value); break;
+			case Water: WaterCoord(*coord, value); break;
+			case Ice: IceCoord(*coord, value); break;
 
 		default: break;
 		}

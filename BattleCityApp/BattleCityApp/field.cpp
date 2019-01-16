@@ -48,14 +48,17 @@ void GameField::UpdateField()
 	//--------------------------------------
 
 	DrawActors();
-	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) { DrawTank(tank); }); //DrawTank
+	DrawTanks();
 	DrawBullets();
-	DrawBulletsBoom();
+	DrawAnimBirth();
+	DrawAnimSkin();
+	DrawAnimBoom();
 
-	window.draw(outsideUP);
-	window.draw(outsideDOWN);
-	window.draw(outsideLEFT);
-	window.draw(outsideRIGHT);
+
+	//window.draw(outsideUP);
+	//window.draw(outsideDOWN);
+	//window.draw(outsideLEFT);
+	//window.draw(outsideRIGHT);
 
 	objTankCollision.MonitoringCollision(*this);
 	objBulletCollision.MonitoringCollision(*this);
@@ -63,19 +66,11 @@ void GameField::UpdateField()
 	objShootingBullets.MonitoringShootingBullets(*this);
 
 	MonitoringKeys();
-	MonitoringAnim();
+	MonitoringAnim		(animBirth);
+	MonitoringAnim		(animSkin);
+	MonitoringAnim		(animBoom);
 
 	clock.restart();
-
-	//--------------------------------------
-	//test bullet
-	 //Bullet bulletObj(texture, sf::Vector2f(10.0, 10.0), UP);
-	 //bulletObj.setPosFrame(10.0, 10.0);
-
-	 //window.draw(bulletObj.takeObj());
-	 //window.draw(bulletObj.frame);
-	//test
-	//--------------------------------------
 
 	window.display();
 	return;

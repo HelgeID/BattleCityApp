@@ -58,19 +58,33 @@ void GameField::DrawBlocks()
 //drawing players
 void GameField::DrawActors()
 {
-	if (coef_reload == firstPlayer->optTank.coef_reload && (Key_A || Key_D || Key_W || Key_S))
-		firstPlayer->reloadTank();
-	if (coef_reload == secondPlayer->optTank.coef_reload && (Key_Left || Key_Right || Key_Up || Key_Down))
-		secondPlayer->reloadTank();
+	bool *keyArray(nullptr);
 
-	//frames position
-	firstPlayer->setPosFrame(firstPlayer->takeObj().getPosition().x, firstPlayer->takeObj().getPosition().y);
-	secondPlayer->setPosFrame(secondPlayer->takeObj().getPosition().x, secondPlayer->takeObj().getPosition().y);
-	
-	firstPlayer->Presence() ? //first
-		p_showframe ? window.draw(firstPlayer->frame) : window.draw(firstPlayer->takeObj()) : NULL;
-	secondPlayer->Presence() ? //second
-		p_showframe ? window.draw(secondPlayer->frame) : window.draw(secondPlayer->takeObj()) : NULL;
+	auto fun = [=](Player& player, bool keyArray[])
+	{
+		if (coef_reload == player.optTank.coef_reload && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3]))
+			player.reloadTank();
+
+		//frames position
+		player.setPosFrame(player.takeObj().getPosition().x, player.takeObj().getPosition().y);
+
+		//draw
+		p_showframe ? window.draw(player.frame) : window.draw(player.takeObj());
+
+		delete[] keyArray;
+		keyArray = nullptr;
+	};
+
+	if (firstPlayer->Presence()) {
+		keyArray = new bool[4] {Key_A, Key_D, Key_W, Key_S};
+		fun(*firstPlayer, keyArray);
+	}
+
+	if (secondPlayer->Presence()) {
+		keyArray = new bool[4] {Key_Left, Key_Right, Key_Up, Key_Down};
+		fun(*secondPlayer, keyArray);
+	}
+
 	return;
 }
 
@@ -102,13 +116,23 @@ void GameField::DrawTank(Tank &tank)
 	return;
 }
 
+//drawing all tanks(enemy)
+void GameField::DrawTanks()
+{
+	if (tank.size() == 0)
+		return;
+
+	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) { DrawTank(tank); });
+	return;
+}
+
 //drawings a bullets
 void GameField::DrawBullets()
 {
 	float speed = BulletSpeed;
 	float time = this->time / speed;
 
-	const size_t bulletArrSize = sizeof(this->bulletArr) / sizeof(*this->bulletArr);
+	const size_t bulletArrSize = this->bulletArr.size();
 	for (int i(0); i < bulletArrSize; ++i) {
 		if (this->bulletArr[i] != nullptr) {
 			this->bulletArr[i]->move(time);
@@ -125,8 +149,25 @@ void GameField::DrawBullets()
 	return;
 }
 
+//drawings a birth anim
+void GameField::DrawAnimBirth()
+{
+	if (firstPlayerBirth != nullptr && !firstPlayerBirth->FinishTime())
+		window.draw(firstPlayerBirth->TakeAnim());
+	if (secondPlayerBirth != nullptr && !secondPlayerBirth->FinishTime())
+		window.draw(secondPlayerBirth->TakeAnim());
+	return;
+}
+
+//drawings a skin anim
+void GameField::DrawAnimSkin()
+{
+
+	return;
+}
+
 //drawings a bullets boom anim
-void GameField::DrawBulletsBoom()
+void GameField::DrawAnimBoom()
 {
 	const size_t bulletBoomSize = sizeof(this->bulletBoom) / sizeof(*this->bulletBoom);
 	for (int i(0); i < bulletBoomSize; ++i) {

@@ -18,21 +18,52 @@ void GameField::FillField()
 //fill the array with data from the level file
 void GameField::FillMap()
 {
+	auto TakeTape = [&](std::string tape)
+	{
+		if (tape == "Empty")
+			return 0;
+		if (tape == "Brick")
+			return 10;
+		if (tape == "Brick_Right")
+			return 11;
+		if (tape == "Brick_Down")
+			return 12;
+		if (tape == "Brick_Left")
+			return 13;
+		if (tape == "Brick_Up")
+			return 14;
+		if (tape == "Steel")
+			return 20;
+		if (tape == "Steel_Right")
+			return 21;
+		if (tape == "Steel_Down")
+			return 22;
+		if (tape == "Steel_Left")
+			return 23;
+		if (tape == "Steel_Up")
+			return 24;
+		if (tape == "Trees")
+			return 30;
+		if (tape == "Water")
+			return 40;
+		if (tape == "Ice")
+			return 50;
+		return 0;
+	};
+
 	std::string FILENAME("");
+
 	switch (p_level) {
-	case 1: FILENAME = "data/levels/level1"; break;
+		case 1: FILENAME = "data/levels/level1"; break;
 	}
 
 	std::ifstream infile(FILENAME.c_str());
 	char s_level_name[16];
-	char s_index[8]; char s_tape[8]; char s_value[8];
+	char s_index[8]; char s_tape[16];
 	int h_value, indI, indJ;
 	infile >> s_level_name;
-	while (infile >> s_index >> s_tape >> s_value)
+	while (infile >> s_index >> s_tape)
 	{
-		std::istringstream issV(s_value);
-		issV >> h_value;
-		issV.clear();
 		char* ptr = s_index;
 		char dash(' ');
 		std::string s_indI{ "" }, s_indJ{ "" };
@@ -47,6 +78,8 @@ void GameField::FillMap()
 
 		std::istringstream issI(s_indI); issI >> indI;
 		std::istringstream issJ(s_indJ); issJ >> indJ;
+		h_value = TakeTape(std::string(s_tape));
+
 		map.SetValueMap(h_value, indI, indJ);
 	}
 
@@ -88,9 +121,15 @@ void GameField::LoadMap()
 			switch (value)
 			{
 			case 10: case 11: case 12: case 13: case 14:
-				level[index] = value + 6; index++; break;
+				level[index] = value + BrickConst; index++; break;
 			case 20: case 21: case 22: case 23: case 24:
-				level[index] = value + 21; index++; break;
+				level[index] = value + SteelConst; index++; break;
+			case 30:
+				level[index] = value + TreesConst; index++; break;
+			case 40:
+				level[index] = value + WaterConst; index++; break;
+			case 50:
+				level[index] = value + IceConst; index++; break;
 			default:
 				level[index] = cellW * cellH - 1; //last cell
 				index++; break;

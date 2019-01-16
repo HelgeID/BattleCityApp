@@ -1,21 +1,68 @@
-﻿#include "field.h"
+﻿#include <thread>
+#include "field.h"
 #include "general.hpp"
+
+struct AnimArgPtr { Player* player; AnimBirth* animBirth; };
+void AnimBirthPlayer(AnimArgPtr argPtr)
+{
+	while (!argPtr.animBirth->FinishTime())
+		;
+	argPtr.player->Presence() = true;
+	return;
+}
 
 void GameField::CreateActors()
 {
-	firstPlayer = new Player(texture, "first player", true);
-	secondPlayer = new Player(texture, "second player", true);
+	firstPlayer = new Player(texture, "first player", false);
+	secondPlayer = new Player(texture, "second player", false);
+	RestartFirstPlayer();
+	RestartSecondPlayer();
+	return;
+}
 
-	sf::Vector2f posFP(64.f, 208.f);
+void GameField::RestartFirstPlayer(const bool flag)
+{
+	//sf::sleep(sf::milliseconds(500)); //test sleep
+	sf::Vector2f posFirstPlayer(64.f, 208.f);
 	firstPlayer->loadTank(YELLOW, modA, UP);
-	firstPlayer->setPosObj(posFP.x, posFP.y);
+	firstPlayer->setPosObj(posFirstPlayer.x, posFirstPlayer.y);
 	firstPlayer->loadIndex(100); // One hundred - just a constant variable for firstPlayer
 
-	sf::Vector2f posSP(192.f, 208.f);
+	if (flag == true)
+	{
+		!firstPlayer->Presence() ? firstPlayer->Presence() = true : NULL;
+		return;
+	}
+
+	std::unique_ptr<AnimBirth> anim(new AnimBirth(texture, posFirstPlayer));
+	firstPlayerBirth = std::move(anim);
+	AnimArgPtr argPtr{ firstPlayer, firstPlayerBirth.get() };
+
+	std::unique_ptr<std::thread> threadPlayer(new std::thread(&AnimBirthPlayer, argPtr));
+	threadPlayer->detach();
+	return;
+}
+
+void GameField::RestartSecondPlayer(const bool flag)
+{
+	//sf::sleep(sf::milliseconds(500)); //test sleep
+	sf::Vector2f posSecondPlayer(192.f, 208.f);
 	secondPlayer->loadTank(GREEN, modA, UP);
-	secondPlayer->setPosObj(posSP.x, posSP.y);
+	secondPlayer->setPosObj(posSecondPlayer.x, posSecondPlayer.y);
 	secondPlayer->loadIndex(200); // Two hundred - just a constant variable for secondPlayer
 
+	if (flag == true)
+	{
+		!secondPlayer->Presence() ? secondPlayer->Presence() = true : NULL;
+		return;
+	}
+
+	std::unique_ptr<AnimBirth> anim(new AnimBirth(texture, posSecondPlayer));
+	secondPlayerBirth = std::move(anim);
+	AnimArgPtr argPtr{ secondPlayer, secondPlayerBirth.get() };
+
+	std::unique_ptr<std::thread> threadPlayer(new std::thread(&AnimBirthPlayer, argPtr));
+	threadPlayer->detach();
 	return;
 }
 
@@ -62,50 +109,63 @@ void GameField::MonitoringKeys()
 	if (!KeyActive)
 		return;
 
-	//A-D-W-S
-	if (Key_A == true && (!Key_D && !Key_W && !Key_S)) {
-		MoveFirstPlayer(*this, LEFT);
-	}
-	else if (Key_D == true && (!Key_A && !Key_W && !Key_S)) {
-		MoveFirstPlayer(*this, RIGHT);
-	}
-	else if (Key_W == true && (!Key_A && !Key_D && !Key_S)) {
-		MoveFirstPlayer(*this, UP);
-	}
-	else if (Key_S == true && (!Key_A && !Key_D && !Key_W)) {
-		MoveFirstPlayer(*this, DOWN);
+	if (firstPlayer->Presence()) {
+		//A-D-W-S
+		if (Key_A == true && (!Key_D && !Key_W && !Key_S)) {
+			MoveFirstPlayer(*this, LEFT);
+		}
+		else if (Key_D == true && (!Key_A && !Key_W && !Key_S)) {
+			MoveFirstPlayer(*this, RIGHT);
+		}
+		else if (Key_W == true && (!Key_A && !Key_D && !Key_S)) {
+			MoveFirstPlayer(*this, UP);
+		}
+		else if (Key_S == true && (!Key_A && !Key_D && !Key_W)) {
+			MoveFirstPlayer(*this, DOWN);
+		}
+
+		if (Key_F == true && !firstPlayer->optTankShooting.bulletActivFlag && time_firstPlayer.asSeconds() > 2.f) {
+			CreateBullet(*firstPlayer);
+			time_firstPlayer = clock_firstPlayer.restart();
+			for (int i(0); i < 6; i++)
+				bulletArr[i] != nullptr ? std::cout << bulletArr[i]->indexTank << "-" : std::cout << "X" << "-";
+			std::cout << std::endl;
+		}
 	}
 
-	//LEFT-RIGHT-UP-DOWN
-	if (Key_Left == true && (!Key_Right && !Key_Up && !Key_Down)) {
-		MoveSecondPlayer(*this, LEFT);
-	}
-	else if (Key_Right == true && (!Key_Left && !Key_Up && !Key_Down)) {
-		MoveSecondPlayer(*this, RIGHT);
-	}
-	else if (Key_Up == true && (!Key_Left && !Key_Right && !Key_Down)) {
-		MoveSecondPlayer(*this, UP);
-	}
-	else if (Key_Down == true && (!Key_Left && !Key_Right && !Key_Up)) {
-		MoveSecondPlayer(*this, DOWN);
+	if (secondPlayer->Presence()) {
+		//LEFT-RIGHT-UP-DOWN
+		if (Key_Left == true && (!Key_Right && !Key_Up && !Key_Down)) {
+			MoveSecondPlayer(*this, LEFT);
+		}
+		else if (Key_Right == true && (!Key_Left && !Key_Up && !Key_Down)) {
+			MoveSecondPlayer(*this, RIGHT);
+		}
+		else if (Key_Up == true && (!Key_Left && !Key_Right && !Key_Down)) {
+			MoveSecondPlayer(*this, UP);
+		}
+		else if (Key_Down == true && (!Key_Left && !Key_Right && !Key_Up)) {
+			MoveSecondPlayer(*this, DOWN);
+		}
+
+		if (Key_Ctrl == true && !secondPlayer->optTankShooting.bulletActivFlag && time_secondPlayer.asSeconds() > 2.f) {
+			CreateBullet(*secondPlayer);
+			time_secondPlayer = clock_secondPlayer.restart();
+			for (int i(0); i < 6; i++)
+				bulletArr[i] != nullptr ? std::cout << bulletArr[i]->indexTank << "-" : std::cout << "X" << "-";
+			std::cout << std::endl;
+		}
 	}
 
-	if (Key_F == true && !firstPlayer->optTankShooting.bulletActivFlag && time_firstPlayer.asSeconds() > 2.f) {
-		CreateBullet(*firstPlayer);
-		time_firstPlayer = clock_firstPlayer.restart();
-		for (int i(0); i < 6; i++)
-			bulletArr[i] != nullptr ? std::cout << bulletArr[i]->indexTank << "-" : std::cout << "X" << "-";
-		std::cout << std::endl;
-	}
-		
+	return;
+}
 
-	if (Key_Ctrl == true && !secondPlayer->optTankShooting.bulletActivFlag && time_secondPlayer.asSeconds() > 2.f) {
-		CreateBullet(*secondPlayer);
-		time_secondPlayer = clock_secondPlayer.restart();
-		for (int i(0); i < 6; i++)
-			bulletArr[i] != nullptr ? std::cout << bulletArr[i]->indexTank << "-" : std::cout << "X" << "-";
-		std::cout << std::endl;
-	}
+void GameField::CheckPlayerBang(Player& player)
+{
+	if (undying_players)
+		return;
 
+	//off player
+	player.Presence() ? player.Presence() = false : NULL;
 	return;
 }

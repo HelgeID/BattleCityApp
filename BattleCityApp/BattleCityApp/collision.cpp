@@ -166,30 +166,30 @@ void GameField::CheckOnCollisionBlocks(Tank& tank, const bool fPL)
 
 	auto CollisionBlocks = [&]() {
 		int i; int j;
-		int index(0);
+		int indxBlock(0);
 		POS *ptr = &*arrCell;
 		const int posX(round(tank.takeObj().getPosition().x)), posY(round(tank.takeObj().getPosition().y));
 		for (RecShape obj : vecRecShape) {
 			i = ptr->cell.y - 1; //because position of field (Y) - 16 pixels
 			j = ptr->cell.x - 2; //because position of field (X) - 32 pixels
 			(i >= 0) && (j >= 0) && (i < sizeMap) && (j < sizeMap) ?
-				index = sizeMap * i + j : index = 0;
+				indxBlock = sizeMap * i + j : indxBlock = 0;
 			if (map.GetValueMap(i, j) == 0)
 				;
 			else {
-				if (!index)
+				if (!indxBlock)
 					;
 				else {
 					if (p_showframe)
-						window.draw(block[index].frame);
+						window.draw(block[indxBlock].frame);
 
 					auto crossing = [&](int index) { return tank.takeObj().getGlobalBounds().intersects((*(&block[0] + index)).frame.getGlobalBounds()); };
-					if (block[index].type == Brick || block[index].type == Steel)
+					if (block[indxBlock].type == Brick || block[indxBlock].type == Steel)
 					{
-						if (crossing(index)) {
+						if (crossing(indxBlock)) {
 							//processing player
 							if (fPL == true) {
-								while (crossing(index)) {
+								while (crossing(indxBlock)) {
 									MoveTank(tank, -1.f);
 									tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
 								}
@@ -215,6 +215,10 @@ void GameField::CheckOnCollisionBlocks(Tank& tank, const bool fPL)
 							tank.ResetBoomParam();
 					}
 
+					if (block[indxBlock].type == Trees) {
+						p_showframe ? window.draw(block[indxBlock].frame) :
+							block[indxBlock].drawBlock(window);
+					}
 					//todo type
 				}
 			}
@@ -462,8 +466,10 @@ void GameField::CheckOnCollisionTanks(Bullet& bullet)
 		if (bulletArr[indxBullet]->frame.getGlobalBounds().intersects(it->frame.getGlobalBounds())) {
 			if (bulletArr[indxBullet]->indexTank == it->takeIndex())
 				continue;
-			if (bulletArr[indxBullet]->indexTank == 100 || bulletArr[indxBullet]->indexTank == 200)
-				; //todo
+			if (bulletArr[indxBullet]->indexTank == 100 || bulletArr[indxBullet]->indexTank == 200) {
+				const int indexTank(it->takeIndex());
+				CheckTankBang(indexTank);
+			}
 
 			//create anim
 			sf::Vector2f point(
@@ -522,6 +528,46 @@ void GameField::CheckOnCollisionBullets(Bullet& bullet1, Bullet& bullet2)
 // Checking the bullet on a collision with the players
 void GameField::CheckOnCollisionPlayers(Bullet& bullet)
 {
+	const int indxBullet = bullet.indxBullet;
+	const sf::FloatRect bullet_globalBounds(bulletArr[indxBullet]->frame.getGlobalBounds());
+	sf::FloatRect player_globalBounds;
+	bool PlayerFirstBoomFLAG(false), PlayerSecondBoomFLAG(false);
+
+	if (firstPlayer->Presence() && bullet.indexTank != 100) {
+		if (bullet.indexTank == 200 && undying_hit_on_player)
+			return;
+		player_globalBounds = firstPlayer->takeObj().getGlobalBounds();
+		PlayerFirstBoomFLAG = bullet_globalBounds.intersects(player_globalBounds);
+	}
+
+	if (secondPlayer->Presence() && bullet.indexTank != 200) {
+		if (bullet.indexTank == 100 && undying_hit_on_player)
+			return;
+		player_globalBounds = secondPlayer->takeObj().getGlobalBounds();
+		PlayerSecondBoomFLAG = bullet_globalBounds.intersects(player_globalBounds);
+	}
+
+	if (PlayerFirstBoomFLAG || PlayerSecondBoomFLAG)
+	{
+		//create anim
+		sf::Vector2f point(
+			bulletArr[indxBullet]->takeObj().getPosition().x,
+			bulletArr[indxBullet]->takeObj().getPosition().y
+		);
+		point.x = point.x - 8;
+		point.y = point.y - 8;
+		CreateAnim(point);
+
+		//say the tank that the bullet hit the target
+		*bulletArr[indxBullet]->bulletActivFlag = false;
+		//remove the bullet
+		delete bulletArr[indxBullet];
+		bulletArr[indxBullet] = nullptr;
+	}
+
+	PlayerFirstBoomFLAG ? CheckPlayerBang(*firstPlayer) : NULL;
+	PlayerSecondBoomFLAG ? CheckPlayerBang(*secondPlayer) : NULL;
+
 	return;
 }
 

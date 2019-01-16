@@ -6,7 +6,7 @@ extern int p_level;
 extern bool p_showframe;
 
 //consts
-extern int SizeCell;
+extern int SizeCell; //todo
 
 //signals
 extern bool KeyActive;
@@ -21,3 +21,9 @@ extern bool Key_Down;
 
 extern bool Key_F;
 extern bool Key_Ctrl; //RControl
+
+//parameters of the game
+extern bool undying_enemy;
+extern bool undying_players;
+extern bool undying_hit_on_player;
+extern bool blocking_firing;

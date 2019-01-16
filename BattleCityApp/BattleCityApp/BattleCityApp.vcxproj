@@ -122,6 +122,7 @@
     <ClCompile Include="field_actor_funcs.cpp" />
     <ClCompile Include="field_bullet_funcs.cpp" />
     <ClCompile Include="collision.cpp" />
+    <ClCompile Include="monitoring_anim.cpp" />
     <ClCompile Include="monitoring_collision.cpp" />
     <ClCompile Include="field_draw.cpp" />
     <ClCompile Include="field_map_funcs.cpp" />

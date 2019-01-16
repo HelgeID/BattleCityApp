@@ -78,6 +78,9 @@
     <ClCompile Include="monitoring_collision.cpp">
       <Filter>Файлы исходного кода\collision</Filter>
     </ClCompile>
+    <ClCompile Include="monitoring_anim.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">

@@ -21,6 +21,7 @@ void GameField::BulletCollision::MonitoringCollision(GameField& gField)
 	CollisionBlocks(gField);
 	CollisionTanks(gField);
 	CollisionBullets(gField);
+	CollisionPlayers(gField);
 
 	return;
 }
@@ -38,6 +39,9 @@ void GameField::PlayerCollision::MonitoringCollision(GameField& gField)
 
 void GameField::TankCollision::CollisionFrame(GameField& gField)
 {
+	if (gField.tank.size() == 0)
+		return;
+
 	for (auto it = gField.tank.begin(); it != gField.tank.end(); ++it)
 		gField.CheckOnCollisionFrame(*it);
 	return;
@@ -45,6 +49,9 @@ void GameField::TankCollision::CollisionFrame(GameField& gField)
 
 void GameField::TankCollision::CollisionBlocks(GameField& gField)
 {
+	if (gField.tank.size() == 0)
+		return;
+
 	for (auto it = gField.tank.begin(); it != gField.tank.end(); ++it)
 		gField.CheckOnCollisionBlocks(*it);
 	return;
@@ -52,6 +59,9 @@ void GameField::TankCollision::CollisionBlocks(GameField& gField)
 
 void GameField::TankCollision::CollisionTanks(GameField& gField)
 {
+	if (gField.tank.size() == 0)
+		return;
+
 	for (auto it1 = gField.tank.begin(); it1 != gField.tank.end(); ++it1) {
 		for (auto it2(it1); it2 != gField.tank.end(); ++it2) {
 			if (&*it1 == &*it2)
@@ -64,7 +74,10 @@ void GameField::TankCollision::CollisionTanks(GameField& gField)
 
 void GameField::BulletCollision::CollisionFrame(GameField& gField)
 {
-	const size_t bulletArrSize = sizeof(gField.bulletArr) / sizeof(*gField.bulletArr);
+	if (std::none_of(gField.bulletArr.begin(), gField.bulletArr.end(), [](Bullet* element) {return element != nullptr;}))
+		return;
+
+	const size_t bulletArrSize = gField.bulletArr.size();
 	for (int indxBullet(0); indxBullet < bulletArrSize; ++indxBullet) {
 		if (gField.bulletArr[indxBullet] == nullptr)
 			continue;
@@ -74,7 +87,10 @@ void GameField::BulletCollision::CollisionFrame(GameField& gField)
 
 void GameField::BulletCollision::CollisionBlocks(GameField& gField)
 {
-	const size_t bulletArrSize = sizeof(gField.bulletArr) / sizeof(*gField.bulletArr);
+	if (std::none_of(gField.bulletArr.begin(), gField.bulletArr.end(), [](Bullet* element) {return element != nullptr;}))
+		return;
+
+	const size_t bulletArrSize = gField.bulletArr.size();
 	for (int indxBullet(0); indxBullet < bulletArrSize; ++indxBullet) {
 		if (gField.bulletArr[indxBullet] != nullptr) {
 			gField.CheckOnCollisionBlocks(*gField.bulletArr[indxBullet]);
@@ -85,7 +101,10 @@ void GameField::BulletCollision::CollisionBlocks(GameField& gField)
 
 void GameField::BulletCollision::CollisionTanks(GameField& gField)
 {
-	const size_t bulletArrSize = sizeof(gField.bulletArr) / sizeof(*gField.bulletArr);
+	if (std::none_of(gField.bulletArr.begin(), gField.bulletArr.end(), [](Bullet* element) {return element != nullptr;}))
+		return;
+
+	const size_t bulletArrSize = gField.bulletArr.size();
 	for (int indxBullet(0); indxBullet < bulletArrSize; ++indxBullet) {
 		if (gField.bulletArr[indxBullet] == nullptr)
 			return;
@@ -96,7 +115,10 @@ void GameField::BulletCollision::CollisionTanks(GameField& gField)
 
 void GameField::BulletCollision::CollisionBullets(GameField& gField)
 {
-	const size_t bulletArrSize = sizeof(gField.bulletArr) / sizeof(*gField.bulletArr);
+	if (std::none_of(gField.bulletArr.begin(), gField.bulletArr.end(), [](Bullet* element) {return element != nullptr;}))
+		return;
+
+	const size_t bulletArrSize = gField.bulletArr.size();
 	for (int indxBullet1(0); indxBullet1 < bulletArrSize; ++indxBullet1) {
 		for (int indxBullet2(0); indxBullet2 < bulletArrSize; ++indxBullet2) {
 			if ((indxBullet1 == indxBullet2) || 
@@ -110,6 +132,15 @@ void GameField::BulletCollision::CollisionBullets(GameField& gField)
 
 void GameField::BulletCollision::CollisionPlayers(GameField& gField)
 {
+	if (std::none_of(gField.bulletArr.begin(), gField.bulletArr.end(), [](Bullet* element) {return element != nullptr;}))
+		return;
+
+	const size_t bulletArrSize = gField.bulletArr.size();
+	for (int indxBullet(0); indxBullet < bulletArrSize; ++indxBullet) {
+		if (gField.bulletArr[indxBullet] == nullptr)
+			return;
+		gField.CheckOnCollisionPlayers(*gField.bulletArr[indxBullet]);
+	}
 	return;
 }
 

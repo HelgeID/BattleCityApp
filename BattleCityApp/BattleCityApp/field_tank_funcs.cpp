@@ -47,3 +47,18 @@ void GameField::ControlTank_onFrame(Tank& tank)
 	tank.takeObj().getPosition().x + 16 > field.getPosition().x + field.getSize().x ? tank.moveObj(-2.f, 0.f) : NULL;
 	return;
 }
+
+void GameField::CheckTankBang(const int indexTank)
+{
+	if (undying_enemy)
+		return;
+
+	//dell tank
+	for (int index(0); index < tank.size(); ++index) {
+		if (tank[index].takeIndex() == indexTank) {
+			RemovalObj(tank, index);
+			break;
+		}
+	}
+	return;
+}

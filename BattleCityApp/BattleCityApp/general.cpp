@@ -19,3 +19,8 @@ bool Key_Down = false;
 
 bool Key_F = false;
 bool Key_Ctrl = false;
+
+bool undying_enemy = false;
+bool undying_players = false;
+bool undying_hit_on_player = false;
+bool blocking_firing = false;

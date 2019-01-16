@@ -17,5 +17,5 @@ public:
 		this->presenceflag = presenceflag;
 	}
 
-	const bool Presence() { return presenceflag; }
+	bool& Presence() { return presenceflag; }
 };

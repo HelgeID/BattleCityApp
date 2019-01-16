@@ -27,7 +27,7 @@ void GameField::CreateBullet(T& tank, sf::Vector2f offset = sf::Vector2f(0.f, 0.
 	bulletObj->bulletActivFlag = &tank.optTankShooting.bulletActivFlag;
 	bulletObj->indexTank = tank.takeIndex();
 
-	const size_t bulletArrSize = sizeof(this->bulletArr) / sizeof(*this->bulletArr);
+	const size_t bulletArrSize = this->bulletArr.size();
 	for (int indxBullet(0); indxBullet < bulletArrSize; ++indxBullet) {
 		if (this->bulletArr[indxBullet] == nullptr) {
 			bulletObj->indxBullet = indxBullet;
@@ -78,20 +78,6 @@ void GameField::CreateAnim(const sf::Vector2f point)
 		if (bulletBoom[i] == nullptr) {
 			bulletBoom[i] = std::move(anim);
 			break;
-		}
-	}
-	return;
-}
-
-void GameField::MonitoringAnim()
-{
-	const size_t bulletBoomSize = sizeof(this->bulletBoom) / sizeof(*this->bulletBoom);
-	for (int i(0); i < bulletBoomSize; ++i) {
-		if (bulletBoom[i] != nullptr) {
-			if (bulletBoom[i]->FinishTime())
-				bulletBoom[i] = nullptr;
-			else
-				bulletBoom[i]->Update();
 		}
 	}
 	return;

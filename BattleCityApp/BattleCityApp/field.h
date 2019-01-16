@@ -2,6 +2,8 @@
 #define SCREEN_H
 
 #include <SFML\Graphics.hpp>
+#include <algorithm>
+#include <array>
 #include <memory>
 #include "actor.hpp"
 #include "tank.hpp"
@@ -46,11 +48,13 @@ class GameField
 
 	std::vector<Tank> tank;
 	void CreateTanks();
+	void DrawTanks();
 	void DrawTank(Tank&);
 	void MoveTank(Tank&, float);
 	void ControlTank_onFrame(Tank&);
+	void CheckTankBang(const int);
 
-	Bullet *bulletArr[6] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+	std::array<Bullet*, 6> bulletArr = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 	std::unique_ptr<AnimBoom> bulletBoom[6] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 
 	template <typename T>
@@ -58,9 +62,7 @@ class GameField
 	void CreateBullet(Tank&);
 	void CreateBullet(Player&);
 	void DrawBullets();
-	void DrawBulletsBoom();
 	void CreateAnim(sf::Vector2f);
-	void MonitoringAnim();
 
 	std::vector<RecShape> vecRecShape;
 	template<typename T> void FormArrayCells(T **, const sf::Vector2i, const sf::Vector2i, RecShape&);
@@ -84,10 +86,15 @@ class GameField
 	Player *firstPlayer;
 	Player *secondPlayer;
 	void CreateActors();
+	void RestartFirstPlayer(const bool flag = false);
+	void RestartSecondPlayer(const bool flag = false);
 	void DrawActors();
 	friend void MoveFirstPlayer(GameField&, const Direction);
 	friend void MoveSecondPlayer(GameField&, const Direction);
 	void MonitoringKeys();
+	void CheckPlayerBang(Player&);
+	std::unique_ptr<AnimBirth> firstPlayerBirth{ nullptr };
+	std::unique_ptr<AnimBirth> secondPlayerBirth{ nullptr };
 
 	//monitoring tanks
 	class TankCollision
@@ -142,6 +149,14 @@ class GameField
 		obj.erase(iter);
 		return;
 	}
+
+	void MonitoringAnim(const AnimBirth*);
+	void MonitoringAnim(const AnimSkin*);
+	void MonitoringAnim(const AnimBoom*);
+
+	void DrawAnimBirth();
+	void DrawAnimSkin();
+	void DrawAnimBoom();
 
 public:
 	explicit GameField(sf::RenderWindow&, sf::Texture&);
