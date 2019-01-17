@@ -152,17 +152,20 @@ void GameField::DrawBullets()
 //drawings a birth anim
 void GameField::DrawAnimBirth()
 {
-	if (firstPlayerBirth != nullptr && !firstPlayerBirth->FinishTime())
-		window.draw(firstPlayerBirth->TakeAnim());
-	if (secondPlayerBirth != nullptr && !secondPlayerBirth->FinishTime())
-		window.draw(secondPlayerBirth->TakeAnim());
+	if (firstPlayerAnim.playerBirth != nullptr && !firstPlayerAnim.playerBirth->FinishTime())
+		window.draw(firstPlayerAnim.playerBirth->TakeAnim());
+	if (secondPlayerAnim.playerBirth != nullptr && !secondPlayerAnim.playerBirth->FinishTime())
+		window.draw(secondPlayerAnim.playerBirth->TakeAnim());
 	return;
 }
 
 //drawings a skin anim
 void GameField::DrawAnimSkin()
 {
-
+	if (firstPlayerAnim.playerSkin != nullptr && !firstPlayerAnim.playerSkin->FinishTime())
+		window.draw(firstPlayerAnim.playerSkin->TakeAnim());
+	if (secondPlayerAnim.playerSkin != nullptr && !secondPlayerAnim.playerSkin->FinishTime())
+		window.draw(secondPlayerAnim.playerSkin->TakeAnim());
 	return;
 }
 

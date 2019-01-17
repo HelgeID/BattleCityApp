@@ -2,7 +2,7 @@
 #include "general.hpp"
 #include <random>
 
-void GameField::ShootingBullets::MonitoringShootingBullets(GameField& gField)
+void GameField::Checking::CheckingShootingBullets(GameField& gField)
 {
 	if (blocking_firing)
 		return;
@@ -23,5 +23,22 @@ void GameField::ShootingBullets::MonitoringShootingBullets(GameField& gField)
 			random = dist(gen); //random generation
 		}
 	});
+	return;
+}
+
+void GameField::Checking::CheckingSkin(GameField& gField)
+{
+	auto Checking = [&](Anim& playerAnim, Player* player)
+	{
+		if (player->GetSkin() && playerAnim.playerSkin == nullptr) {
+			sf::Vector2f posPlayer = player->getPosObj();
+			std::unique_ptr<AnimSkin> anim(new AnimSkin(gField.texture, posPlayer));
+			playerAnim.playerSkin = std::move(anim);
+		}
+	};
+
+	Checking(gField.firstPlayerAnim, gField.firstPlayer);
+	Checking(gField.secondPlayerAnim, gField.secondPlayer);
+
 	return;
 }

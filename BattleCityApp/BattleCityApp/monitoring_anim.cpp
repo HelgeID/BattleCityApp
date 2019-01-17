@@ -4,25 +4,40 @@
 void GameField::MonitoringAnim(const AnimBirth* ptr)
 {
 	//ptr - not used !!!
-	if (firstPlayerBirth != nullptr) {
-		if (firstPlayerBirth->FinishTime())
-			firstPlayerBirth = nullptr;
-		else
-			firstPlayerBirth->Update();
-	}
+	auto Monitoring = [&](Anim& playerAnim)
+	{
+		if (playerAnim.playerBirth != nullptr) {
+			if (playerAnim.playerBirth->FinishTime())
+				playerAnim.playerBirth = nullptr;
+			else
+				playerAnim.playerBirth->Update();
+		}
+		return;
+	};
+	Monitoring(firstPlayerAnim);
+	Monitoring(secondPlayerAnim);
 
-	if (secondPlayerBirth != nullptr) {
-		if (secondPlayerBirth->FinishTime())
-			secondPlayerBirth = nullptr;
-		else
-			secondPlayerBirth->Update();
-	}
 	return;
 }
 
 void GameField::MonitoringAnim(const AnimSkin* ptr)
 {
 	//ptr - not used !!!
+	auto Monitoring = [&](Anim& playerAnim, Player* player)
+	{
+		if (playerAnim.playerSkin != nullptr) {
+			if (playerAnim.playerSkin->FinishTime()) {
+				playerAnim.playerSkin = nullptr;
+				player->SkinOff();
+			}
+			else {
+				playerAnim.playerSkin->Update(player->getPosObj());
+			}
+		}
+	};
+	Monitoring(firstPlayerAnim, firstPlayer);
+	Monitoring(secondPlayerAnim, secondPlayer);
+
 	return;
 }
 

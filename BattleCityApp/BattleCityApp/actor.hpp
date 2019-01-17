@@ -6,6 +6,7 @@
 #include "tank.hpp"
 
 #define PlayerSpeed (0.5f)
+#define PlayerRechargeTime (2.f)
 
 class Player : public Tank
 {

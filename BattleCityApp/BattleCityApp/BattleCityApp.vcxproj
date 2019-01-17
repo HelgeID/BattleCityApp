@@ -126,7 +126,7 @@
     <ClCompile Include="monitoring_collision.cpp" />
     <ClCompile Include="field_draw.cpp" />
     <ClCompile Include="field_map_funcs.cpp" />
-    <ClCompile Include="field_shooting_bullets.cpp" />
+    <ClCompile Include="field_checking.cpp" />
     <ClCompile Include="field_tank_funcs.cpp" />
     <ClCompile Include="game_main.cpp" />
     <ClCompile Include="game_system.cpp" />

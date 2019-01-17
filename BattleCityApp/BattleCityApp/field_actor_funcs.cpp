@@ -8,6 +8,7 @@ void AnimBirthPlayer(AnimArgPtr argPtr)
 	while (!argPtr.animBirth->FinishTime())
 		;
 	argPtr.player->Presence() = true;
+	argPtr.player->SkinOn();
 	return;
 }
 
@@ -35,8 +36,8 @@ void GameField::RestartFirstPlayer(const bool flag)
 	}
 
 	std::unique_ptr<AnimBirth> anim(new AnimBirth(texture, posFirstPlayer));
-	firstPlayerBirth = std::move(anim);
-	AnimArgPtr argPtr{ firstPlayer, firstPlayerBirth.get() };
+	firstPlayerAnim.playerBirth = std::move(anim);
+	AnimArgPtr argPtr{ firstPlayer, firstPlayerAnim.playerBirth.get() };
 
 	std::unique_ptr<std::thread> threadPlayer(new std::thread(&AnimBirthPlayer, argPtr));
 	threadPlayer->detach();
@@ -58,8 +59,8 @@ void GameField::RestartSecondPlayer(const bool flag)
 	}
 
 	std::unique_ptr<AnimBirth> anim(new AnimBirth(texture, posSecondPlayer));
-	secondPlayerBirth = std::move(anim);
-	AnimArgPtr argPtr{ secondPlayer, secondPlayerBirth.get() };
+	secondPlayerAnim.playerBirth = std::move(anim);
+	AnimArgPtr argPtr{ secondPlayer, secondPlayerAnim.playerBirth.get() };
 
 	std::unique_ptr<std::thread> threadPlayer(new std::thread(&AnimBirthPlayer, argPtr));
 	threadPlayer->detach();
@@ -124,7 +125,7 @@ void GameField::MonitoringKeys()
 			MoveFirstPlayer(*this, DOWN);
 		}
 
-		if (Key_F == true && !firstPlayer->optTankShooting.bulletActivFlag && time_firstPlayer.asSeconds() > 2.f) {
+		if (Key_F == true && !firstPlayer->optTankShooting.bulletActivFlag && time_firstPlayer.asSeconds() >= PlayerRechargeTime) {
 			CreateBullet(*firstPlayer);
 			time_firstPlayer = clock_firstPlayer.restart();
 			for (int i(0); i < 6; i++)
@@ -148,7 +149,7 @@ void GameField::MonitoringKeys()
 			MoveSecondPlayer(*this, DOWN);
 		}
 
-		if (Key_Ctrl == true && !secondPlayer->optTankShooting.bulletActivFlag && time_secondPlayer.asSeconds() > 2.f) {
+		if (Key_Ctrl == true && !secondPlayer->optTankShooting.bulletActivFlag && time_secondPlayer.asSeconds() >= PlayerRechargeTime) {
 			CreateBullet(*secondPlayer);
 			time_secondPlayer = clock_secondPlayer.restart();
 			for (int i(0); i < 6; i++)
@@ -163,9 +164,14 @@ void GameField::MonitoringKeys()
 void GameField::CheckPlayerBang(Player& player)
 {
 	if (undying_players)
-		return;
+		goto exit;
+	if (player.GetSkin())
+		goto exit;
 
 	//off player
 	player.Presence() ? player.Presence() = false : NULL;
+
+exit:
+	;
 	return;
 }

@@ -72,15 +72,16 @@ public:
 class Tank : public Object, public Frame, public TankBoom
 {
 	int indexTank;
+	bool skinTank;
 
 	bool preReverseArr[4] = { false, false, false, false };
 	sf::Vector2f prePosReverse;
 public:
-	Tank(sf::Texture &texture) : Object(texture), Frame("tank"), indexTank(0)
+	Tank(sf::Texture &texture) : Object(texture), Frame("tank"), indexTank(0), skinTank(false)
 	{
 	}
 
-	Tank(sf::Texture &texture, const char* actorName) : Object(texture), Frame(actorName), indexTank(0)
+	Tank(sf::Texture &texture, const char* actorName) : Object(texture), Frame(actorName), indexTank(0), skinTank(false)
 	{
 	}
 
@@ -92,6 +93,10 @@ public:
 		new (this) Tank(obj);
 		return *this;
 	}
+
+	bool GetSkin() const { return skinTank; }
+	void SkinOn() { skinTank = true; return; }
+	void SkinOff() { skinTank = false; return; }
 
 	spaceTank::Settings optTank;
 	spaceTank::SettingsShooting optTankShooting;

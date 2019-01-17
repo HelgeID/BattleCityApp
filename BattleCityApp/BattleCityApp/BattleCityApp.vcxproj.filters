@@ -66,9 +66,6 @@
     <ClCompile Include="field_bullet_funcs.cpp">
       <Filter>Файлы исходного кода\field</Filter>
     </ClCompile>
-    <ClCompile Include="field_shooting_bullets.cpp">
-      <Filter>Файлы исходного кода\field</Filter>
-    </ClCompile>
     <ClCompile Include="field_actor_funcs.cpp">
       <Filter>Файлы исходного кода\field</Filter>
     </ClCompile>
@@ -80,6 +77,9 @@
     </ClCompile>
     <ClCompile Include="monitoring_anim.cpp">
       <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="field_checking.cpp">
+      <Filter>Файлы исходного кода\field</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

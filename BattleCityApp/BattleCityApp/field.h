@@ -28,6 +28,8 @@ class GameField
 	sf::Clock clock_firstPlayer, clock_secondPlayer;
 	sf::Time time_firstPlayer, time_secondPlayer;
 
+	void UpdateTime();
+
 	sf::RectangleShape field, outsideUP, outsideDOWN, outsideLEFT, outsideRIGHT;
 	Map map;
 	TileMap tmap;
@@ -93,8 +95,12 @@ class GameField
 	friend void MoveSecondPlayer(GameField&, const Direction);
 	void MonitoringKeys();
 	void CheckPlayerBang(Player&);
-	std::unique_ptr<AnimBirth> firstPlayerBirth{ nullptr };
-	std::unique_ptr<AnimBirth> secondPlayerBirth{ nullptr };
+	
+	struct Anim
+	{
+		std::unique_ptr<AnimBirth> playerBirth{ nullptr };
+		std::unique_ptr<AnimSkin> playerSkin{ nullptr };
+	} firstPlayerAnim, secondPlayerAnim;
 
 	//monitoring tanks
 	class TankCollision
@@ -133,12 +139,13 @@ class GameField
 		void CollisionPlayers(GameField&);
 	} objPlayerCollision;
 
-	//monitoring shooting bullets
-	class ShootingBullets
+	//checking
+	class Checking
 	{
 	public:
-		void MonitoringShootingBullets(GameField&);
-	} objShootingBullets;
+		void CheckingShootingBullets(GameField&);
+		void CheckingSkin(GameField&);
+	} objChecking;
 
 	//destroy objects
 	template<class T, class I, class = typename std::enable_if<std::is_integral<I>::value>::type>
