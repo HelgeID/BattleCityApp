@@ -163,13 +163,15 @@ void GameField::MonitoringKeys()
 
 void GameField::CheckPlayerBang(Player& player)
 {
-	if (undying_players)
-		goto exit;
-	if (player.GetSkin())
+	if (player.GetSkin() || undying_players)
 		goto exit;
 
 	//off player
-	player.Presence() ? player.Presence() = false : NULL;
+	if (player.Presence()) {
+		player.Presence() = false;
+		const sf::Vector2f point = player.getPosObj();
+		CreateAnimBoom(point, "tankObj");
+	}
 
 exit:
 	;

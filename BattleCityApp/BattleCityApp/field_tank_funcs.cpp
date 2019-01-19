@@ -38,7 +38,7 @@ void GameField::MoveTank(Tank& tank, float position)
 	return;
 }
 
-//todo
+//todo fun
 void GameField::ControlTank_onFrame(Tank& tank)
 {
 	tank.takeObj().getPosition().y < field.getPosition().y ? tank.moveObj(0.f, 2.f) : NULL;
@@ -56,6 +56,8 @@ void GameField::CheckTankBang(const int indexTank)
 	//dell tank
 	for (int index(0); index < tank.size(); ++index) {
 		if (tank[index].takeIndex() == indexTank) {
+			const sf::Vector2f point = tank[index].getPosObj();
+			CreateAnimBoom(point, "tankObj");
 			RemovalObj(tank, index);
 			break;
 		}

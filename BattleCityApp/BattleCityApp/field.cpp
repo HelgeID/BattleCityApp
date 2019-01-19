@@ -73,6 +73,28 @@ void GameField::UpdateField()
 	clock.restart();
 
 	window.display();
+
+	//test
+	{
+		std::cerr << std::endl; std::cerr << "Birth:";
+		firstPlayerAnim.playerBirth == nullptr ? std::cerr << 0 : std::cerr << 1;
+		secondPlayerAnim.playerBirth == nullptr ? std::cerr << 0 : std::cerr << 1;
+		std::cerr << std::endl; std::cerr << "Skin:";
+		firstPlayerAnim.playerSkin == nullptr ? std::cerr << 0 : std::cerr << 1;
+		secondPlayerAnim.playerSkin == nullptr ? std::cerr << 0 : std::cerr << 1;
+		std::cerr << std::endl;
+
+		std::cerr << std::endl; std::cerr << "Boom:";
+		auto test = [&](const size_t i) {
+			if (bulletBoom[i] == nullptr)
+				std::cerr << 0;
+			else
+				std::cerr << 1;
+		};
+		for (size_t i(0); i < 6; i++)
+			test(i);
+
+	}
 	return;
 }
 

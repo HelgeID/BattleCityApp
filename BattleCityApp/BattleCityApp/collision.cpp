@@ -310,7 +310,7 @@ void GameField::CheckOnCollisionFrame(Bullet& bullet)
 		);
 		point.x = point.x - 8;
 		point.y = point.y - 8;
-		CreateAnim(point);
+		CreateAnimBoom(point, "bulletObj");
 
 		//say the tank that the bullet hit the target
 		*bulletArr[indxBullet]->bulletActivFlag = false;
@@ -424,7 +424,7 @@ void GameField::CheckOnCollisionBlocks(Bullet& bullet)
 					);
 					point.x = point.x - 8;
 					point.y = point.y - 8;
-					CreateAnim(point);
+					CreateAnimBoom(point, "bulletObj");
 
 					//say the tank that the bullet hit the target
 					*bulletArr[indxBullet]->bulletActivFlag = false;
@@ -445,7 +445,7 @@ void GameField::CheckOnCollisionBlocks(Bullet& bullet)
 			);
 			point.x = point.x - 8;
 			point.y = point.y - 8;
-			CreateAnim(point);
+			CreateAnimBoom(point, "bulletObj");
 
 			//say the tank that the bullet hit the target
 			*bulletArr[indxBullet]->bulletActivFlag = false;
@@ -478,7 +478,7 @@ void GameField::CheckOnCollisionTanks(Bullet& bullet)
 			);
 			point.x = point.x - 8;
 			point.y = point.y - 8;
-			CreateAnim(point);
+			CreateAnimBoom(point, "bulletObj");
 
 			//say the tank that the bullet hit the target
 			*bulletArr[indxBullet]->bulletActivFlag = false;
@@ -506,7 +506,7 @@ void GameField::CheckOnCollisionBullets(Bullet& bullet1, Bullet& bullet2)
 			);
 			point1.x = point1.x - 8;
 			point1.y = point1.y - 8;
-			CreateAnim(point1);
+			CreateAnimBoom(point1, "bulletObj");
 
 			sf::Vector2f point2(
 				bulletArr[indxBullet2]->takeObj().getPosition().x,
@@ -514,7 +514,7 @@ void GameField::CheckOnCollisionBullets(Bullet& bullet1, Bullet& bullet2)
 			);
 			point2.x = point2.x - 8;
 			point2.y = point2.y - 8;
-			CreateAnim(point2);
+			CreateAnimBoom(point2, "bulletObj");
 
 			//say the tanks that the bullet hit the target
 			*bulletArr[indxBullet1]->bulletActivFlag = false; *bulletArr[indxBullet2]->bulletActivFlag = false;
@@ -556,7 +556,7 @@ void GameField::CheckOnCollisionPlayers(Bullet& bullet)
 		);
 		point.x = point.x - 8;
 		point.y = point.y - 8;
-		CreateAnim(point);
+		CreateAnimBoom(point, "bulletObj");
 
 		//say the tank that the bullet hit the target
 		*bulletArr[indxBullet]->bulletActivFlag = false;

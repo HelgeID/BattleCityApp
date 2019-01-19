@@ -57,14 +57,15 @@ class GameField
 	void CheckTankBang(const int);
 
 	std::array<Bullet*, 6> bulletArr = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
-	std::unique_ptr<AnimBoom> bulletBoom[6] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+	std::shared_ptr<AnimBoom> bulletBoom[6] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+	std::shared_ptr<AnimBoom> tankBoom[6] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+	void CreateAnimBoom(sf::Vector2f, const char*);
 
 	template <typename T>
 	void CreateBullet(T&, sf::Vector2f);
 	void CreateBullet(Tank&);
 	void CreateBullet(Player&);
 	void DrawBullets();
-	void CreateAnim(sf::Vector2f);
 
 	std::vector<RecShape> vecRecShape;
 	template<typename T> void FormArrayCells(T **, const sf::Vector2i, const sf::Vector2i, RecShape&);

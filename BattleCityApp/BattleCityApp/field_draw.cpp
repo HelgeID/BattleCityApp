@@ -177,5 +177,11 @@ void GameField::DrawAnimBoom()
 		if (bulletBoom[i] != nullptr)
 			window.draw(bulletBoom[i]->TakeAnim());
 	}
+
+	const size_t tankBoomSize = sizeof(this->tankBoom) / sizeof(*this->tankBoom);
+	for (int i(0); i < tankBoomSize; ++i) {
+		if (tankBoom[i] != nullptr)
+			window.draw(tankBoom[i]->TakeAnim());
+	}
 	return;
 }

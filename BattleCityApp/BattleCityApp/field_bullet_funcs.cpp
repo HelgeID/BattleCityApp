@@ -70,15 +70,3 @@ Bullet* _createBulletRIGHT(const sf::Vector2f point, sf::Texture &texture)
 	return (new Bullet(texture, sf::Vector2f(pX, pY-1), RIGHT));
 }
 
-void GameField::CreateAnim(const sf::Vector2f point)
-{
-	std::unique_ptr<AnimBoom> anim(new AnimBoom(texture, point, AnimBoom::AnimChose::Small, 0.4f));
-	const size_t bulletBoomSize = sizeof(this->bulletBoom) / sizeof(*this->bulletBoom);
-	for (int i(0); i < bulletBoomSize; ++i) {
-		if (bulletBoom[i] == nullptr) {
-			bulletBoom[i] = std::move(anim);
-			break;
-		}
-	}
-	return;
-}

@@ -128,7 +128,7 @@ class AnimBoom : Animation, public Time
 public:
 	enum AnimChose { Small, Bigger };
 
-	AnimBoom(sf::Texture& texture, const sf::Vector2f position, AnimChose chose, const float maxTime = 0.f)
+	AnimBoom(sf::Texture& texture, const sf::Vector2f position, AnimChose chose, const float maxTime = 0.f, const bool loop = false)
 	{
 		this->SetTexture(texture);
 		this->maxTime = maxTime;
@@ -139,13 +139,13 @@ public:
 			this->AddFrame(sf::IntRect(256, 128, 16, 16));
 			this->AddFrame(sf::IntRect(272, 128, 16, 16));
 			this->AddFrame(sf::IntRect(288, 128, 16, 16));
-			obj = new AnimatedObject(sf::seconds(0.1f), true, false);
+			obj = new AnimatedObject(sf::seconds(0.1f), true, loop);
 		}
 
 		if (chose == Bigger) {
 			this->AddFrame(sf::IntRect(304, 128, 32, 32));
 			this->AddFrame(sf::IntRect(336, 128, 32, 32));
-			obj = new AnimatedObject(sf::seconds(0.2f), true, true);
+			obj = new AnimatedObject(sf::seconds(0.2f), true, loop);
 		}
 
 		obj->setPosition(position);
