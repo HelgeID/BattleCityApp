@@ -14,13 +14,17 @@ void GameField::Checking::CheckingShootingBullets(GameField& gField)
 
 	std::for_each(gField.tank.begin(), gField.tank.end(), [&](Tank &tank)
 	{
-		if (!tank.optTankShooting.bulletActivFlag && tank.optTankShooting.clockTank.getElapsedTime().asSeconds() > random) {
-			gField.CreateBullet(tank, sf::Vector2f(0.f, 0.f));
-			for (int i(0); i < 6; i++)
-				gField.bulletArr[i] != nullptr ? std::cout << gField.bulletArr[i]->indexTank << "-": std::cout << "X" << "-";
-			std::cout << std::endl;
-			tank.optTankShooting.timeShooting = tank.optTankShooting.clockTank.restart(); //starting the timer
-			random = dist(gen); //random generation
+		if (!tank.isTank())
+			;
+		else {
+			if (!tank.optTankShooting.bulletActivFlag && tank.optTankShooting.clockTank.getElapsedTime().asSeconds() > random) {
+				gField.CreateBullet(tank, sf::Vector2f(0.f, 0.f));
+				for (int i(0); i < 6; i++)
+					gField.bulletArr[i] != nullptr ? std::cout << gField.bulletArr[i]->indexTank << "-" : std::cout << "X" << "-";
+				std::cout << std::endl;
+				tank.optTankShooting.timeShooting = tank.optTankShooting.clockTank.restart(); //starting the timer
+				random = dist(gen); //random generation
+			}
 		}
 	});
 	return;
@@ -28,7 +32,7 @@ void GameField::Checking::CheckingShootingBullets(GameField& gField)
 
 void GameField::Checking::CheckingSkin(GameField& gField)
 {
-	auto Checking = [&](Anim& playerAnim, Player* player)
+	auto Checking = [&](AnimPlayer& playerAnim, Player* player)
 	{
 		if (player->GetSkin() && playerAnim.playerSkin == nullptr) {
 			sf::Vector2f posPlayer = player->getPosObj();

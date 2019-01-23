@@ -56,6 +56,12 @@ class GameField
 	void ControlTank_onFrame(Tank&);
 	void CheckTankBang(const int);
 
+	struct AnimTank
+	{
+		std::unique_ptr<AnimBirth> tankBirth{ nullptr };
+		std::unique_ptr<AnimSkin> tankSkin{ nullptr };
+	} tankAnimArr[4];
+
 	std::array<Bullet*, 6> bulletArr = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 	std::shared_ptr<AnimBoom> bulletBoom[6] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 	std::shared_ptr<AnimBoom> tankBoom[6] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
@@ -97,7 +103,7 @@ class GameField
 	void MonitoringKeys();
 	void CheckPlayerBang(Player&);
 	
-	struct Anim
+	struct AnimPlayer
 	{
 		std::unique_ptr<AnimBirth> playerBirth{ nullptr };
 		std::unique_ptr<AnimSkin> playerSkin{ nullptr };

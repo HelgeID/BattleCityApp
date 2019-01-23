@@ -28,7 +28,7 @@ void GameField::CreateAnimBoom(const sf::Vector2f point, const char* name = "")
 void GameField::MonitoringAnim(const AnimBirth* ptr)
 {
 	//ptr - not used !!!
-	auto Monitoring = [&](Anim& playerAnim)
+	auto Monitoring = [&](AnimPlayer& playerAnim)
 	{
 		if (playerAnim.playerBirth != nullptr) {
 			if (playerAnim.playerBirth->FinishTime())
@@ -41,13 +41,21 @@ void GameField::MonitoringAnim(const AnimBirth* ptr)
 	Monitoring(firstPlayerAnim);
 	Monitoring(secondPlayerAnim);
 
+	for (size_t i(0); i < 4; i++) {
+		if (tankAnimArr[i].tankBirth != nullptr) {
+			if (tankAnimArr[i].tankBirth->FinishTime())
+				tankAnimArr[i].tankBirth = nullptr;
+			else
+				tankAnimArr[i].tankBirth->Update();
+		}
+	}
 	return;
 }
 
 void GameField::MonitoringAnim(const AnimSkin* ptr)
 {
 	//ptr - not used !!!
-	auto Monitoring = [&](Anim& playerAnim, Player* player)
+	auto Monitoring = [&](AnimPlayer& playerAnim, Player* player)
 	{
 		if (playerAnim.playerSkin != nullptr) {
 			if (playerAnim.playerSkin->FinishTime()) {
@@ -62,6 +70,14 @@ void GameField::MonitoringAnim(const AnimSkin* ptr)
 	Monitoring(firstPlayerAnim, firstPlayer);
 	Monitoring(secondPlayerAnim, secondPlayer);
 
+	for (size_t i(0); i < 4; i++) {
+		if (tankAnimArr[i].tankSkin != nullptr) {
+			if (tankAnimArr[i].tankSkin->FinishTime())
+				tankAnimArr[i].tankSkin = nullptr;
+			else
+				tankAnimArr[i].tankSkin->Update(tank[i].getPosObj());
+		}
+	}
 	return;
 }
 

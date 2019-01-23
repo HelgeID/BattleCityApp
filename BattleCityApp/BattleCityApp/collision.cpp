@@ -703,16 +703,18 @@ void GameField::CheckOnCollisionTanks(Player& player)
 		tank.ResetBoomParam();
 	};
 
-	for (auto it = tank.begin(); it != tank.end(); ++it)
+	for (auto it = tank.begin(); it != tank.end(); ++it) {
+		if (!it->isTank())
+			continue;
 		if (player.takeObj().getGlobalBounds().intersects(it->takeObj().getGlobalBounds())) {
 			PLAYER_BOOM(player, *it);
 			if ((player.optTank.dir == UP && it->optTank.dir == DOWN) ||
 				(player.optTank.dir == LEFT && it->optTank.dir == RIGHT) ||
 				(player.optTank.dir == DOWN && it->optTank.dir == UP) ||
 				(player.optTank.dir == RIGHT && it->optTank.dir == LEFT))
-					rotation(*it);
+				rotation(*it);
 		}
-			
+	}		
 	return;
 }
 

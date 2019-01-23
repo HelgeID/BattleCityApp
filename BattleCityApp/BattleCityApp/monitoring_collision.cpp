@@ -43,7 +43,7 @@ void GameField::TankCollision::CollisionFrame(GameField& gField)
 		return;
 
 	for (auto it = gField.tank.begin(); it != gField.tank.end(); ++it)
-		gField.CheckOnCollisionFrame(*it);
+		it->isTank() ? gField.CheckOnCollisionFrame(*it) : NULL;
 	return;
 }
 
@@ -53,7 +53,7 @@ void GameField::TankCollision::CollisionBlocks(GameField& gField)
 		return;
 
 	for (auto it = gField.tank.begin(); it != gField.tank.end(); ++it)
-		gField.CheckOnCollisionBlocks(*it);
+		it->isTank() ? gField.CheckOnCollisionBlocks(*it) : NULL;
 	return;
 }
 
@@ -66,7 +66,7 @@ void GameField::TankCollision::CollisionTanks(GameField& gField)
 		for (auto it2(it1); it2 != gField.tank.end(); ++it2) {
 			if (&*it1 == &*it2)
 				continue;
-			gField.CheckOnCollisionTanks(*it1, *it2);
+			it1->isTank() && it2->isTank() ? gField.CheckOnCollisionTanks(*it1, *it2) : NULL;
 		}
 	}
 	return;

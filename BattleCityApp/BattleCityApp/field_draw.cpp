@@ -91,6 +91,9 @@ void GameField::DrawActors()
 //drawing a tank(enemy)
 void GameField::DrawTank(Tank &tank)
 {
+	if (!tank.isTank())
+		return;
+
 	float speed = tank.optTank.speed;
 	float time = this->time / speed;
 	
@@ -122,7 +125,7 @@ void GameField::DrawTanks()
 	if (tank.size() == 0)
 		return;
 
-	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) { DrawTank(tank); });
+	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) { tank.isTank() ? DrawTank(tank) : NULL; });
 	return;
 }
 
@@ -156,6 +159,11 @@ void GameField::DrawAnimBirth()
 		window.draw(firstPlayerAnim.playerBirth->TakeAnim());
 	if (secondPlayerAnim.playerBirth != nullptr && !secondPlayerAnim.playerBirth->FinishTime())
 		window.draw(secondPlayerAnim.playerBirth->TakeAnim());
+
+	tankAnimArr[0].tankBirth == nullptr ? NULL : window.draw(tankAnimArr[0].tankBirth->TakeAnim());
+	tankAnimArr[1].tankBirth == nullptr ? NULL : window.draw(tankAnimArr[1].tankBirth->TakeAnim());
+	tankAnimArr[2].tankBirth == nullptr ? NULL : window.draw(tankAnimArr[2].tankBirth->TakeAnim());
+	tankAnimArr[3].tankBirth == nullptr ? NULL : window.draw(tankAnimArr[3].tankBirth->TakeAnim());
 	return;
 }
 
@@ -166,6 +174,11 @@ void GameField::DrawAnimSkin()
 		window.draw(firstPlayerAnim.playerSkin->TakeAnim());
 	if (secondPlayerAnim.playerSkin != nullptr && !secondPlayerAnim.playerSkin->FinishTime())
 		window.draw(secondPlayerAnim.playerSkin->TakeAnim());
+
+	tankAnimArr[0].tankSkin == nullptr ? NULL : window.draw(tankAnimArr[0].tankSkin->TakeAnim());
+	tankAnimArr[1].tankSkin == nullptr ? NULL : window.draw(tankAnimArr[1].tankSkin->TakeAnim());
+	tankAnimArr[2].tankSkin == nullptr ? NULL : window.draw(tankAnimArr[2].tankSkin->TakeAnim());
+	tankAnimArr[3].tankSkin == nullptr ? NULL : window.draw(tankAnimArr[3].tankSkin->TakeAnim());
 	return;
 }
 
