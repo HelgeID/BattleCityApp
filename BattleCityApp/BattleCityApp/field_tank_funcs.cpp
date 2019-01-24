@@ -1,23 +1,11 @@
 ﻿#include "field.h"
 #include "general.hpp"
+#include <thread>
 
 void GameField::CreateTanks()
 {
-	//todo new thread
-	Tank tankObj(texture);
-	tank.push_back(tankObj);
-	tank.push_back(tankObj);
-
-	sf::Vector2f pos;
-	tank[0].loadTank(YELLOW, modA, DOWN); pos = { 64.f, 16.f };//64, 16
-	tank[0].setPosObj(pos.x, pos.y);
-	tank[0].loadIndex(tank);
-	tank[0].onTank();
-
-	tank[1].loadTank(YELLOW, modA, LEFT); pos = { 128.f, 80.f };//128, 80
-	tank[1].setPosObj(pos.x, pos.y);
-	tank[1].loadIndex(tank);
-	tank[1].onTank();
+	std::unique_ptr<std::thread> thread_control(new std::thread(&CONTROL_TANKS, this));
+	thread_control->detach();
 
 	//tank[0].mapPos.i = map.TakeIndex(pos, 'i');
 	//tank[0].mapPos.j = map.TakeIndex(pos, 'j');
@@ -25,6 +13,16 @@ void GameField::CreateTanks()
 	//RemovalObj(tank, 0);
 	//RemovalObj(tank, 1);
 
+	return;
+}
+
+void GameField::CreateTank(const sf::Vector2f pos)
+{
+	static Tank tankObj(texture);
+	tank.push_back(tankObj);
+	(tank.end() - 1)->loadTank(WHITE, modA, DOWN);
+	(tank.end() - 1)->loadIndex(tank);
+	(tank.end() - 1)->setPosObj(pos.x, pos.y);
 	return;
 }
 

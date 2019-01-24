@@ -1,6 +1,13 @@
 ﻿#include "field.h"
 #include "general.hpp"
 
+void GameField::CreateAnimBirth(const sf::Vector2f point, const int index)
+{
+	std::unique_ptr<AnimBirth> anim(new AnimBirth(texture, point));
+	tankAnimArr[index].tankBirth = std::move(anim);
+	return;
+}
+
 void GameField::CreateAnimBoom(const sf::Vector2f point, const char* name = "")
 {
 	auto Create = [&](std::shared_ptr<AnimBoom>* boom, const size_t boomSize, const float maxTime, const bool loop = false)

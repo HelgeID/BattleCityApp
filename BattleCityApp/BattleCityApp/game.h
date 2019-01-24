@@ -20,6 +20,7 @@ private:
 
 	void zoomOn();
 	void zoomOff();
+
 };
 
 #endif

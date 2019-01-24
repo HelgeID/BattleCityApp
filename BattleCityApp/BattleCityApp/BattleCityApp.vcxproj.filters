@@ -81,6 +81,9 @@
     <ClCompile Include="field_checking.cpp">
       <Filter>Файлы исходного кода\field</Filter>
     </ClCompile>
+    <ClCompile Include="control_tanks.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">

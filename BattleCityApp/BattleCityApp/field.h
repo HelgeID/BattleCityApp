@@ -50,22 +50,25 @@ class GameField
 
 	std::vector<Tank> tank;
 	void CreateTanks();
+	void CreateTank(const sf::Vector2f);
 	void DrawTanks();
 	void DrawTank(Tank&);
 	void MoveTank(Tank&, float);
 	void ControlTank_onFrame(Tank&);
 	void CheckTankBang(const int);
+	friend void CONTROL_TANKS(GameField*);
 
 	struct AnimTank
 	{
 		std::unique_ptr<AnimBirth> tankBirth{ nullptr };
 		std::unique_ptr<AnimSkin> tankSkin{ nullptr };
 	} tankAnimArr[4];
+	void CreateAnimBirth(const sf::Vector2f, const int);
 
 	std::array<Bullet*, 6> bulletArr = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 	std::shared_ptr<AnimBoom> bulletBoom[6] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 	std::shared_ptr<AnimBoom> tankBoom[6] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
-	void CreateAnimBoom(sf::Vector2f, const char*);
+	void CreateAnimBoom(const sf::Vector2f, const char*);
 
 	template <typename T>
 	void CreateBullet(T&, sf::Vector2f);
