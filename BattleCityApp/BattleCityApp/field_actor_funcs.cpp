@@ -5,12 +5,15 @@
 struct AnimArgPtr { Player* player; AnimBirth* animBirth; };
 void AnimBirthPlayer(AnimArgPtr argPtr)
 {
-	//todo мютекс
 	sf::sleep(sf::milliseconds(3000)); //3s -> because AnimBirth 4s
 	while (!argPtr.animBirth->FinishTime())
 		;
+
+	mtx.lock();
 	argPtr.player->Presence() = true;
 	argPtr.player->SkinOn();
+	mtx.unlock();
+
 	return;
 }
 

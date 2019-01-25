@@ -69,4 +69,3 @@ Bullet* _createBulletRIGHT(const sf::Vector2f point, sf::Texture &texture)
 	float pY = point.y;
 	return (new Bullet(texture, sf::Vector2f(pX, pY-1), RIGHT));
 }
-

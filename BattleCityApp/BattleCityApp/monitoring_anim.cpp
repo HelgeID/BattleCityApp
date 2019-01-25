@@ -38,8 +38,10 @@ void GameField::MonitoringAnim(const AnimBirth* ptr)
 	auto Monitoring = [&](AnimPlayer& playerAnim)
 	{
 		if (playerAnim.playerBirth != nullptr) {
-			if (playerAnim.playerBirth->FinishTime())
+			if (playerAnim.playerBirth->FinishTime()) {
+				playerAnim.playerBirth.reset();
 				playerAnim.playerBirth = nullptr;
+			}
 			else
 				playerAnim.playerBirth->Update();
 		}
@@ -50,8 +52,10 @@ void GameField::MonitoringAnim(const AnimBirth* ptr)
 
 	for (size_t i(0); i < 4; i++) {
 		if (tankAnimArr[i].tankBirth != nullptr) {
-			if (tankAnimArr[i].tankBirth->FinishTime())
+			if (tankAnimArr[i].tankBirth->FinishTime()) {
+				tankAnimArr[i].tankBirth.reset();
 				tankAnimArr[i].tankBirth = nullptr;
+			}
 			else
 				tankAnimArr[i].tankBirth->Update();
 		}
@@ -66,6 +70,7 @@ void GameField::MonitoringAnim(const AnimSkin* ptr)
 	{
 		if (playerAnim.playerSkin != nullptr) {
 			if (playerAnim.playerSkin->FinishTime()) {
+				playerAnim.playerSkin.reset();
 				playerAnim.playerSkin = nullptr;
 				player->SkinOff();
 			}
@@ -79,8 +84,10 @@ void GameField::MonitoringAnim(const AnimSkin* ptr)
 
 	for (size_t i(0); i < 4; i++) {
 		if (tankAnimArr[i].tankSkin != nullptr) {
-			if (tankAnimArr[i].tankSkin->FinishTime())
+			if (tankAnimArr[i].tankSkin->FinishTime()) {
+				tankAnimArr[i].tankSkin.reset();
 				tankAnimArr[i].tankSkin = nullptr;
+			}
 			else
 				tankAnimArr[i].tankSkin->Update(tank[i].getPosObj());
 		}
@@ -91,12 +98,16 @@ void GameField::MonitoringAnim(const AnimSkin* ptr)
 void GameField::MonitoringAnim(const AnimBoom* ptr)
 {
 	//ptr - not used !!!
-	auto Monitoring = [&](std::shared_ptr<AnimBoom>* boom, const size_t boomSize)
+	auto Monitoring = [&](std::shared_ptr<AnimBoom>* boom, const size_t boomSize, const char* name = "")
 	{
 		for (int i(0); i < boomSize; ++i) {
 			if (boom[i] != nullptr) {
-				if (boom[i]->FinishTime())
+				if (boom[i]->FinishTime()) {
+					name == "bulletObj" ? bulletBoom[i].reset() : NULL;
+					name == "tankObj" ? tankBoom[i].reset() : NULL;
+					boom[i].reset();
 					boom[i] = nullptr;
+				}
 				else
 					boom[i]->Update();
 			}
@@ -104,10 +115,10 @@ void GameField::MonitoringAnim(const AnimBoom* ptr)
 	};
 
 	const size_t bulletBoomSize(sizeof(this->bulletBoom) / sizeof(*this->bulletBoom));
-	Monitoring(bulletBoom, bulletBoomSize);
+	Monitoring(bulletBoom, bulletBoomSize, "bulletObj");
 
 	const size_t tankBoomSize(sizeof(this->tankBoom) / sizeof(*this->tankBoom));
-	Monitoring(tankBoom, tankBoomSize);
+	Monitoring(tankBoom, tankBoomSize, "tankObj");
 
 	return;
 }

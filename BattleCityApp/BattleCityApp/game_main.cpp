@@ -3,6 +3,8 @@
 #include "events.h"
 #include "field.h"
 
+std::mutex mtx;
+
 Game::Game(sf::RenderWindow &window)
 	: window(window), texture(new sf::Texture())
 {
@@ -39,10 +41,14 @@ void Game::GameLaunch()
 	// update
 	while (window.isOpen())
 	{
+		//Update Event
 		gEvent.UpdateEvent();
-		gField.UpdateField();
 
-		//sf::sleep(sf::milliseconds(20));
+		//Update Field
+		{
+			std::lock_guard<std::mutex> lg(mtx);
+			gField.UpdateField();
+		}
 	}
 
 	return;

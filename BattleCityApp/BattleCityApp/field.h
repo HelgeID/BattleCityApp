@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <array>
 #include <memory>
+#include <mutex>
 #include "actor.hpp"
 #include "tank.hpp"
 #include "block.hpp"
@@ -16,6 +17,8 @@
 
 //test
 #include <iostream>
+
+extern std::mutex mtx;
 
 class GameField
 {

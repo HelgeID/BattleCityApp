@@ -13,7 +13,7 @@ struct Time
 class AnimBirth : Animation, public Time
 {
 	Animation* animation;
-	AnimatedObject *obj;
+	AnimatedObject obj;
 	enum AnimFlag { zero, one, two } animFlag;
 
 public:
@@ -28,16 +28,18 @@ public:
 		animation->AddFrame(sf::IntRect(272, 96, 16, 16));
 		animFlag = zero;
 
-		obj = new AnimatedObject(sf::seconds(0.12), true, true);
+		{
+			AnimatedObject obj(sf::seconds(0.12), true, true);
+			this->obj = obj;
+		}
 
-		obj->setPosition(position);
-		obj->PlayAnimation(*animation);
+		obj.setPosition(position);
+		obj.PlayAnimation(*animation);
 		elapsedTime = elapsedClock.restart();
 	}
 
 	~AnimBirth()
 	{
-		delete obj;
 	}
 
 	void Update()
@@ -46,18 +48,16 @@ public:
 		if (FinishTime())
 			return;
 
-		if (!obj->IsPlaying())
-			obj->PlayAnimation();
+		if (!obj.IsPlaying())
+			obj.PlayAnimation();
 
 		if (animFlag == zero && elapsedTime.asSeconds() >= 1.3f) {
-			//obj->StopAnimation();
 			animation->DelHeadFrame();
 			animation->AddFrame(sf::IntRect(288, 96, 16, 16));
 			animFlag = one;
 		}
 
 		else if (animFlag == one && elapsedTime.asSeconds() >= 2.6f) {
-			//obj->StopAnimation();
 			animation->DelHeadFrame();
 			animation->AddFrame(sf::IntRect(304, 96, 16, 16));
 			animFlag = two;
@@ -65,20 +65,21 @@ public:
 
 		frameTime = frameClock.restart();
 
-		obj->Update(frameTime);
+		obj.Update(frameTime);
 		return;
 	}
 
-	AnimatedObject TakeAnim()
+	AnimatedObject& TakeAnim()
 	{
-		return *obj;
+		return obj;
 	}
+
 } static *animBirth;
 
 class AnimSkin : Animation, public Time
 {
 	Animation* animation;
-	AnimatedObject *obj;
+	AnimatedObject obj;
 
 public:
 	AnimSkin(sf::Texture& texture, const sf::Vector2f position, const float maxTime = 10.f)
@@ -88,18 +89,21 @@ public:
 
 		animation = &*this;
 
-		this->AddFrame(sf::IntRect(256, 144, 16, 16));
-		this->AddFrame(sf::IntRect(272, 144, 16, 16));
+		animation->AddFrame(sf::IntRect(256, 144, 16, 16));
+		animation->AddFrame(sf::IntRect(272, 144, 16, 16));
 
-		obj = new AnimatedObject(sf::seconds(0.06), true, true);
-		obj->setPosition(position);
-		obj->PlayAnimation(*animation);
+		{
+			AnimatedObject obj(sf::seconds(0.06), true, true);
+			this->obj = obj;
+		}
+
+		obj.setPosition(position);
+		obj.PlayAnimation(*animation);
 		elapsedTime = elapsedClock.restart();
 	}
 
 	~AnimSkin()
 	{
-		delete obj;
 	}
 
 	void Update(const sf::Vector2f position)
@@ -109,21 +113,22 @@ public:
 			return;
 
 		frameTime = frameClock.restart();
-		obj->setPosition(position);
-		obj->Update(frameTime);
+		obj.setPosition(position);
+		obj.Update(frameTime);
 		return;
 	}
 
-	AnimatedObject TakeAnim()
+	AnimatedObject& TakeAnim()
 	{
-		return *obj;
+		return obj;
 	}
+
 } static *animSkin;
 
 class AnimBoom : Animation, public Time
 {
 	Animation* animation;
-	AnimatedObject *obj;
+	AnimatedObject obj;
 
 public:
 	enum AnimChose { Small, Bigger };
@@ -136,26 +141,33 @@ public:
 		animation = &*this;
 
 		if (chose == Small) {
-			this->AddFrame(sf::IntRect(256, 128, 16, 16));
-			this->AddFrame(sf::IntRect(272, 128, 16, 16));
-			this->AddFrame(sf::IntRect(288, 128, 16, 16));
-			obj = new AnimatedObject(sf::seconds(0.1f), true, loop);
+			animation->AddFrame(sf::IntRect(256, 128, 16, 16));
+			animation->AddFrame(sf::IntRect(272, 128, 16, 16));
+			animation->AddFrame(sf::IntRect(288, 128, 16, 16));
+
+			{
+				AnimatedObject obj(sf::seconds(0.1f), true, loop);
+				this->obj = obj;
+			}
 		}
 
 		if (chose == Bigger) {
-			this->AddFrame(sf::IntRect(304, 128, 32, 32));
-			this->AddFrame(sf::IntRect(336, 128, 32, 32));
-			obj = new AnimatedObject(sf::seconds(0.2f), true, loop);
+			animation->AddFrame(sf::IntRect(304, 128, 32, 32));
+			animation->AddFrame(sf::IntRect(336, 128, 32, 32));
+
+			{
+				AnimatedObject obj(sf::seconds(0.2f), true, loop);
+				this->obj = obj;
+			}
 		}
 
-		obj->setPosition(position);
-		obj->PlayAnimation(*animation);
+		obj.setPosition(position);
+		obj.PlayAnimation(*animation);
 		elapsedTime = elapsedClock.restart();
 	}
 
 	~AnimBoom()
 	{
-		delete obj;
 	}
 
 	void Update()
@@ -166,12 +178,13 @@ public:
 
 		frameTime = frameClock.restart();
 
-		obj->Update(frameTime);
+		obj.Update(frameTime);
 		return;
 	}
 
-	AnimatedObject TakeAnim()
+	AnimatedObject& TakeAnim()
 	{
-		return *obj;
+		return obj;
 	}
+
 } static *animBoom;
