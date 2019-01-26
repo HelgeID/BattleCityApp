@@ -11,34 +11,45 @@ void CONTROL_TANKS(GameField* gField)
 		{ //searching for an empty place
 			for (size_t index = _index; index < 4; index++)
 				if (gField->tankAnimArr[index].tankBirth == nullptr) {
-					{
-						std::lock_guard<std::mutex> lg(mtx);
-						gField->CreateAnimBirth(pos, index);
-					}
+					{ std::lock_guard<std::mutex> lg(mtx); gField->CreateAnimBirth(pos, index); }
 					break;
 				}
 		}
 		init_tank(pos);
 	};
 
-	auto random1 = [&](const size_t index)
+	auto random1 = [&](const size_t index, const bool flag)
 	{
-		sf::Vector2f pos_center{ 64.f, 26.f };
+		mtx.lock();
+			gField->c_BS->Spawn() = flag;
+		mtx.unlock();
+
+		//read position for animation
+		sf::Vector2f pos_center{ gField->c_BS->getPosObj() };
 		random(index, pos_center);
+		return;
 	};
 
-	auto random2 = [&](const size_t index)
+	auto random2 = [&](const size_t index, const bool flag)
 	{
-		sf::Vector2f pos_left{ 128.f, 80.f };
-		sf::Vector2f pos_right{ 64.f, 100.f };
+		mtx.lock();
+			gField->l_BS->Spawn() = flag;
+			gField->r_BS->Spawn() = flag;
+		mtx.unlock();
+
+		//read position for animation
+		sf::Vector2f pos_left{ gField->l_BS->getPosObj() };
+		sf::Vector2f pos_right{ gField->r_BS->getPosObj() };
 		random(index, pos_left);
 		random(index, pos_right);
+		return;
 	};
 
-	auto random3 = [&](const size_t index)
+	auto random3 = [&](const size_t index, const bool flag)
 	{
-		random1(index);
-		random2(index);
+		random1(index, flag);
+		random2(index, flag);
+		return;
 	};
 
 	//********************************************************
@@ -54,9 +65,9 @@ void CONTROL_TANKS(GameField* gField)
 
 	switch (variant)
 	{
-	case 1: random1(0); break;
-	case 2: random2(0); break;
-	case 3: random3(0); break;
+	case 1: random1(0, false); break;
+	case 2: random2(0, false); break;
+	case 3: random3(0, false); break;
 	}
 
 	mtx.lock();
@@ -90,34 +101,47 @@ void CONTROL_TANKS(GameField* gField)
 	sf::sleep(sf::milliseconds(2000));
 	blocking_firing = !blocking_firing;
 
-	switch (variant)
-	{
-	case 1: random3(1); break; // 1 + 3 == sum 4
-	case 2: random2(2); break; // 2 + 2 == sum 4
-	case 3: random1(3); break; // 3 + 1 == sum 4
-	}
-
 	mtx.lock();
 	auto CollisionTanks = [&]()
 	{
 		bool flag(false);
-		for (auto it1 = gField->tank.begin(); it1 != gField->tank.end(); ++it1) {
-			for (auto it2(it1); it2 != gField->tank.end(); ++it2) {
-				if (&*it1 == &*it2)
-					continue;
-				flag = it1->takeObj().getGlobalBounds().intersects(it2->takeObj().getGlobalBounds());
-				if (flag)
-					return flag;
-			}
+		for (auto it = gField->tank.begin(); it != gField->tank.end(); ++it) {
+			if (it->takeObj().getGlobalBounds().intersects(gField->l_BS->takeObj().getGlobalBounds()))
+				return true;
+			if (it->takeObj().getGlobalBounds().intersects(gField->r_BS->takeObj().getGlobalBounds()))
+				return true;
+			if (it->takeObj().getGlobalBounds().intersects(gField->c_BS->takeObj().getGlobalBounds()))
+				return true;
 		}
-		return flag;
+		return false;
 	};
 	mtx.unlock();
 
-	int count(4);
-	while (count)
-		if (gField->tankAnimArr[count - 1].tankBirth == nullptr && !CollisionTanks())
-			count--;
+	while (true) {
+		if (CollisionTanks())
+			;
+		else
+			break;
+	}
+
+	switch (variant)
+	{
+	case 1: random3(1, true); break; // 1 + 3 == sum 4
+	case 2: random2(2, true); break; // 2 + 2 == sum 4
+	case 3: random1(3, true); break; // 3 + 1 == sum 4
+	}
+
+	while (true) {
+		if (gField->tankAnimArr[0].tankBirth == nullptr && gField->tankAnimArr[1].tankBirth == nullptr && gField->tankAnimArr[2].tankBirth == nullptr && gField->tankAnimArr[3].tankBirth == nullptr)
+		{
+			std::lock_guard<std::mutex> lg(mtx);
+			gField->l_BS->Spawn() = false;
+			gField->r_BS->Spawn() = false;
+			gField->c_BS->Spawn() = false;
+			break;
+		}
+	}
+
 	{
 		std::lock_guard<std::mutex> lg(mtx);
 		std::for_each(gField->tank.begin(), gField->tank.end(), [&](Tank &tank) { tank.onTank(); });

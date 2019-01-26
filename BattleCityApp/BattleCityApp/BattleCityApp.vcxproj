@@ -135,6 +135,7 @@
     <ClCompile Include="hit_brick.cpp" />
     <ClCompile Include="part_bricks_map.cpp" />
     <ClCompile Include="field.cpp" />
+    <ClCompile Include="point_spawn.cpp" />
     <ClCompile Include="source.cpp" />
     <ClCompile Include="tile_map.cpp" />
   </ItemGroup>
@@ -143,6 +144,7 @@
     <ClInclude Include="animation.h" />
     <ClInclude Include="animation_game.h" />
     <ClInclude Include="block.hpp" />
+    <ClInclude Include="block_spawn.hpp" />
     <ClInclude Include="bullet.hpp" />
     <ClInclude Include="events.h" />
     <ClInclude Include="frame.hpp" />

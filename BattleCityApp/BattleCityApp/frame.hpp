@@ -44,6 +44,10 @@ public:
 			frame.setOutlineColor(sf::Color(0, 127, 0, 64));
 			frame.setFillColor(sf::Color(0, 64, 0, 64));
 		}
+		else if (name == "block spawn") {
+			frame.setOutlineColor(sf::Color(127, 0, 0, 64));
+			frame.setFillColor(sf::Color(0, 0, 0, 64));
+		}
 	}
 
 	~Frame()

@@ -9,6 +9,7 @@ void GameField::TankCollision::MonitoringCollision(GameField& gField)
 	gField.coef_reload > 6 ? gField.coef_reload = 0 : 0; //todo max_coef_reload
 
 	CollisionFrame(gField);
+	CollisionBlocksSpawn(gField);
 	CollisionBlocks(gField);
 	CollisionTanks(gField);
 
@@ -29,6 +30,7 @@ void GameField::BulletCollision::MonitoringCollision(GameField& gField)
 void GameField::PlayerCollision::MonitoringCollision(GameField& gField)
 {
 	CollisionFrame(gField);
+	CollisionBlocksSpawn(gField);
 	CollisionBlocks(gField);
 	CollisionTanks(gField);
 	CollisionBullets(gField);
@@ -44,6 +46,16 @@ void GameField::TankCollision::CollisionFrame(GameField& gField)
 
 	for (auto it = gField.tank.begin(); it != gField.tank.end(); ++it)
 		it->isTank() ? gField.CheckOnCollisionFrame(*it) : NULL;
+	return;
+}
+
+void GameField::TankCollision::CollisionBlocksSpawn(GameField& gField)
+{
+	if (gField.tank.size() == 0)
+		return;
+
+	for (auto it = gField.tank.begin(); it != gField.tank.end(); ++it)
+		it->isTank() ? gField.CheckOnCollisionBlocksSpawn(*it) : NULL;
 	return;
 }
 
@@ -150,6 +162,15 @@ void GameField::PlayerCollision::CollisionFrame(GameField& gField)
 		gField.CheckOnCollisionFrame(*gField.firstPlayer);
 	if (gField.secondPlayer->Presence())
 		gField.CheckOnCollisionFrame(*gField.secondPlayer);
+	return;
+}
+
+void GameField::PlayerCollision::CollisionBlocksSpawn(GameField& gField)
+{
+	if (gField.firstPlayer->Presence())
+		gField.CheckOnCollisionBlocksSpawn(*gField.firstPlayer, 1);
+	if (gField.secondPlayer->Presence())
+		gField.CheckOnCollisionBlocksSpawn(*gField.secondPlayer, 2);
 	return;
 }
 

@@ -9,6 +9,7 @@
 #include "actor.hpp"
 #include "tank.hpp"
 #include "block.hpp"
+#include "block_spawn.hpp"
 #include "bullet.hpp"
 #include "map.h"
 #include "tile_map.h"
@@ -84,6 +85,7 @@ class GameField
 	template<typename T> void DisbandArrayCells(T **);
 
 	void CheckOnCollisionFrame(Tank&); //for the tanks
+	void CheckOnCollisionBlocksSpawn(Tank&); //for the tanks
 	void CheckOnCollisionBlocks(Tank&, const bool fPL = false); //for the tanks
 	void CheckOnCollisionTanks(Tank&, Tank&); //for the tanks
 	void CheckOnCollisionFrame(Bullet&); //for the bullets
@@ -92,6 +94,7 @@ class GameField
 	void CheckOnCollisionBullets(Bullet&, Bullet&); //for the bullets
 	void CheckOnCollisionPlayers(Bullet&); //for the bullets
 	void CheckOnCollisionFrame(Player&); //for the players
+	void CheckOnCollisionBlocksSpawn(Player&, const int); //for the players
 	void CheckOnCollisionBlocks(Player&); //for the players
 	void CheckOnCollisionTanks(Player&); //for the players
 	void CheckOnCollisionBullets(Player&); //for the players
@@ -122,6 +125,7 @@ class GameField
 		void MonitoringCollision(GameField&);
 	private:
 		void CollisionFrame(GameField&);
+		void CollisionBlocksSpawn(GameField&);
 		void CollisionBlocks(GameField&);
 		void CollisionTanks(GameField&);
 	} objTankCollision;
@@ -146,6 +150,7 @@ class GameField
 		void MonitoringCollision(GameField&);
 	private:
 		void CollisionFrame(GameField&);
+		void CollisionBlocksSpawn(GameField&);
 		void CollisionBlocks(GameField&);
 		void CollisionTanks(GameField&);
 		void CollisionBullets(GameField&);
@@ -177,6 +182,11 @@ class GameField
 	void DrawAnimBirth();
 	void DrawAnimSkin();
 	void DrawAnimBoom();
+
+	std::unique_ptr<BlockSpawn> l_BS{ nullptr };
+	std::unique_ptr<BlockSpawn> r_BS{ nullptr };
+	std::unique_ptr<BlockSpawn> c_BS{ nullptr };
+	void CreatePointsSpawnEnemy();
 
 public:
 	explicit GameField(sf::RenderWindow&, sf::Texture&);

@@ -9,6 +9,7 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	FillField();
 	FillMap();
 	LoadMap();
+	CreatePointsSpawnEnemy();
 	InitOutside();
 	CreateBlocks();
 	CreateActors();

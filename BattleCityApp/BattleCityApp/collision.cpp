@@ -151,6 +151,31 @@ void GameField::DisbandArrayCells(T **arrCell)
 	vecRecShape.clear();
 }
 
+void GameField::CheckOnCollisionBlocksSpawn(Tank& tank)
+{
+	auto ReverseTank = [&]
+	{
+		const bool bulletActivFlag(tank.optTankShooting.bulletActivFlag);
+		tank.loadTank(tank.optTank.col, tank.optTank.mod, tank.ReverseDirection(tank.optTank.dir));
+		tank.optTankShooting.bulletActivFlag = bulletActivFlag;
+		MoveTank(tank, 2);
+	};
+
+	if (l_BS->Spawn() == true)
+		if (tank.takeObj().getGlobalBounds().intersects(l_BS->takeObj().getGlobalBounds()))
+			ReverseTank();
+
+	if (r_BS->Spawn() == true)
+		if (tank.takeObj().getGlobalBounds().intersects(r_BS->takeObj().getGlobalBounds()))
+			ReverseTank();
+
+	if (c_BS->Spawn() == true)
+		if (tank.takeObj().getGlobalBounds().intersects(c_BS->takeObj().getGlobalBounds()))
+			ReverseTank();
+
+	return;
+}
+
 void GameField::CheckOnCollisionBlocks(Tank& tank, const bool fPL)
 {
 	struct POS { sf::Vector2i cell; } *arrCell(nullptr);
@@ -674,6 +699,44 @@ void GameField::CheckOnCollisionFrame(Player& player)
 	};
 
 	relocate(player);
+	return;
+}
+
+// Checking the player on a collision with the block spawn
+void GameField::CheckOnCollisionBlocksSpawn(Player& player, const int num)
+{
+	bool flag(false);
+	if (l_BS->Spawn() == true) {
+		if (player.takeObj().getGlobalBounds().intersects(l_BS->takeObj().getGlobalBounds())) {
+			CheckPlayerBang(player);
+			flag = !flag;
+		}
+	}
+	if (r_BS->Spawn() == true) {
+		if (player.takeObj().getGlobalBounds().intersects(r_BS->takeObj().getGlobalBounds())) {
+			CheckPlayerBang(player);
+			flag = !flag;
+		}
+	}
+	if (c_BS->Spawn() == true) {
+		if (player.takeObj().getGlobalBounds().intersects(c_BS->takeObj().getGlobalBounds())) {
+			CheckPlayerBang(player);
+			flag = !flag;
+		}
+	}
+
+	if (flag) {
+		if (num == 1 && firstPlayerAnim.playerSkin != nullptr) {
+			firstPlayerAnim.playerSkin.reset();
+			firstPlayerAnim.playerSkin = nullptr;
+			player.SkinOff();
+		}
+		else if (num == 2 && secondPlayerAnim.playerSkin != nullptr) {
+			secondPlayerAnim.playerSkin.reset();
+			secondPlayerAnim.playerSkin = nullptr;
+			player.SkinOff();
+		}
+	}
 	return;
 }
 

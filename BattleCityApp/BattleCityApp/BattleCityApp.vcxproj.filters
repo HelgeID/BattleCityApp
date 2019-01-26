@@ -84,6 +84,9 @@
     <ClCompile Include="control_tanks.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="point_spawn.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -130,6 +133,9 @@
     </ClInclude>
     <ClInclude Include="animation_game.h">
       <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="block_spawn.hpp">
+      <Filter>Заголовочные файлы\objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
