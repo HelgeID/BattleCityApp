@@ -73,6 +73,9 @@ void CONTROL_TANKS(GameField* gField)
 	mtx.lock();
 	auto check = [&](const int index)
 	{
+		if (gField->tankAnimArr[index].tankBirth == nullptr)
+			return false;
+
 		if (!gField->tankAnimArr[index].tankBirth->FinishTime()) {
 			return false;
 		}

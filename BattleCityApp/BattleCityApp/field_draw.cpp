@@ -155,10 +155,12 @@ void GameField::DrawBullets()
 //drawings a birth anim
 void GameField::DrawAnimBirth()
 {
-	if (firstPlayerAnim.playerBirth != nullptr && !firstPlayerAnim.playerBirth->FinishTime())
-		window.draw(firstPlayerAnim.playerBirth->TakeAnim());
-	if (secondPlayerAnim.playerBirth != nullptr && !secondPlayerAnim.playerBirth->FinishTime())
-		window.draw(secondPlayerAnim.playerBirth->TakeAnim());
+	if (firstPlayerAnim.playerBirth != nullptr)
+		if (!firstPlayerAnim.playerBirth->FinishTime())
+			window.draw(firstPlayerAnim.playerBirth->TakeAnim());
+	if (secondPlayerAnim.playerBirth != nullptr)
+		if (!secondPlayerAnim.playerBirth->FinishTime())
+			window.draw(secondPlayerAnim.playerBirth->TakeAnim());
 
 	tankAnimArr[0].tankBirth == nullptr ? NULL : window.draw(tankAnimArr[0].tankBirth->TakeAnim());
 	tankAnimArr[1].tankBirth == nullptr ? NULL : window.draw(tankAnimArr[1].tankBirth->TakeAnim());
@@ -170,10 +172,12 @@ void GameField::DrawAnimBirth()
 //drawings a skin anim
 void GameField::DrawAnimSkin()
 {
-	if (firstPlayerAnim.playerSkin != nullptr && !firstPlayerAnim.playerSkin->FinishTime())
-		window.draw(firstPlayerAnim.playerSkin->TakeAnim());
-	if (secondPlayerAnim.playerSkin != nullptr && !secondPlayerAnim.playerSkin->FinishTime())
-		window.draw(secondPlayerAnim.playerSkin->TakeAnim());
+	if (firstPlayerAnim.playerSkin != nullptr)
+		if (!firstPlayerAnim.playerSkin->FinishTime())
+			window.draw(firstPlayerAnim.playerSkin->TakeAnim());
+	if (secondPlayerAnim.playerSkin != nullptr)
+		if (!secondPlayerAnim.playerSkin->FinishTime())
+			window.draw(secondPlayerAnim.playerSkin->TakeAnim());
 
 	tankAnimArr[0].tankSkin == nullptr ? NULL : window.draw(tankAnimArr[0].tankSkin->TakeAnim());
 	tankAnimArr[1].tankSkin == nullptr ? NULL : window.draw(tankAnimArr[1].tankSkin->TakeAnim());
