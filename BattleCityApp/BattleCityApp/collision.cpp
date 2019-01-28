@@ -401,7 +401,6 @@ void GameField::CheckOnCollisionBlocks(Bullet& bullet)
 					//directly damage
 					block[indxBlock].brickDamage(partsBrickVec, indxNUM);
 					pbmap.fillMap(partsBrickVec[partsBrickVec.size() - 1]);
-					std::cerr << "indxNUM: " << indxNUM << std::endl;
 				}
 				//additional damage
 				block[indxBlock].brickDamageAdditional(partsBrickVec, pbmap);

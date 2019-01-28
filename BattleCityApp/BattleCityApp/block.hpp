@@ -9,7 +9,9 @@
 
 #include "part_bricks_map.h"
 
-enum Environment { Empty, Brick, Steel, Trees, Water, Ice };
+enum Environment { Empty, Brick, Steel, Trees, Water, Ice }; //block type
+
+enum ModBlock { Nothing, modRight, modDown, modLeft, modUp }; //offset block
 
 //constants for determining the ordinal position in a texture (0 - 24), (25 - 49), ...
 // level[index] = value + const; // in LoadMap()
@@ -52,7 +54,7 @@ class Block : public Object, public Frame
 	std::shared_ptr<PartsBrickArr> partBrick;
 public:
 	const std::shared_ptr<PartsBrickArr>& takePartBrick() { return partBrick; }
-	void loadParamPartsBrick();
+	void loadParamPartsBrick(std::vector<sf::RectangleShape>&, Part_Bricks_Map& );
 	void brickDamage(std::vector<sf::RectangleShape>&, const int);
 	void brickDamageAdditional(std::vector<sf::RectangleShape>&, Part_Bricks_Map& );
 	void overloadFrame(const Direction);
@@ -61,6 +63,23 @@ private:
 	Environment TakeTape(const int& value)
 	{
 		return Environment(value / 10);
+	}
+
+	ModBlock TakeMod(const int& value)
+	{
+		if (!value)
+			return Nothing;
+
+		if (value == 11 || value == 21)
+			return modRight;
+		else if (value == 12 || value == 22)
+			return modDown;
+		else if (value == 13 || value == 23)
+			return modLeft;
+		else if (value == 14 || value == 24)
+			return modUp;
+		else
+			return Nothing;
 	}
 
 	struct COORD { int x; int y; };
@@ -107,9 +126,12 @@ public:
 	}
 
 	Environment type;
+	ModBlock mod;
+
 	void loadBlock(int value = 0)
 	{
 		this->type = TakeTape(value);
+		this->mod = TakeMod(value);
 
 		COORD *coord = new COORD;
 

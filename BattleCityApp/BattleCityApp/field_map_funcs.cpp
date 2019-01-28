@@ -172,8 +172,7 @@ void GameField::ReadMap(std::vector<Block>::iterator& it, const int i, const int
 	(*it).setPosObj(pos.x, pos.y);
 	(*it).setPosFrame(pos.x, pos.y);
 
-	(*it).offsetFrame(map.GetValueMap(i, j));
-	(*it).loadParamPartsBrick();
+	(*it).loadParamPartsBrick(partsBrickVec, pbmap);
 	return;
 }
 

@@ -102,8 +102,7 @@ void CONTROL_TANKS(GameField* gField)
 			}
 
 	sf::sleep(sf::milliseconds(2000));
-	blocking_firing = !blocking_firing;
-
+	
 	mtx.lock();
 	auto CollisionTanks = [&]()
 	{

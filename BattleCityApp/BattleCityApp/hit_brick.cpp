@@ -1,8 +1,8 @@
 ﻿#include "block.hpp"
 
-void Block::loadParamPartsBrick()
+void Block::loadParamPartsBrick(std::vector<sf::RectangleShape> &partsBrickVec, Part_Bricks_Map &pbmap)
 {
-	if (this->type == Brick)
+	if (this->type == Brick || this->type == Steel)
 	{
 		std::shared_ptr<PartsBrickArr> partBrick(new PartsBrickArr);
 		this->partBrick = std::move(partBrick);
@@ -26,6 +26,37 @@ void Block::loadParamPartsBrick()
 			}
 
 			this->partBrick->pbArr[index].presence = false;
+		}
+
+		auto self_hit = [&](const int indxArr[], const Direction dir)
+		{
+			for (int indx(0); indx < 4; indx++) {
+				brickDamage(partsBrickVec, indxArr[indx]);
+				pbmap.fillMap(partsBrickVec[partsBrickVec.size() - 1]);
+				brickDamageAdditional(partsBrickVec, pbmap);
+				overloadFrame(dir);
+			}
+		};
+
+		if (this->mod == ModBlock::modRight)
+		{
+			int indxArr[]{ 8, 9, 10, 11 };
+			self_hit(indxArr, Direction::RIGHT);
+		}
+		else if (this->mod == ModBlock::modDown)
+		{
+			int indxArr[]{ 0, 1, 2, 3 };
+			self_hit(indxArr, Direction::DOWN);
+		}
+		else if (this->mod == ModBlock::modLeft)
+		{
+			int indxArr[]{ 15, 14, 13, 12 };
+			self_hit(indxArr, Direction::LEFT);
+		}
+		else if (this->mod == ModBlock::modUp)
+		{
+			int indxArr[]{ 7, 6, 5, 4 };
+			self_hit(indxArr, Direction::UP);
 		}
 	}
 	return;
@@ -74,13 +105,11 @@ void Block::brickDamageAdditional(std::vector<sf::RectangleShape> &partsBrickVec
 			{
 				this->brickDamage(partsBrickVec, groupe->out1);
 				pbmap.fillMap(partsBrickVec[partsBrickVec.size() - 1]);
-				std::cerr << "indxNUM(ADD): " << groupe->out1 << std::endl;
 			}
 			if (!this->partBrick->pbArr[groupe->out2].presence)
 			{
 				this->brickDamage(partsBrickVec, groupe->out2);
 				pbmap.fillMap(partsBrickVec[partsBrickVec.size() - 1]);
-				std::cerr << "indxNUM(ADD): " << groupe->out2 << std::endl;
 			}
 		}
 	};
