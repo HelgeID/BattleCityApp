@@ -208,7 +208,12 @@ void GameField::CheckOnCollisionBlocks(Tank& tank, const bool fPL)
 					if (p_showframe)
 						window.draw(block[indxBlock].frame);
 
-					auto crossing = [&](int index) { return tank.takeObj().getGlobalBounds().intersects((*(&block[0] + index)).frame.getGlobalBounds()); };
+					auto crossing = [&](int index) {
+						if (!fPL)
+							return tank.takeObj().getGlobalBounds().intersects((*(&block[0] + index)).frame.getGlobalBounds());
+						return tank.frame.getGlobalBounds().intersects((*(&block[0] + index)).frame.getGlobalBounds());
+					};
+
 					if (block[indxBlock].type == Brick || block[indxBlock].type == Steel)
 					{
 						if (crossing(indxBlock)) {

@@ -14,16 +14,19 @@ public:
 
 class Frame
 {
-	void initFrame(const sf::Vector2f& size)
+	void initFrame(const char* name, sf::Vector2f& size)
 	{
+		if (name == "first player" || name == "second player")
+			size = sf::Vector2f(size.x - 1, size.y - 1);
 		frame.setSize(size);
+		return;
 	}
 
 public:
 	sf::RectangleShape frame;
 	Frame(const char* name = "", sf::Vector2f size = sf::Vector2f(16.f, 16.f))
 	{
-		initFrame(size);
+		initFrame(name, size);
 		if (name == "tank") {
 			frame.setOutlineColor(sf::Color(127, 0, 0, 64));
 			frame.setFillColor(sf::Color(64, 0, 0, 64));
