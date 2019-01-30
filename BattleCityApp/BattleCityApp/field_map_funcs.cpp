@@ -6,6 +6,67 @@
 #include <sstream>
 #include <string>
 
+void FixedValue(int& value, const int i, const int j)
+{
+	(i == 12 && j == 5) || (i == 11 && j == 5) || (i == 11 && j == 6) || (i == 12 && j == 7) || (i == 11 && j == 7) ? value = 0 : 0;
+	//todo spawn point
+	//todo flag point
+	return;
+}
+
+auto TakeTape = [&](std::string tape)
+{
+	if (tape == "Empty")
+		return 0;
+	if (tape == "Brick")
+		return 10;
+	if (tape == "Brick_Right")
+		return 11;
+	if (tape == "Brick_Down")
+		return 12;
+	if (tape == "Brick_Left")
+		return 13;
+	if (tape == "Brick_Up")
+		return 14;
+	if (tape == "Steel")
+		return 20;
+	if (tape == "Steel_Right")
+		return 21;
+	if (tape == "Steel_Down")
+		return 22;
+	if (tape == "Steel_Left")
+		return 23;
+	if (tape == "Steel_Up")
+		return 24;
+	if (tape == "Trees")
+		return 30;
+	if (tape == "Water")
+		return 40;
+	if (tape == "Ice")
+		return 50;
+
+	//add
+	if (tape == "Brick_Right_Up_Mini")
+		return 1114;
+	if (tape == "Brick_Right_Down_Mini")
+		return 1112;
+	if (tape == "Brick_Left_Up_Mini")
+		return 1314;
+	if (tape == "Brick_Left_Down_Mini")
+		return 1312;
+
+	if (tape == "Steel_Right_Up_Mini")
+		return 2124;
+	if (tape == "Steel_Right_Down_Mini")
+		return 2122;
+	if (tape == "Steel_Left_Up_Mini")
+		return 2324;
+	if (tape == "Steel_Left_Down_Mini")
+		return 2322;
+
+	return 0;
+};
+
 //init field (parameters: start position, size, color)
 void GameField::FillField()
 {
@@ -18,39 +79,6 @@ void GameField::FillField()
 //fill the array with data from the level file
 void GameField::FillMap()
 {
-	auto TakeTape = [&](std::string tape)
-	{
-		if (tape == "Empty")
-			return 0;
-		if (tape == "Brick")
-			return 10;
-		if (tape == "Brick_Right")
-			return 11;
-		if (tape == "Brick_Down")
-			return 12;
-		if (tape == "Brick_Left")
-			return 13;
-		if (tape == "Brick_Up")
-			return 14;
-		if (tape == "Steel")
-			return 20;
-		if (tape == "Steel_Right")
-			return 21;
-		if (tape == "Steel_Down")
-			return 22;
-		if (tape == "Steel_Left")
-			return 23;
-		if (tape == "Steel_Up")
-			return 24;
-		if (tape == "Trees")
-			return 30;
-		if (tape == "Water")
-			return 40;
-		if (tape == "Ice")
-			return 50;
-		return 0;
-	};
-
 	std::string FILENAME("");
 
 	switch (p_level) {
@@ -79,6 +107,8 @@ void GameField::FillMap()
 		std::istringstream issI(s_indI); issI >> indI;
 		std::istringstream issJ(s_indJ); issJ >> indJ;
 		h_value = TakeTape(std::string(s_tape));
+
+		FixedValue(h_value, indI, indJ);
 
 		map.SetValueMap(h_value, indI, indJ);
 	}
@@ -205,6 +235,50 @@ void GameField::InitOutside()
 	outsideRIGHT.setFillColor(sf::Color(124, 124, 124, 50));
 	outsideRIGHT.setOutlineThickness(0.5f);
 	outsideRIGHT.setOutlineColor(sf::Color::Red);
+
+	return;
+}
+
+//moore
+void GameField::CreateMoore()
+{
+	struct Pos
+	{
+		int value;
+		int i, j;
+	} pos[]{
+		{ TakeTape("Brick_Right"), 12, 5 },
+		{ TakeTape("Brick_Right_Down_Mini"), 11, 5 },
+		{ TakeTape("Brick_Down"), 11, 6 },
+		{ TakeTape("Brick_Left"), 12, 7 },
+		{ TakeTape("Brick_Left_Down_Mini"), 11, 7 }
+	};
+
+	Block blockObj(texture);
+	moore.push_back(blockObj); //lower left, 0
+	moore.push_back(blockObj); //upper left, 1
+	moore.push_back(blockObj); //central, 2
+	moore.push_back(blockObj); //lower right, 3
+	moore.push_back(blockObj); //upper right, 4
+
+	int element(0);
+	for (auto& moore : moore)
+	{
+		InitMoore(moore, pos[element].i, pos[element].j, pos[element].value);
+		element++;
+	}
+
+	return;
+}
+
+void GameField::InitMoore(Block& block, const int i, const int j, const int value)
+{
+	sf::Vector2f pos = map.TakeCoord(i, j);
+	block.loadBlock(value);
+	block.setPosObj(pos.x, pos.y);
+	block.setPosFrame(pos.x, pos.y);
+
+	block.loadParamPartsBrick(partsBrickVec, pbmap);
 
 	return;
 }

@@ -55,6 +55,19 @@ void GameField::DrawBlocks()
 	return;
 }
 
+//drawing moore
+void GameField::DrawMoore()
+{
+	if (moore.size() > 0)
+		;
+	else
+		return;
+
+	for each(Block block in moore)
+		p_showframe ? window.draw(block.frame) : block.drawBlock(window);
+	return;
+}
+
 //drawing players
 void GameField::DrawActors()
 {

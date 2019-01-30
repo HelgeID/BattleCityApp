@@ -802,3 +802,124 @@ void GameField::CheckOnCollisionPlayers(Player& player1, Player& player2)
 	}
 	return;
 }
+
+/////////////////////////////////////////////////////////////////////////////
+//Moore
+/////////////////////////////////////////////////////////////////////////////
+void GameField::CheckOnMoore()
+{
+	bool removal(false);
+
+	if (moore.size() > 0)
+		;
+	else
+		return;
+
+	//Check the players, enemies
+
+	bool fPL(false);
+	auto crossing = [&](Block& block, Tank& tank) {
+		if (!fPL)
+			return tank.takeObj().getGlobalBounds().intersects(block.frame.getGlobalBounds());
+		return tank.frame.getGlobalBounds().intersects(block.frame.getGlobalBounds());
+	};
+
+	auto PlAYER_BOOM = [&](Block& block, Tank& tank)
+	{
+		//processing player
+		while (crossing(block, tank))
+		{
+			MoveTank(tank, -1.f);
+			tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
+		}
+	};
+
+	auto BOOM = [&](Block& block, Tank& tank, const sf::Vector2i pos)
+	{
+		//processing enemie
+		const bool bulletActivFlag(tank.optTankShooting.bulletActivFlag);
+		tank.SetBoomCoord(pos.x, pos.y);
+		tank.loadTank(
+			tank.optTank.col,
+			tank.optTank.mod,
+			tank.optTank.dir = tank.RandomReverseDirection(tank.optTank.dir)
+		);
+		tank.optTankShooting.bulletActivFlag = bulletActivFlag;
+		tank.setPosObj((float)pos.x, (float)pos.y);
+
+		std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
+		std::cerr << " :" << pos.x << " :" << pos.y << std::endl;
+	};
+
+	auto Compare = [&](Tank& tank, const sf::Vector2i pos)
+	{
+		if (!tank.CompareBoomCoord(pos.x, pos.y))
+			tank.ResetBoomParam();
+	};
+
+	for (size_t iMoore(0); iMoore < moore.size(); ++iMoore)
+	{
+		fPL = false; //signal => the enemies
+		if (tank.size() != 0) {
+			for (size_t iTank(0); iTank < tank.size(); ++iTank) {
+				if (tank[iTank].isTank()) {
+					const sf::Vector2i posTank(
+						round(tank[iTank].takeObj().getPosition().x), 
+						round(tank[iTank].takeObj().getPosition().y)
+					);
+					if (crossing(moore[iMoore], tank[iTank]))
+						BOOM(moore[iMoore], tank[iTank], posTank);
+					Compare(tank[iTank], posTank);
+				}
+			}
+		}
+
+		fPL = true; //signal => the player
+
+		if (firstPlayer->Presence()) {
+			if (crossing(moore[iMoore], *firstPlayer))
+				PlAYER_BOOM(moore[iMoore], *firstPlayer);
+		}
+
+		if (secondPlayer->Presence()) {
+			if (crossing(moore[iMoore], *secondPlayer))
+				PlAYER_BOOM(moore[iMoore], *secondPlayer);
+		}
+	}
+
+	//Check the bullets
+
+	if (std::none_of(bulletArr.begin(), bulletArr.end(), [](Bullet* element) {return element != nullptr;}))
+		return;
+
+	const size_t bulletArrSize = bulletArr.size();
+	for (int indxBullet(0); indxBullet < bulletArrSize; ++indxBullet) {
+		if (bulletArr[indxBullet] != nullptr && moore.size() > 0) {
+			for (size_t iMoore(0); iMoore < moore.size(); ++iMoore) {
+				bool crossing = (bulletArr[indxBullet]->frame.getGlobalBounds().intersects(moore[iMoore].frame.getGlobalBounds()));
+				if (crossing) {
+					sf::Vector2f point(
+						bulletArr[indxBullet]->takeObj().getPosition().x,
+						bulletArr[indxBullet]->takeObj().getPosition().y
+					);
+					point.x = point.x - 8;
+					point.y = point.y - 8;
+					CreateAnimBoom(point, "bulletObj");
+
+					//say the tank that the bullet hit the target
+					*bulletArr[indxBullet]->bulletActivFlag = false;
+					//remove the bullet
+					delete bulletArr[indxBullet];
+					bulletArr[indxBullet] = nullptr;
+
+					//remove the block
+					if (moore[iMoore].type == Brick)
+						RemovalObj(moore, iMoore);
+
+					break;
+				}
+			}
+		}
+	}
+	return;
+}

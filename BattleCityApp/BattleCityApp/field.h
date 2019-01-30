@@ -52,6 +52,11 @@ class GameField
 	void CreateBlocks();
 	void DrawBlocks();
 
+	std::vector<Block> moore;
+	void CreateMoore();
+	void InitMoore(Block&, const int, const int, const int);
+	void DrawMoore();
+
 	std::vector<Tank> tank;
 	void CreateTanks();
 	void CreateTank(const sf::Vector2f);
@@ -99,6 +104,8 @@ class GameField
 	void CheckOnCollisionTanks(Player&); //for the players
 	void CheckOnCollisionBullets(Player&); //for the players
 	void CheckOnCollisionPlayers(Player&, Player&); //for the players
+
+	void CheckOnMoore();
 
 	//actors
 	Player *firstPlayer;

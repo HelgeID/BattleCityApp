@@ -12,6 +12,7 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	CreatePointsSpawnEnemy();
 	InitOutside();
 	CreateBlocks();
+	CreateMoore();
 	CreateActors();
 	CreateTanks();
 }
@@ -30,6 +31,7 @@ void GameField::UpdateField()
 	DrawField();
 	DrawMap();
 	//DrawBlocks();
+	DrawMoore();
 	//--------------------------------------
 	DrawBrickDamage();
 	//--------------------------------------
@@ -50,6 +52,7 @@ void GameField::UpdateField()
 	objTankCollision.MonitoringCollision(*this);
 	objBulletCollision.MonitoringCollision(*this);
 	objPlayerCollision.MonitoringCollision(*this);
+	CheckOnMoore();
 
 	MonitoringKeys();
 	objChecking.CheckingShootingBullets(*this);

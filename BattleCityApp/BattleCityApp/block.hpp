@@ -11,7 +11,7 @@
 
 enum Environment { Empty, Brick, Steel, Trees, Water, Ice }; //block type
 
-enum ModBlock { Nothing, modRight, modDown, modLeft, modUp }; //offset block
+enum ModBlock { Nothing, modRight, modDown, modLeft, modUp, modRightUpMini, modRightDownMini, modLeftUpMini, modLeftDownMini }; //offset block
 
 //constants for determining the ordinal position in a texture (0 - 24), (25 - 49), ...
 // level[index] = value + const; // in LoadMap()
@@ -78,6 +78,16 @@ private:
 			return modLeft;
 		else if (value == 14 || value == 24)
 			return modUp;
+
+		else if (value == 1114 || value == 2124)
+			return modRightUpMini;
+		else if (value == 1112 || value == 2122)
+			return modRightDownMini;
+		else if (value == 1314 || value == 2324)
+			return modLeftUpMini;
+		else if (value == 1312 || value == 2322)
+			return modLeftDownMini;
+
 		else
 			return Nothing;
 	}
@@ -125,13 +135,30 @@ public:
 	{
 	}
 
+	Block& operator=(const Block& obj)
+	{
+		if (this == &obj)
+			return *this;
+		this->~Block();
+		new (this) Block(obj);
+		return *this;
+	}
+
 	Environment type;
 	ModBlock mod;
 
 	void loadBlock(int value = 0)
 	{
-		this->type = TakeTape(value);
 		this->mod = TakeMod(value);
+
+		if (value > 999) {
+			(value / 1000 == 1) ? this->type = Brick :
+				(value / 1000 == 2) ? this->type = Steel : NULL;
+
+			{ value /= 1000; value *= 10; } //lead to the whole block (10 || 20), so two actions
+		}
+		else
+			this->type = TakeTape(value);
 
 		COORD *coord = new COORD;
 

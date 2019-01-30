@@ -28,9 +28,9 @@ void Block::loadParamPartsBrick(std::vector<sf::RectangleShape> &partsBrickVec, 
 			this->partBrick->pbArr[index].presence = false;
 		}
 
-		auto self_hit = [&](const int indxArr[], const Direction dir)
+		auto self_hit = [&](const int indxArr[], const int size, const Direction dir)
 		{
-			for (int indx(0); indx < 4; indx++) {
+			for (int indx(0); indx < size; indx++) {
 				brickDamage(partsBrickVec, indxArr[indx]);
 				pbmap.fillMap(partsBrickVec[partsBrickVec.size() - 1]);
 				brickDamageAdditional(partsBrickVec, pbmap);
@@ -41,22 +41,51 @@ void Block::loadParamPartsBrick(std::vector<sf::RectangleShape> &partsBrickVec, 
 		if (this->mod == ModBlock::modRight)
 		{
 			int indxArr[]{ 8, 9, 10, 11 };
-			self_hit(indxArr, Direction::RIGHT);
+			self_hit(indxArr, 4, Direction::RIGHT);
 		}
 		else if (this->mod == ModBlock::modDown)
 		{
 			int indxArr[]{ 0, 1, 2, 3 };
-			self_hit(indxArr, Direction::DOWN);
+			self_hit(indxArr, 4, Direction::DOWN);
 		}
 		else if (this->mod == ModBlock::modLeft)
 		{
 			int indxArr[]{ 15, 14, 13, 12 };
-			self_hit(indxArr, Direction::LEFT);
+			self_hit(indxArr, 4, Direction::LEFT);
 		}
 		else if (this->mod == ModBlock::modUp)
 		{
 			int indxArr[]{ 7, 6, 5, 4 };
-			self_hit(indxArr, Direction::UP);
+			self_hit(indxArr, 4, Direction::UP);
+		}
+
+		else if (this->mod == ModBlock::modRightUpMini)
+		{
+			int indxArr1[]{ 8, 9, 10, 11 };
+			self_hit(indxArr1, 4, Direction::RIGHT);
+			int indxArr2[]{ 7, 5 };
+			self_hit(indxArr2, 2, Direction::UP);
+		}
+		else if (this->mod == ModBlock::modRightDownMini)
+		{
+			int indxArr1[]{ 8, 9, 10, 11 };
+			self_hit(indxArr1, 4, Direction::RIGHT);
+			int indxArr2[]{ 1, 3 };
+			self_hit(indxArr2, 2, Direction::DOWN);
+		}
+		else if (this->mod == ModBlock::modLeftUpMini)
+		{
+			int indxArr1[]{ 15, 14, 13, 12 };
+			self_hit(indxArr1, 4, Direction::LEFT);
+			int indxArr2[]{ 6, 4 };
+			self_hit(indxArr2, 2, Direction::UP);
+		}
+		else if (this->mod == ModBlock::modLeftDownMini)
+		{
+			int indxArr1[]{ 15, 14, 13, 12 };
+			self_hit(indxArr1, 4, Direction::LEFT);
+			int indxArr2[]{ 0, 2 };
+			self_hit(indxArr2, 2, Direction::DOWN);
 		}
 	}
 	return;
