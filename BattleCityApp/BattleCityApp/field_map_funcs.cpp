@@ -240,18 +240,28 @@ void GameField::InitOutside()
 }
 
 //moore
-void GameField::CreateMoore()
+void GameField::CreateMoore(const char* block)
 {
+	moore.size() > 0 ? moore.clear() : 0;
+
+	char* blockName[5];
+	if (block == "steel") {
+		blockName[0] = "Steel_Right"; blockName[1] = "Steel_Right_Down_Mini"; blockName[2] = "Steel_Down"; blockName[3] = "Steel_Left"; blockName[4] = "Steel_Left_Down_Mini";
+	}
+	else {
+		blockName[0] = "Brick_Right"; blockName[1] = "Brick_Right_Down_Mini"; blockName[2] = "Brick_Down"; blockName[3] = "Brick_Left"; blockName[4] = "Brick_Left_Down_Mini";
+	}
+
 	struct Pos
 	{
 		int value;
 		int i, j;
 	} pos[]{
-		{ TakeTape("Brick_Right"), 12, 5 },
-		{ TakeTape("Brick_Right_Down_Mini"), 11, 5 },
-		{ TakeTape("Brick_Down"), 11, 6 },
-		{ TakeTape("Brick_Left"), 12, 7 },
-		{ TakeTape("Brick_Left_Down_Mini"), 11, 7 }
+		{ TakeTape(blockName[0]), 12, 5 },
+		{ TakeTape(blockName[1]), 11, 5 },
+		{ TakeTape(blockName[2]), 11, 6 },
+		{ TakeTape(blockName[3]), 12, 7 },
+		{ TakeTape(blockName[4]), 11, 7 }
 	};
 
 	Block blockObj(texture);

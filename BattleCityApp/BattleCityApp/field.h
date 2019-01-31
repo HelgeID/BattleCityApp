@@ -53,7 +53,7 @@ class GameField
 	void DrawBlocks();
 
 	std::vector<Block> moore;
-	void CreateMoore();
+	void CreateMoore(const char* block = "brick");
 	void InitMoore(Block&, const int, const int, const int);
 	void DrawMoore();
 

@@ -4,8 +4,8 @@
 
 void GameField::CreateTanks()
 {
-	//std::unique_ptr<std::thread> thread_control(new std::thread(&CONTROL_TANKS, this));
-	//thread_control->detach();
+	std::unique_ptr<std::thread> thread_control(new std::thread(&CONTROL_TANKS, this));
+	thread_control->detach();
 
 	//tank[0].mapPos.i = map.TakeIndex(pos, 'i');
 	//tank[0].mapPos.j = map.TakeIndex(pos, 'j');
