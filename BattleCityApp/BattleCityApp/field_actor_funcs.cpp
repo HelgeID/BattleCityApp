@@ -169,9 +169,9 @@ void GameField::MonitoringKeys()
 	return;
 }
 
-void GameField::CheckPlayerBang(Player& player)
+void GameField::CheckPlayerBang(Player& player, const bool off)
 {
-	if (player.GetSkin() || undying_players)
+	if ((player.GetSkin() && !off) || undying_players)
 		goto exit;
 
 	//off player
@@ -179,6 +179,20 @@ void GameField::CheckPlayerBang(Player& player)
 		player.Presence() = false;
 		const sf::Vector2f point = player.getPosObj();
 		CreateAnimBoom(point, "tankObj");
+
+		if (player.name == "first player" && firstPlayerAnim.playerSkin != nullptr)
+		{
+			firstPlayerAnim.playerSkin.reset();
+			firstPlayerAnim.playerSkin = nullptr;
+			player.SkinOff();
+		}
+
+		if (player.name == "second player" && secondPlayerAnim.playerSkin != nullptr)
+		{
+			secondPlayerAnim.playerSkin.reset();
+			secondPlayerAnim.playerSkin = nullptr;
+			player.SkinOff();
+		}
 	}
 
 exit:

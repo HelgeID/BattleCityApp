@@ -63,9 +63,13 @@ class GameField
 	void DrawTanks();
 	void DrawTank(Tank&);
 	void MoveTank(Tank&, float);
+	void MoveTank(const Direction, Tank&, float);
 	void ControlTank_onFrame(Tank&);
 	void CheckTankBang(const int);
 	friend void CONTROL_TANKS(GameField*);
+	friend bool CONTROL_CollisionTanks(GameField*);
+	friend bool CONTROL_CheckFinishTimeAnim(GameField*, const int);
+	friend bool CONTROL_OffAllAnim(GameField*);
 
 	struct AnimTank
 	{
@@ -117,7 +121,7 @@ class GameField
 	friend void MoveFirstPlayer(GameField&, const Direction);
 	friend void MoveSecondPlayer(GameField&, const Direction);
 	void MonitoringKeys();
-	void CheckPlayerBang(Player&);
+	void CheckPlayerBang(Player&, const bool off = false);
 	
 	struct AnimPlayer
 	{

@@ -28,13 +28,25 @@ void GameField::CreateTank(const sf::Vector2f pos)
 
 void GameField::MoveTank(Tank& tank, float position)
 {
-	if (tank.optTank.dir == UP)
+	switch (tank.optTank.dir)
+	{
+		case UP: MoveTank(UP, tank, position); break;
+		case LEFT: MoveTank(LEFT, tank, position); break;
+		case DOWN: MoveTank(DOWN, tank, position); break;
+		case RIGHT: MoveTank(RIGHT, tank, position); break;
+	}
+	return;
+}
+
+void GameField::MoveTank(const Direction dir, Tank& tank, float position)
+{
+	if (dir == UP)
 		tank.moveObj(0.f, -position);
-	else if (tank.optTank.dir == LEFT)
+	else if (dir == LEFT)
 		tank.moveObj(-position, 0.f);
-	else if (tank.optTank.dir == DOWN)
+	else if (dir == DOWN)
 		tank.moveObj(0.f, position);
-	else if (tank.optTank.dir == RIGHT)
+	else if (dir == RIGHT)
 		tank.moveObj(position, 0.f);
 	return;
 }
@@ -54,12 +66,12 @@ void GameField::CheckTankBang(const int indexTank)
 	if (undying_enemy)
 		return;
 
-	//dell tank
+	//off tank
 	for (int index(0); index < tank.size(); ++index) {
 		if (tank[index].takeIndex() == indexTank) {
 			const sf::Vector2f point = tank[index].getPosObj();
 			CreateAnimBoom(point, "tankObj");
-			RemovalObj(tank, index);
+			tank[index].offTank();
 			break;
 		}
 	}

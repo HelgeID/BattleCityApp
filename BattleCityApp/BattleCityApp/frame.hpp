@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <SFML/Graphics.hpp>
+#include <string>
 
 //additional functionality
 class RecShape : public sf::RectangleShape
@@ -14,9 +15,9 @@ public:
 
 class Frame
 {
-	void initFrame(const char* name, sf::Vector2f& size)
+	void initFrame(const std::string name, sf::Vector2f& size)
 	{
-		if (name == "first player" || name == "second player")
+		if (name == "first player" || name == "second player" || name == "tank")
 			size = sf::Vector2f(size.x - 1, size.y - 1);
 		frame.setSize(size);
 		return;
@@ -24,7 +25,8 @@ class Frame
 
 public:
 	sf::RectangleShape frame;
-	Frame(const char* name = "", sf::Vector2f size = sf::Vector2f(16.f, 16.f))
+	std::string name;
+	Frame(const std::string name = "", sf::Vector2f size = sf::Vector2f(16.f, 16.f)) : name(name)
 	{
 		initFrame(name, size);
 		if (name == "tank") {

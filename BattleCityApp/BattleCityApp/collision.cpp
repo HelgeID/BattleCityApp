@@ -159,6 +159,7 @@ void GameField::CheckOnCollisionBlocksSpawn(Tank& tank)
 		tank.loadTank(tank.optTank.col, tank.optTank.mod, tank.ReverseDirection(tank.optTank.dir));
 		tank.optTankShooting.bulletActivFlag = bulletActivFlag;
 		MoveTank(tank, 2);
+		tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
 	};
 
 	if (l_BS->Spawn() == true)
@@ -210,8 +211,8 @@ void GameField::CheckOnCollisionBlocks(Tank& tank, const bool fPL)
 
 					auto crossing = [&](int index) {
 						if (!fPL)
-							return tank.takeObj().getGlobalBounds().intersects((*(&block[0] + index)).frame.getGlobalBounds());
-						return tank.frame.getGlobalBounds().intersects((*(&block[0] + index)).frame.getGlobalBounds());
+							return tank.frame.getGlobalBounds().intersects((*(&block[0] + index)).frame.getGlobalBounds()); // for enemie
+						return tank.frame.getGlobalBounds().intersects((*(&block[0] + index)).frame.getGlobalBounds()); // for player
 					};
 
 					if (block[indxBlock].type == Brick || block[indxBlock].type == Steel)
@@ -227,15 +228,18 @@ void GameField::CheckOnCollisionBlocks(Tank& tank, const bool fPL)
 							//processing enemie
 							else
 							{
+								Direction dirlast;
 								const bool bulletActivFlag(tank.optTankShooting.bulletActivFlag);
 								tank.SetBoomCoord(posX, posY);
 								tank.loadTank(
 									tank.optTank.col,
 									tank.optTank.mod,
-									tank.optTank.dir = tank.RandomReverseDirection(tank.optTank.dir)
+									tank.optTank.dir = tank.RandomReverseDirection(dirlast = tank.optTank.dir)
 								);
 								tank.optTankShooting.bulletActivFlag = bulletActivFlag;
 								tank.setPosObj((float)posX, (float)posY);
+								MoveTank(dirlast, tank, -1.f);
+								tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
 
 								std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
 								std::cerr << " :" << posX << " :" << posY << std::endl;
@@ -310,6 +314,7 @@ void GameField::CheckOnCollisionTanks(Tank& tank1, Tank& tank2)
 			tank1.loadTank(tank1.optTank.col, tank1.optTank.mod, tank1.ReverseDirection(dirTank));
 			tank1.optTankShooting.bulletActivFlag = bulletActivFlag;
 			MoveTank(tank1, 2);
+			tank1.setPosFrame(tank1.takeObj().getPosition().x, tank1.takeObj().getPosition().y);
 		}
 
 		if (r2_flag == true) {
@@ -317,6 +322,7 @@ void GameField::CheckOnCollisionTanks(Tank& tank1, Tank& tank2)
 			tank2.loadTank(tank2.optTank.col, tank2.optTank.mod, tank1.ReverseDirection(dirTankOther));
 			tank2.optTankShooting.bulletActivFlag = bulletActivFlag;
 			MoveTank(tank2, 2);
+			tank2.setPosFrame(tank2.takeObj().getPosition().x, tank2.takeObj().getPosition().y);
 		}
 	}
 	return;
@@ -492,6 +498,9 @@ void GameField::CheckOnCollisionTanks(Bullet& bullet)
 	const int indxBullet = bullet.indxBullet;
 
 	for (auto it = tank.begin(); it != tank.end(); ++it) {
+		if (!it->isTank())
+			continue;
+
 		if (bulletArr[indxBullet]->frame.getGlobalBounds().intersects(it->frame.getGlobalBounds())) {
 			if (bulletArr[indxBullet]->indexTank == it->takeIndex())
 				continue;
@@ -779,7 +788,8 @@ void GameField::CheckOnCollisionTanks(Player& player)
 				(player.optTank.dir == LEFT && it->optTank.dir == RIGHT) ||
 				(player.optTank.dir == DOWN && it->optTank.dir == UP) ||
 				(player.optTank.dir == RIGHT && it->optTank.dir == LEFT))
-				rotation(*it);
+				//rotation(*it);
+				CheckPlayerBang(player, true);
 		}
 	}		
 	return;
@@ -820,8 +830,8 @@ void GameField::CheckOnMoore()
 	bool fPL(false);
 	auto crossing = [&](Block& block, Tank& tank) {
 		if (!fPL)
-			return tank.takeObj().getGlobalBounds().intersects(block.frame.getGlobalBounds());
-		return tank.frame.getGlobalBounds().intersects(block.frame.getGlobalBounds());
+			return tank.frame.getGlobalBounds().intersects(block.frame.getGlobalBounds()); // for enemie
+		return tank.frame.getGlobalBounds().intersects(block.frame.getGlobalBounds()); // for player
 	};
 
 	auto PlAYER_BOOM = [&](Block& block, Tank& tank)
@@ -837,15 +847,18 @@ void GameField::CheckOnMoore()
 	auto BOOM = [&](Block& block, Tank& tank, const sf::Vector2i pos)
 	{
 		//processing enemie
+		Direction dirlast;
 		const bool bulletActivFlag(tank.optTankShooting.bulletActivFlag);
 		tank.SetBoomCoord(pos.x, pos.y);
 		tank.loadTank(
 			tank.optTank.col,
 			tank.optTank.mod,
-			tank.optTank.dir = tank.RandomReverseDirection(tank.optTank.dir)
+			tank.optTank.dir = tank.RandomReverseDirection(dirlast = tank.optTank.dir)
 		);
 		tank.optTankShooting.bulletActivFlag = bulletActivFlag;
 		tank.setPosObj((float)pos.x, (float)pos.y);
+		MoveTank(dirlast, tank, -1.f);
+		tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
 
 		std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
 		std::cerr << " :" << pos.x << " :" << pos.y << std::endl;
