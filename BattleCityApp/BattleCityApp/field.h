@@ -27,12 +27,29 @@ class GameField
 	sf::Texture &texture;
 	sf::Clock clock;
 	float time;
-	int coef_reload;
+	struct CR
+	{
+		int cr_a{ 0 }, cr_b{ 0 }, cr_c{ 0 }, cr_d{ 0 }, cr_e{ 0 }, cr_f{ 0 }, cr_g{ 0 }, cr_h{ 0 };
+
+		void operator+=(const int value)
+		{
+			cr_a += value;
+			cr_b += value;
+			cr_c += value;
+			cr_d += value;
+			cr_e += value;
+			cr_f += value;
+			cr_g += value;
+			cr_h += value;
+		}
+
+	} cr; //coef_reload
 
 	sf::Clock clock_firstPlayer, clock_secondPlayer;
 	sf::Time time_firstPlayer, time_secondPlayer;
 
 	void UpdateTime();
+	void UpdateCoefReload();
 
 	sf::RectangleShape field, outsideUP, outsideDOWN, outsideLEFT, outsideRIGHT;
 	Map map;
@@ -60,14 +77,17 @@ class GameField
 	std::vector<Tank> tank;
 	void CreateTanks();
 	void CreateTank(const sf::Vector2f);
+	void ReloadTank(Tank&, const sf::Vector2f);
 	void DrawTanks();
 	void DrawTank(Tank&);
 	void MoveTank(Tank&, float);
 	void MoveTank(const Direction, Tank&, float);
 	void ControlTank_onFrame(Tank&);
 	void CheckTankBang(const int);
-	friend void CONTROL_TANKS(GameField*);
-	friend bool CONTROL_CollisionTanks(GameField*);
+	friend void LAUNCHING_TANKS(GameField*);
+	friend void ON_TANK(GameField*);
+	friend bool CONTROL_CollisionTanksBS(GameField*);
+	friend bool CONTROL_CollisionTanksTank(GameField*, Tank&);
 	friend bool CONTROL_CheckFinishTimeAnim(GameField*, const int);
 	friend bool CONTROL_OffAllAnim(GameField*);
 

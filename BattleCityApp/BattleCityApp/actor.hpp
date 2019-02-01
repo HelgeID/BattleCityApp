@@ -5,7 +5,7 @@
 #include "general.hpp"
 #include "tank.hpp"
 
-#define PlayerSpeed (0.5f)
+#define PlayerSpeed (0.4f)
 #define PlayerRechargeTime (2.f)
 
 class Player : public Tank

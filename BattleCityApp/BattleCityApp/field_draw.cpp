@@ -75,8 +75,16 @@ void GameField::DrawActors()
 
 	auto fun = [=](Player& player, bool keyArray[])
 	{
-		if (coef_reload == player.optTank.coef_reload && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3]))
-			player.reloadTank();
+		if (
+			(cr.cr_a == player.optTank.coef_reload && player.optTank.mod == modA && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_b == player.optTank.coef_reload && player.optTank.mod == modB && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_c == player.optTank.coef_reload && player.optTank.mod == modC && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_d == player.optTank.coef_reload && player.optTank.mod == modD && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_e == player.optTank.coef_reload && player.optTank.mod == modE && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_f == player.optTank.coef_reload && player.optTank.mod == modF && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_g == player.optTank.coef_reload && player.optTank.mod == modG && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_h == player.optTank.coef_reload && player.optTank.mod == modH && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])))
+				player.reloadTank();
 
 		//frames position
 		player.setPosFrame(player.takeObj().getPosition().x, player.takeObj().getPosition().y);
@@ -119,8 +127,16 @@ void GameField::DrawTank(Tank &tank)
 	else if (tank.optTank.dir == RIGHT)
 		tank.moveObj(0.1f*time, 0.f);
 
-	if (coef_reload == tank.optTank.coef_reload)
-		tank.reloadTank();
+	if (
+		(cr.cr_a == tank.optTank.coef_reload && tank.optTank.mod == modA) ||
+		(cr.cr_b == tank.optTank.coef_reload && tank.optTank.mod == modB) ||
+		(cr.cr_c == tank.optTank.coef_reload && tank.optTank.mod == modC) ||
+		(cr.cr_d == tank.optTank.coef_reload && tank.optTank.mod == modD) ||
+		(cr.cr_e == tank.optTank.coef_reload && tank.optTank.mod == modE) ||
+		(cr.cr_f == tank.optTank.coef_reload && tank.optTank.mod == modF) ||
+		(cr.cr_g == tank.optTank.coef_reload && tank.optTank.mod == modG) ||
+		(cr.cr_h == tank.optTank.coef_reload && tank.optTank.mod == modH))
+			tank.reloadTank();
 	
 	//frames position
 	tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);

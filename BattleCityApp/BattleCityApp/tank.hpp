@@ -12,6 +12,15 @@
 enum Color { YELLOW, WHITE, GREEN, RED };
 enum Model { modA, modB, modC, modD, modE, modF, modG, modH };
 
+#define CoefReloadModA 9
+#define CoefReloadModB 16
+#define CoefReloadModC 20
+#define CoefReloadModD 18
+#define CoefReloadModE 10
+#define CoefReloadModF 6
+#define CoefReloadModG 10
+#define CoefReloadModH 11
+
 namespace spaceTank
 {
 	struct Settings
@@ -134,16 +143,14 @@ public:
 
 		switch (mod)
 		{
-		case modA: optTank.speed = 8000; optTank.coef_reload = 6; break;
-		case modB: optTank.speed = 7000; optTank.coef_reload = 6; break;
-		case modC: optTank.speed = 6000; optTank.coef_reload = 4; break;
-		case modD: optTank.speed = 5000; optTank.coef_reload = 4; break;
-		case modE: optTank.speed = 4000; optTank.coef_reload = 3; break;
-		case modF: optTank.speed = 3000; optTank.coef_reload = 3; break;
-		case modG: optTank.speed = 2000; optTank.coef_reload = 2; break;
-		case modH: optTank.speed = 1000; optTank.coef_reload = 2; break;
-		default:
-			break;
+		case modA: optTank.speed = 4500; optTank.coef_reload = CoefReloadModA; break;
+		case modB: optTank.speed = 8000; optTank.coef_reload = CoefReloadModB; break;
+		case modC: optTank.speed = 8500; optTank.coef_reload = CoefReloadModC; break;
+		case modD: optTank.speed = 7000; optTank.coef_reload = CoefReloadModD; break;
+		case modE: optTank.speed = 5000; optTank.coef_reload = CoefReloadModE; break;
+		case modF: optTank.speed = 1500; optTank.coef_reload = CoefReloadModF; break;
+		case modG: optTank.speed = 6000; optTank.coef_reload = CoefReloadModG; break;
+		case modH: optTank.speed = 7500; optTank.coef_reload = CoefReloadModH; break;
 		}
 
 		return;

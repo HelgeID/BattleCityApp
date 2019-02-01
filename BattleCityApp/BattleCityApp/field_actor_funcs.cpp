@@ -31,7 +31,6 @@ void GameField::CreateActors()
 
 void GameField::RestartFirstPlayer(const bool flag)
 {
-	//sf::sleep(sf::milliseconds(500)); //test sleep
 	sf::Vector2f posFirstPlayer(64.f, 208.f);
 	firstPlayer->loadTank(YELLOW, modA, UP);
 	firstPlayer->setPosObj(posFirstPlayer.x, posFirstPlayer.y);
@@ -54,7 +53,6 @@ void GameField::RestartFirstPlayer(const bool flag)
 
 void GameField::RestartSecondPlayer(const bool flag)
 {
-	//sf::sleep(sf::milliseconds(500)); //test sleep
 	sf::Vector2f posSecondPlayer(192.f, 208.f);
 	secondPlayer->loadTank(GREEN, modA, UP);
 	secondPlayer->setPosObj(posSecondPlayer.x, posSecondPlayer.y);

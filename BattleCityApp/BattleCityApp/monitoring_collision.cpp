@@ -4,10 +4,6 @@
 
 void GameField::TankCollision::MonitoringCollision(GameField& gField)
 {
-	//coef_reload
-	gField.coef_reload = gField.coef_reload + 1;
-	gField.coef_reload > 6 ? gField.coef_reload = 0 : 0; //todo max_coef_reload
-
 	CollisionFrame(gField);
 	CollisionBlocksSpawn(gField);
 	CollisionBlocks(gField);

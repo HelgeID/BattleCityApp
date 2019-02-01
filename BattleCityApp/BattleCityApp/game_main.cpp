@@ -8,7 +8,7 @@ std::mutex mtx;
 Game::Game(sf::RenderWindow &window)
 	: window(window), texture(new sf::Texture())
 {
-	window.setFramerateLimit(60);
+	window.setFramerateLimit(80);
 	window.setVerticalSyncEnabled(true);
 	loadTexture();
 	loadIcon();

@@ -4,7 +4,7 @@
 
 void GameField::CreateTanks()
 {
-	std::unique_ptr<std::thread> thread_control(new std::thread(&CONTROL_TANKS, this));
+	std::unique_ptr<std::thread> thread_control(new std::thread(&LAUNCHING_TANKS, this));
 	thread_control->detach();
 
 	//tank[0].mapPos.i = map.TakeIndex(pos, 'i');
@@ -23,6 +23,13 @@ void GameField::CreateTank(const sf::Vector2f pos)
 	(tank.end() - 1)->loadTank(WHITE, modA, DOWN);
 	(tank.end() - 1)->loadIndex(tank);
 	(tank.end() - 1)->setPosObj(pos.x, pos.y);
+	return;
+}
+
+void GameField::ReloadTank(Tank& tank, const sf::Vector2f pos)
+{
+	tank.loadTank(RED, modA, DOWN);
+	tank.setPosObj(pos.x, pos.y);
 	return;
 }
 
@@ -72,6 +79,10 @@ void GameField::CheckTankBang(const int indexTank)
 			const sf::Vector2f point = tank[index].getPosObj();
 			CreateAnimBoom(point, "tankObj");
 			tank[index].offTank();
+
+			//launching a new tank on the field
+			std::unique_ptr<std::thread> thread_control(new std::thread(&ON_TANK, this));
+			thread_control->detach();
 			break;
 		}
 	}
