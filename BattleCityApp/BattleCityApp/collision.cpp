@@ -17,7 +17,7 @@ void GameField::CheckOnCollisionFrame(Tank& tank)
 		tank.loadTank(
 			tank.optTank.col,
 			tank.optTank.mod,
-			tank.optTank.dir = tank.RandomReverseDirection(tank.optTank.dir)
+			tank.optTank.dir = tank.ClockWiseDirection(tank.optTank.dir)
 		);
 		tank.optTankShooting.bulletActivFlag = bulletActivFlag;
 		tank.setPosObj((float)posX, (float)posY);
@@ -234,7 +234,7 @@ void GameField::CheckOnCollisionBlocks(Tank& tank, const bool fPL)
 								tank.loadTank(
 									tank.optTank.col,
 									tank.optTank.mod,
-									tank.optTank.dir = tank.RandomReverseDirection(dirlast = tank.optTank.dir)
+									tank.optTank.dir = tank.ClockWiseDirection(dirlast = tank.optTank.dir)
 								);
 								tank.optTankShooting.bulletActivFlag = bulletActivFlag;
 								tank.setPosObj((float)posX, (float)posY);
@@ -508,6 +508,9 @@ void GameField::CheckOnCollisionTanks(Bullet& bullet)
 				const int indexTank(it->takeIndex());
 				CheckTankBang(indexTank);
 			}
+			else
+				if (blocking_hit_for_enemy)
+					continue;
 
 			//create anim
 			sf::Vector2f point(
@@ -770,7 +773,7 @@ void GameField::CheckOnCollisionTanks(Player& player)
 		tank.loadTank(
 			tank.optTank.col,
 			tank.optTank.mod,
-			tank.optTank.dir = tank.RandomReverseDirection(tank.optTank.dir)
+			tank.optTank.dir = tank.ClockWiseDirection(tank.optTank.dir)
 		);
 
 		tank.setPosObj((float)posX, (float)posY);
@@ -853,7 +856,7 @@ void GameField::CheckOnMoore()
 		tank.loadTank(
 			tank.optTank.col,
 			tank.optTank.mod,
-			tank.optTank.dir = tank.RandomReverseDirection(dirlast = tank.optTank.dir)
+			tank.optTank.dir = tank.ClockWiseDirection(dirlast = tank.optTank.dir)
 		);
 		tank.optTankShooting.bulletActivFlag = bulletActivFlag;
 		tank.setPosObj((float)pos.x, (float)pos.y);

@@ -27,3 +27,4 @@ extern bool undying_enemy;
 extern bool undying_players;
 extern bool undying_hit_on_player;
 extern bool blocking_firing;
+extern bool blocking_hit_for_enemy;

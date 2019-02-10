@@ -50,6 +50,7 @@ class GameField
 
 	void UpdateTime();
 	void UpdateCoefReload();
+	void UpdateDirectionTanks();
 
 	sf::RectangleShape field, outsideUP, outsideDOWN, outsideLEFT, outsideRIGHT;
 	Map map;

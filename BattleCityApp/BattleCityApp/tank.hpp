@@ -41,6 +41,12 @@ namespace spaceTank
 		sf::Time timeShooting;
 	};
 
+	struct SettingsRDir
+	{
+		int tankTime_for_dir{ 10 };
+		sf::Clock tankClock_for_dir;
+	};
+
 	struct MapPosition
 	{
 		int i, j;
@@ -115,10 +121,13 @@ public:
 
 	spaceTank::Settings optTank;
 	spaceTank::SettingsShooting optTankShooting;
+	spaceTank::SettingsRDir optRDir;
 	spaceTank::MapPosition mapPos;
 
 	void loadTank(Color col, Model mod, Direction dir)
 	{
+		srand((unsigned)time(NULL));
+
 		const int null(0);
 		const int offset(128);
 		struct COORD { int x; int y; };
@@ -199,6 +208,24 @@ public:
 			this->setSpriteObj(rect.left - 16, rect.top);
 
 		return;
+	}
+
+	Direction ClockWiseDirection(const Direction dir)
+	{
+		srand((unsigned)time(NULL));
+
+		const bool select = (rand() % 2);
+
+		Direction dirCW;
+		switch (dir)
+		{
+		case UP: select ? dirCW = LEFT : dirCW = RIGHT; break;
+		case LEFT: select ? dirCW = DOWN : dirCW = UP; break;
+		case DOWN: select ? dirCW = RIGHT : dirCW = LEFT; break;
+		case RIGHT: select ? dirCW = UP : dirCW = DOWN; break;
+		}
+
+		return dirCW;
 	}
 
 	Direction ReverseDirection(const Direction dir)

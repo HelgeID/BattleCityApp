@@ -1,5 +1,6 @@
 ﻿#include "field.h"
 #include "general.hpp"
+#include <random>
 #include <iostream>
 
 GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
@@ -44,6 +45,7 @@ void GameField::UpdateField()
 	DrawAnimBoom();
 
 	UpdateCoefReload();
+	UpdateDirectionTanks();
 
 	//window.draw(outsideUP);
 	//window.draw(outsideDOWN);
@@ -78,6 +80,7 @@ void GameField::UpdateTime()
 
 	time_firstPlayer.asSeconds() > PlayerRechargeTime ? time_firstPlayer = sf::seconds(PlayerRechargeTime) : time_firstPlayer.Zero;
 	time_secondPlayer.asSeconds() > PlayerRechargeTime ? time_secondPlayer = sf::seconds(PlayerRechargeTime) : time_secondPlayer.Zero;
+	
 	return;
 }
 
@@ -92,6 +95,50 @@ void GameField::UpdateCoefReload()
 	cr.cr_f > CoefReloadModF ? cr.cr_f = 0 : 0;
 	cr.cr_g > CoefReloadModG ? cr.cr_g = 0 : 0;
 	cr.cr_h > CoefReloadModH ? cr.cr_h = 0 : 0;
+
+	return;
+}
+
+void GameField::UpdateDirectionTanks()
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> dist(15, 30);
+
+	sf::Time timeT;
+
+	auto r_DIR = [&](Tank& tank) //Reverse Direction
+	{
+		const int posX(round(tank.takeObj().getPosition().x)), posY(round(tank.takeObj().getPosition().y));
+		const bool bulletActivFlag(tank.optTankShooting.bulletActivFlag);
+		tank.SetBoomCoord(posX, posY);
+		tank.loadTank(
+			tank.optTank.col,
+			tank.optTank.mod,
+			tank.optTank.dir = tank.ReverseDirection(tank.optTank.dir)
+		);
+		tank.optTankShooting.bulletActivFlag = bulletActivFlag;
+		tank.setPosObj((float)posX, (float)posY);
+		std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
+		std::cerr << " :" << posX << " :" << posY << std::endl;
+
+		tank.ResetBoomParam();
+	};
+
+	auto UPD = [&](Tank& tank) {
+		timeT = tank.optRDir.tankClock_for_dir.getElapsedTime();
+		if (timeT.asSeconds() > (float)tank.optRDir.tankTime_for_dir) {
+			tank.optRDir.tankClock_for_dir.restart();
+			tank.optRDir.tankTime_for_dir = dist(gen);
+			r_DIR(tank);
+		}
+	};
+
+	if (tank.size() == 0)
+		return;
+
+	for (auto it = tank.begin(); it != tank.end(); ++it)
+		it->isTank() ? UPD(*it) : NULL;
 
 	return;
 }
