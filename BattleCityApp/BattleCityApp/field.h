@@ -86,7 +86,7 @@ class GameField
 	void ControlTank_onFrame(Tank&);
 	void CheckTankBang(const int);
 	friend void LAUNCHING_TANKS(GameField*);
-	friend void ON_TANK(GameField*);
+	friend void LOAD_TANK(GameField*, const bool);
 	friend bool CONTROL_CollisionTanksBS(GameField*);
 	friend bool CONTROL_CollisionTanksTank(GameField*, Tank&);
 	friend bool CONTROL_CheckFinishTimeAnim(GameField*, const int);
@@ -96,12 +96,12 @@ class GameField
 	{
 		std::unique_ptr<AnimBirth> tankBirth{ nullptr };
 		std::unique_ptr<AnimSkin> tankSkin{ nullptr };
-	} tankAnimArr[4];
+	} tankAnimArr[6];
 	void CreateAnimBirth(const sf::Vector2f, const int);
 
-	std::array<Bullet*, 6> bulletArr = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
-	std::shared_ptr<AnimBoom> bulletBoom[6] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
-	std::shared_ptr<AnimBoom> tankBoom[6] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+	std::array<Bullet*, 8> bulletArr = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+	std::shared_ptr<AnimBoom> bulletBoom[8] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+	std::shared_ptr<AnimBoom> tankBoom[8] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 	void CreateAnimBoom(const sf::Vector2f, const char*);
 
 	template <typename T>

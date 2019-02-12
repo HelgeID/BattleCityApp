@@ -80,8 +80,12 @@ void GameField::CheckTankBang(const int indexTank)
 			CreateAnimBoom(point, "tankObj");
 			tank[index].offTank();
 
+			//init pos to NULL
+			tank[index].setPosObj(0.f, 0.f);
+			tank[index].setPosFrame(tank[index].getPosObj().x, tank[index].getPosObj().y);
+
 			//launching a new tank on the field
-			std::unique_ptr<std::thread> thread_control(new std::thread(&ON_TANK, this));
+			std::unique_ptr<std::thread> thread_control(new std::thread(&LOAD_TANK, this, false));
 			thread_control->detach();
 			break;
 		}

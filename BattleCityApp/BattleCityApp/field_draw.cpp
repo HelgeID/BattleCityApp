@@ -195,6 +195,8 @@ void GameField::DrawAnimBirth()
 	tankAnimArr[1].tankBirth == nullptr ? NULL : window.draw(tankAnimArr[1].tankBirth->TakeAnim());
 	tankAnimArr[2].tankBirth == nullptr ? NULL : window.draw(tankAnimArr[2].tankBirth->TakeAnim());
 	tankAnimArr[3].tankBirth == nullptr ? NULL : window.draw(tankAnimArr[3].tankBirth->TakeAnim());
+	tankAnimArr[4].tankBirth == nullptr ? NULL : window.draw(tankAnimArr[4].tankBirth->TakeAnim());
+	tankAnimArr[5].tankBirth == nullptr ? NULL : window.draw(tankAnimArr[5].tankBirth->TakeAnim());
 	return;
 }
 
@@ -212,6 +214,8 @@ void GameField::DrawAnimSkin()
 	tankAnimArr[1].tankSkin == nullptr ? NULL : window.draw(tankAnimArr[1].tankSkin->TakeAnim());
 	tankAnimArr[2].tankSkin == nullptr ? NULL : window.draw(tankAnimArr[2].tankSkin->TakeAnim());
 	tankAnimArr[3].tankSkin == nullptr ? NULL : window.draw(tankAnimArr[3].tankSkin->TakeAnim());
+	tankAnimArr[4].tankSkin == nullptr ? NULL : window.draw(tankAnimArr[4].tankSkin->TakeAnim());
+	tankAnimArr[5].tankSkin == nullptr ? NULL : window.draw(tankAnimArr[5].tankSkin->TakeAnim());
 	return;
 }
 

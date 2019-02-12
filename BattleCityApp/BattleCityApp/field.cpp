@@ -119,8 +119,8 @@ void GameField::UpdateDirectionTanks()
 		);
 		tank.optTankShooting.bulletActivFlag = bulletActivFlag;
 		tank.setPosObj((float)posX, (float)posY);
-		std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
-		std::cerr << " :" << posX << " :" << posY << std::endl;
+		//std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
+		//std::cerr << " :" << posX << " :" << posY << std::endl;
 
 		tank.ResetBoomParam();
 	};

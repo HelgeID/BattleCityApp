@@ -134,7 +134,7 @@ void GameField::MonitoringKeys()
 		if (Key_F == true && !firstPlayer->optTankShooting.bulletActivFlag && time_firstPlayer.asSeconds() >= PlayerRechargeTime) {
 			CreateBullet(*firstPlayer);
 			time_firstPlayer = clock_firstPlayer.restart();
-			for (int i(0); i < 6; i++)
+			for (int i(0); i < 8; i++)
 				bulletArr[i] != nullptr ? std::cout << bulletArr[i]->indexTank << "-" : std::cout << "X" << "-";
 			std::cout << std::endl;
 		}
@@ -158,7 +158,7 @@ void GameField::MonitoringKeys()
 		if (Key_Ctrl == true && !secondPlayer->optTankShooting.bulletActivFlag && time_secondPlayer.asSeconds() >= PlayerRechargeTime) {
 			CreateBullet(*secondPlayer);
 			time_secondPlayer = clock_secondPlayer.restart();
-			for (int i(0); i < 6; i++)
+			for (int i(0); i < 8; i++)
 				bulletArr[i] != nullptr ? std::cout << bulletArr[i]->indexTank << "-" : std::cout << "X" << "-";
 			std::cout << std::endl;
 		}

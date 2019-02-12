@@ -54,7 +54,10 @@ bool CONTROL_OffAllAnim(GameField* gField)
 	return (gField->tankAnimArr[0].tankBirth == nullptr &&
 		gField->tankAnimArr[1].tankBirth == nullptr &&
 		gField->tankAnimArr[2].tankBirth == nullptr &&
-		gField->tankAnimArr[3].tankBirth == nullptr);
+		gField->tankAnimArr[3].tankBirth == nullptr &&
+		gField->tankAnimArr[4].tankBirth == nullptr &&
+		gField->tankAnimArr[5].tankBirth == nullptr
+		);
 }
 
 void LAUNCHING_TANKS(GameField* gField)
@@ -66,7 +69,7 @@ void LAUNCHING_TANKS(GameField* gField)
 	auto create_anim = [&](const size_t _index, const sf::Vector2f& pos)
 	{
 		{ //searching for an empty place
-			for (size_t index = _index; index < 4; index++)
+			for (size_t index = _index; index < 6; index++)
 				if (gField->tankAnimArr[index].tankBirth == nullptr) {
 					{ std::lock_guard<std::mutex> lg(mtx); gField->CreateAnimBirth(pos, index); }
 					break;
@@ -185,14 +188,28 @@ void LAUNCHING_TANKS(GameField* gField)
 		});
 
 	}
+
+	//todo
+	//LOAD_TANK(gField, true); //add 5 tank
+	//LOAD_TANK(gField, true); //add 6 tank
+
 	LAUNCHING_TANKS_ON_START_FINISH = true;
+
 	std::cout << "\a";
 	return;
 }
 
-void ON_TANK(GameField* gField)
+void LOAD_TANK(GameField* gField, const bool newTank)
 {
 	srand(time(NULL));
+
+	auto init_tank = [&](sf::Vector2f pos, int& indexTank) {
+		std::lock_guard<std::mutex> lg(mtx);
+		gField->CreateTank(pos);
+		auto it = gField->tank.end() - 1;
+		indexTank = it - gField->tank.begin();
+		return;
+	};
 
 	auto reload_tank = [&](sf::Vector2f pos, int& indexTank) { 
 		std::lock_guard<std::mutex> lg(mtx);
@@ -214,7 +231,7 @@ void ON_TANK(GameField* gField)
 		{ //searching for an empty place
 		research:
 			;
-			for (size_t index = 0; index < 4; index++) {
+			for (size_t index = 0; index < 6; index++) {
 				if (gField->tankAnimArr[index].tankBirth == nullptr) {
 					{ std::lock_guard<std::mutex> lg(mtx); gField->CreateAnimBirth(pos, index); }
 					_index = index;
@@ -233,8 +250,14 @@ void ON_TANK(GameField* gField)
 	//********************************************************
 	//                      ** start **
 	//********************************************************
+	if (newTank)
+		goto start;
+
 	while (!LAUNCHING_TANKS_ON_START_FINISH)
 		sf::sleep(sf::milliseconds(300));
+
+start:
+	;
 
 	sf::sleep(sf::milliseconds(2000));
 
@@ -282,7 +305,7 @@ void ON_TANK(GameField* gField)
 	}
 
 	int indexTank(-1);
-	reload_tank(pos, indexTank);
+	newTank ? init_tank(pos, indexTank) : reload_tank(pos, indexTank);
 
 	if (indexTank != -1) {
 		while (CONTROL_CollisionTanksTank(gField, gField->tank[indexTank]))

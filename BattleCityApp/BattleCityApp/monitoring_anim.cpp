@@ -50,7 +50,7 @@ void GameField::MonitoringAnim(const AnimBirth* ptr)
 	Monitoring(firstPlayerAnim);
 	Monitoring(secondPlayerAnim);
 
-	for (size_t i(0); i < 4; i++) {
+	for (size_t i(0); i < 6; i++) {
 		if (tankAnimArr[i].tankBirth != nullptr) {
 			if (tankAnimArr[i].tankBirth->FinishTime()) {
 				tankAnimArr[i].tankBirth.reset();
@@ -82,7 +82,7 @@ void GameField::MonitoringAnim(const AnimSkin* ptr)
 	Monitoring(firstPlayerAnim, firstPlayer);
 	Monitoring(secondPlayerAnim, secondPlayer);
 
-	for (size_t i(0); i < 4; i++) {
+	for (size_t i(0); i < 6; i++) {
 		if (tankAnimArr[i].tankSkin != nullptr) {
 			if (tankAnimArr[i].tankSkin->FinishTime()) {
 				tankAnimArr[i].tankSkin.reset();

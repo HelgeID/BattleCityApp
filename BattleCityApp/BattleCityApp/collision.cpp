@@ -21,8 +21,8 @@ void GameField::CheckOnCollisionFrame(Tank& tank)
 		);
 		tank.optTankShooting.bulletActivFlag = bulletActivFlag;
 		tank.setPosObj((float)posX, (float)posY);
-		std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
-		std::cerr << " :" << posX << " :" << posY << std::endl;
+		//std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
+		//std::cerr << " :" << posX << " :" << posY << std::endl;
 
 		tank.ResetBoomParam();
 	};
@@ -241,8 +241,8 @@ void GameField::CheckOnCollisionBlocks(Tank& tank, const bool fPL)
 								MoveTank(dirlast, tank, -1.f);
 								tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
 
-								std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
-								std::cerr << " :" << posX << " :" << posY << std::endl;
+								//std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
+								//std::cerr << " :" << posX << " :" << posY << std::endl;
 							}
 						}
 						if (!tank.CompareBoomCoord(posX, posY) && !fPL)
@@ -777,8 +777,8 @@ void GameField::CheckOnCollisionTanks(Player& player)
 		);
 
 		tank.setPosObj((float)posX, (float)posY);
-		std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
-		std::cerr << " :" << posX << " :" << posY << std::endl;
+		//std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
+		//std::cerr << " :" << posX << " :" << posY << std::endl;
 		tank.ResetBoomParam();
 	};
 
@@ -863,8 +863,8 @@ void GameField::CheckOnMoore()
 		MoveTank(dirlast, tank, -1.f);
 		tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
 
-		std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
-		std::cerr << " :" << pos.x << " :" << pos.y << std::endl;
+		//std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
+		//std::cerr << " :" << pos.x << " :" << pos.y << std::endl;
 	};
 
 	auto Compare = [&](Tank& tank, const sf::Vector2i pos)
