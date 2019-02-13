@@ -19,9 +19,13 @@ void GameField::Checking::CheckingShootingBullets(GameField& gField)
 		else {
 			if (!tank.optTankShooting.bulletActivFlag && tank.optTankShooting.clockTank.getElapsedTime().asSeconds() > random) {
 				gField.CreateBullet(tank, sf::Vector2f(0.f, 0.f));
-				for (int i(0); i < 8; i++)
-					gField.bulletArr[i] != nullptr ? std::cout << gField.bulletArr[i]->indexTank << "-" : std::cout << "X" << "-";
-				std::cout << std::endl;
+
+				//{
+				//	for (int i(0); i < 8; i++)
+				//		gField.bulletArr[i] != nullptr ? std::cerr << gField.bulletArr[i]->indexTank << "-" : std::cerr << "X" << "-";
+				//	std::cerr << std::endl;
+				//}
+
 				tank.optTankShooting.timeShooting = tank.optTankShooting.clockTank.restart(); //starting the timer
 				random = dist(gen); //random generation
 			}

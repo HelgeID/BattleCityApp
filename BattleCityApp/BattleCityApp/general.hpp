@@ -1,6 +1,7 @@
 ﻿#pragma once
 extern bool p_zoom;
 extern int p_level;
+extern int p_player; //1 or 2
 
 //test
 extern bool p_showframe;

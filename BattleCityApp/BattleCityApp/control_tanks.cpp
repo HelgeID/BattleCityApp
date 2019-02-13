@@ -62,9 +62,14 @@ bool CONTROL_OffAllAnim(GameField* gField)
 
 void LAUNCHING_TANKS(GameField* gField)
 {
-	srand(time(NULL));
+	srand(time(NULL)); //for rand()
 
-	auto init_tank = [&](sf::Vector2f pos) { std::lock_guard<std::mutex> lg(mtx); gField->CreateTank(pos); };
+	int indexTank(-1);
+	auto reload_tank = [&](sf::Vector2f pos)
+	{
+		std::lock_guard<std::mutex> lg(mtx);
+		gField->ReloadTank(gField->tank[++indexTank], pos);
+	};
 
 	auto create_anim = [&](const size_t _index, const sf::Vector2f& pos)
 	{
@@ -75,7 +80,7 @@ void LAUNCHING_TANKS(GameField* gField)
 					break;
 				}
 		}
-		init_tank(pos);
+		reload_tank(pos);
 	};
 
 	auto random1 = [&](const size_t index, const bool flag)
@@ -117,7 +122,6 @@ void LAUNCHING_TANKS(GameField* gField)
 	//********************************************************
 	//search variant
 	int variant = (rand() % 3 + 1);
-
 	///random ->> 1     *   
 	///random ->> 2  *     *
 	///random ->> 3  *  *  *
@@ -176,22 +180,21 @@ void LAUNCHING_TANKS(GameField* gField)
 		std::lock_guard<std::mutex> lg(mtx);
 
 		std::vector<Tank>::iterator first = gField->tank.begin();
-		std::vector<Tank>::iterator last = gField->tank.begin() + variant;
-		const int distance = std::distance(first, last);
+		std::vector<Tank>::iterator current = gField->tank.begin() + variant;
+		const int distance = std::distance(first, current);
 
 		int indexTank(0);
 		std::for_each(gField->tank.begin(), gField->tank.end(), [&](Tank &tank) 
 		{
-			if (indexTank >= distance)
+			if (indexTank >= distance && indexTank < 4)
 				tank.onTank();
 			indexTank = indexTank + 1;
 		});
 
 	}
 
-	//todo
-	//LOAD_TANK(gField, true); //add 5 tank
-	//LOAD_TANK(gField, true); //add 6 tank
+	(p_player == 2) ?
+		LOAD_TANK(gField, true), LOAD_TANK(gField, true) : 0; //add 5, add 6
 
 	LAUNCHING_TANKS_ON_START_FINISH = true;
 
@@ -201,15 +204,7 @@ void LAUNCHING_TANKS(GameField* gField)
 
 void LOAD_TANK(GameField* gField, const bool newTank)
 {
-	srand(time(NULL));
-
-	auto init_tank = [&](sf::Vector2f pos, int& indexTank) {
-		std::lock_guard<std::mutex> lg(mtx);
-		gField->CreateTank(pos);
-		auto it = gField->tank.end() - 1;
-		indexTank = it - gField->tank.begin();
-		return;
-	};
+	srand(time(NULL)); //for rand()
 
 	auto reload_tank = [&](sf::Vector2f pos, int& indexTank) { 
 		std::lock_guard<std::mutex> lg(mtx);
@@ -259,7 +254,7 @@ void LOAD_TANK(GameField* gField, const bool newTank)
 start:
 	;
 
-	sf::sleep(sf::milliseconds(2000));
+	sf::sleep(sf::milliseconds(1000));
 
 	sf::Vector2f pos{ 0.f, 0.f };
 	int place; // "l" or "r" or "c"
@@ -305,7 +300,7 @@ start:
 	}
 
 	int indexTank(-1);
-	newTank ? init_tank(pos, indexTank) : reload_tank(pos, indexTank);
+	reload_tank(pos, indexTank);
 
 	if (indexTank != -1) {
 		while (CONTROL_CollisionTanksTank(gField, gField->tank[indexTank]))

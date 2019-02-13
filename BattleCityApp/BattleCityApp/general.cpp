@@ -2,6 +2,7 @@
 
 bool p_zoom = false;
 int p_level = 1;
+int p_player = 2;
 
 bool p_showframe = false;
 
