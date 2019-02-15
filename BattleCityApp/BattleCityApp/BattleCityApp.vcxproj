@@ -147,10 +147,12 @@
     <ClInclude Include="block_spawn.hpp" />
     <ClInclude Include="bullet.hpp" />
     <ClInclude Include="events.h" />
+    <ClInclude Include="fps.h" />
     <ClInclude Include="frame.hpp" />
     <ClInclude Include="game.h" />
     <ClInclude Include="general.hpp" />
     <ClInclude Include="map.h" />
+    <ClInclude Include="msg.h" />
     <ClInclude Include="object.hpp" />
     <ClInclude Include="part_bricks_map.h" />
     <ClInclude Include="field.h" />

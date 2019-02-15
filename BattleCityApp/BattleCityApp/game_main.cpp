@@ -28,6 +28,9 @@ void Game::GameLaunch()
 	// show frame
 	//p_showframe = true;
 
+	// show fps
+	//p_showfps = true;
+
 	// parameters
 	//undying_enemy = true;
 	//undying_players = true;
@@ -38,17 +41,36 @@ void Game::GameLaunch()
 	GameEvent gEvent(window);
 	GameField gField(window, *texture);
 
+	GameFPS gFPS;
+
 	// update
 	while (window.isOpen())
 	{
 		//Update Event
 		gEvent.UpdateEvent();
 
+		///////////////////////////////////////////////
+		gFPS.StartFrame(); //for FPS
+		///////////////////////////////////////////////
+
 		//Update Field
 		{
 			std::lock_guard<std::mutex> lg(mtx);
 			gField.UpdateField();
 		}
+
+		///////////////////////////////////////////////
+		gFPS.FinishFrame(); //for FPS
+		///////////////////////////////////////////////
+
+		///////////////////////////////////////////////
+		gFPS.ProcessingFPS(window); //for FPS
+		///////////////////////////////////////////////
+		
+		//std::cerr << "FPS: "<< gFPS.fps.getFPS() << std::endl;
+
+		//show
+		window.display();
 	}
 
 	return;

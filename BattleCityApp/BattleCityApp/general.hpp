@@ -5,6 +5,7 @@ extern int p_player; //1 or 2
 
 //test
 extern bool p_showframe;
+extern bool p_showfps;
 
 //consts
 extern int SizeCell; //todo

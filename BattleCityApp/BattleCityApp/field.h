@@ -16,6 +16,9 @@
 #include "part_bricks_map.h"
 #include "animation_game.h"
 
+#include "msg.h"
+#include "fps.h"
+
 //test
 #include <iostream>
 
@@ -225,6 +228,49 @@ public:
 	~GameField();
 
 	void UpdateField();
+};
+
+class GameFPS
+{
+private:
+	FPS fps;
+	MSG msg{ sf::Vector2f(8.f, 2.f) };
+
+public:
+	GameFPS()
+	{
+	}
+
+	void StartFrame()
+	{
+		if (!p_showfps)
+			return;
+		fps.StartFrame();
+		return;
+	}
+
+	void FinishFrame()
+	{
+		if (!p_showfps)
+			return;
+		fps.FinishFrame();
+		return;
+	}
+
+	void ProcessingFPS(sf::RenderWindow &window)
+	{
+		if (!p_showfps)
+			return;
+
+		auto s_fps = std::to_string(fps.updateFPS());
+		auto s_timeFrame = std::to_string(fps.updateTimeFrame());
+		auto s = "FPS: " + s_fps + "  " + "Time Frame: " + s_timeFrame;
+
+		msg.TakeText().setString(s);
+		window.draw(msg.TakeText());
+
+		return;
+	}
 };
 
 #endif

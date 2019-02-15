@@ -5,6 +5,7 @@ int p_level = 1;
 int p_player = 2;
 
 bool p_showframe = false;
+bool p_showfps = false;
 
 int SizeCell = 16;
 

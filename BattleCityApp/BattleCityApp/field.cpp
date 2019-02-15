@@ -67,8 +67,6 @@ void GameField::UpdateField()
 
 	clock.restart();
 
-	window.display();
-
 	return;
 }
 
