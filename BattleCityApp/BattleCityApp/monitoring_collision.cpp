@@ -115,7 +115,7 @@ void GameField::BulletCollision::CollisionTanks(GameField& gField)
 	const size_t bulletArrSize = gField.bulletArr.size();
 	for (int indxBullet(0); indxBullet < bulletArrSize; ++indxBullet) {
 		if (gField.bulletArr[indxBullet] == nullptr)
-			return;
+			continue;
 		gField.CheckOnCollisionTanks(*gField.bulletArr[indxBullet]);
 	}
 	return;
@@ -146,7 +146,7 @@ void GameField::BulletCollision::CollisionPlayers(GameField& gField)
 	const size_t bulletArrSize = gField.bulletArr.size();
 	for (int indxBullet(0); indxBullet < bulletArrSize; ++indxBullet) {
 		if (gField.bulletArr[indxBullet] == nullptr)
-			return;
+			continue;
 		gField.CheckOnCollisionPlayers(*gField.bulletArr[indxBullet]);
 	}
 	return;

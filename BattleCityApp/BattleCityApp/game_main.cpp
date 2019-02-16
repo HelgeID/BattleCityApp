@@ -29,7 +29,7 @@ void Game::GameLaunch()
 	//p_showframe = true;
 
 	// show fps
-	//p_showfps = true;
+	p_showfps = true;
 
 	// parameters
 	//undying_enemy = true;

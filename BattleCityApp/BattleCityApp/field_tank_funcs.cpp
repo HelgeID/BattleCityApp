@@ -11,8 +11,8 @@ void GameField::CreateTanks()
 		for (int i = 0; i < 6; i++) //max tank == 6, when two players
 			CreateTank(sf::Vector2f(0.f, 0.f));
 
-	std::unique_ptr<std::thread> thread_control(new std::thread(&LAUNCHING_TANKS, this));
-	thread_control->detach();
+	//std::unique_ptr<std::thread> thread_control(new std::thread(&LAUNCHING_TANKS, this));
+	//thread_control->detach();
 	return;
 }
 
@@ -20,7 +20,7 @@ void GameField::CreateTank(const sf::Vector2f pos)
 {
 	static Tank tankObj(texture);
 	tank.push_back(tankObj);
-	(tank.end() - 1)->loadTank(RED, modA, DOWN);
+	(tank.end() - 1)->loadTank(RED, modA, DOWN, false);
 	(tank.end() - 1)->loadIndex(tank);
 	(tank.end() - 1)->setPosObj(pos.x, pos.y);
 	return;
@@ -28,7 +28,7 @@ void GameField::CreateTank(const sf::Vector2f pos)
 
 void GameField::ReloadTank(Tank& tank, const sf::Vector2f pos)
 {
-	tank.loadTank(WHITE, modA, DOWN);
+	tank.loadTank(WHITE, modA, DOWN, true);
 	tank.setPosObj(pos.x, pos.y);
 	return;
 }
@@ -76,6 +76,16 @@ void GameField::CheckTankBang(const int indexTank)
 	//off tank
 	for (int index(0); index < tank.size(); ++index) {
 		if (tank[index].takeIndex() == indexTank) {
+			if (tank[index].optTank.bonus) {
+				tank[index].optTank.bonus = !tank[index].optTank.bonus;
+				tank[index].loadTank(Color::WHITE, 
+					tank[index].optTank.mod,
+					tank[index].optTank.dir,
+					tank[index].optTank.bonus
+				);
+				break;
+			}
+
 			const sf::Vector2f point = tank[index].getPosObj();
 			CreateAnimBoom(point, "tankObj");
 			tank[index].offTank();

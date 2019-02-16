@@ -47,10 +47,10 @@ void GameField::UpdateField()
 	UpdateCoefReload();
 	UpdateDirectionTanks();
 
-	//window.draw(outsideUP);
-	//window.draw(outsideDOWN);
-	//window.draw(outsideLEFT);
-	//window.draw(outsideRIGHT);
+	window.draw(outsideUP);
+	window.draw(outsideDOWN);
+	window.draw(outsideLEFT);
+	window.draw(outsideRIGHT);
 
 	objTankCollision.MonitoringCollision(*this);
 	objBulletCollision.MonitoringCollision(*this);
@@ -79,6 +79,32 @@ void GameField::UpdateTime()
 	time_firstPlayer.asSeconds() > PlayerRechargeTime ? time_firstPlayer = sf::seconds(PlayerRechargeTime) : time_firstPlayer.Zero;
 	time_secondPlayer.asSeconds() > PlayerRechargeTime ? time_secondPlayer = sf::seconds(PlayerRechargeTime) : time_secondPlayer.Zero;
 	
+	//
+	//to do time here...
+	//
+
+	//Update Time for tanks
+	if (tank.size() == 0)
+		return;
+
+	auto u_p_d_t_i_m_e_t_a_n_k = [&](Tank& tank)
+	{
+		if (!tank.optTank.bonus)
+			return;
+
+		sf::Time deltaTime = tank.optBonus.clockTank.restart();
+		tank.optBonus.timeBonus += deltaTime.asSeconds();
+		if (tank.optBonus.timeBonus > 0.40f)
+		{
+			tank.loadTank_RED_WHITE();
+			tank.optBonus.timeBonus = 0.f;
+		}
+
+		return;
+	};
+
+	for (auto it = tank.begin(); it != tank.end(); ++it)
+		it->isTank() ? u_p_d_t_i_m_e_t_a_n_k(*it) : NULL;
 	return;
 }
 
@@ -113,7 +139,8 @@ void GameField::UpdateDirectionTanks()
 		tank.loadTank(
 			tank.optTank.col,
 			tank.optTank.mod,
-			tank.optTank.dir = tank.ReverseDirection(tank.optTank.dir)
+			tank.optTank.dir = tank.ReverseDirection(tank.optTank.dir),
+			tank.optTank.bonus
 		);
 		tank.optTankShooting.bulletActivFlag = bulletActivFlag;
 		tank.setPosObj((float)posX, (float)posY);

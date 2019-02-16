@@ -17,7 +17,8 @@ void GameField::CheckOnCollisionFrame(Tank& tank)
 		tank.loadTank(
 			tank.optTank.col,
 			tank.optTank.mod,
-			tank.optTank.dir = tank.ClockWiseDirection(tank.optTank.dir)
+			tank.optTank.dir = tank.ClockWiseDirection(tank.optTank.dir),
+			tank.optTank.bonus
 		);
 		tank.optTankShooting.bulletActivFlag = bulletActivFlag;
 		tank.setPosObj((float)posX, (float)posY);
@@ -156,7 +157,7 @@ void GameField::CheckOnCollisionBlocksSpawn(Tank& tank)
 	auto ReverseTank = [&]
 	{
 		const bool bulletActivFlag(tank.optTankShooting.bulletActivFlag);
-		tank.loadTank(tank.optTank.col, tank.optTank.mod, tank.ReverseDirection(tank.optTank.dir));
+		tank.loadTank(tank.optTank.col, tank.optTank.mod, tank.ReverseDirection(tank.optTank.dir), tank.optTank.bonus);
 		tank.optTankShooting.bulletActivFlag = bulletActivFlag;
 		MoveTank(tank, 2);
 		tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
@@ -221,7 +222,7 @@ void GameField::CheckOnCollisionBlocks(Tank& tank, const bool fPL)
 							//processing player
 							if (fPL == true) {
 								while (crossing(indxBlock)) {
-									MoveTank(tank, -1.f);
+									MoveTank(tank, -0.25f);
 									tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
 								}
 							}
@@ -234,7 +235,8 @@ void GameField::CheckOnCollisionBlocks(Tank& tank, const bool fPL)
 								tank.loadTank(
 									tank.optTank.col,
 									tank.optTank.mod,
-									tank.optTank.dir = tank.ClockWiseDirection(dirlast = tank.optTank.dir)
+									tank.optTank.dir = tank.ClockWiseDirection(dirlast = tank.optTank.dir),
+									tank.optTank.bonus
 								);
 								tank.optTankShooting.bulletActivFlag = bulletActivFlag;
 								tank.setPosObj((float)posX, (float)posY);
@@ -311,7 +313,7 @@ void GameField::CheckOnCollisionTanks(Tank& tank1, Tank& tank2)
 
 		if (r1_flag == true) {
 			const bool bulletActivFlag(tank1.optTankShooting.bulletActivFlag);
-			tank1.loadTank(tank1.optTank.col, tank1.optTank.mod, tank1.ReverseDirection(dirTank));
+			tank1.loadTank(tank1.optTank.col, tank1.optTank.mod, tank1.ReverseDirection(dirTank), tank1.optTank.bonus);
 			tank1.optTankShooting.bulletActivFlag = bulletActivFlag;
 			MoveTank(tank1, 2);
 			tank1.setPosFrame(tank1.takeObj().getPosition().x, tank1.takeObj().getPosition().y);
@@ -319,7 +321,7 @@ void GameField::CheckOnCollisionTanks(Tank& tank1, Tank& tank2)
 
 		if (r2_flag == true) {
 			const bool bulletActivFlag(tank2.optTankShooting.bulletActivFlag);
-			tank2.loadTank(tank2.optTank.col, tank2.optTank.mod, tank1.ReverseDirection(dirTankOther));
+			tank2.loadTank(tank2.optTank.col, tank2.optTank.mod, tank1.ReverseDirection(dirTankOther), tank2.optTank.bonus);
 			tank2.optTankShooting.bulletActivFlag = bulletActivFlag;
 			MoveTank(tank2, 2);
 			tank2.setPosFrame(tank2.takeObj().getPosition().x, tank2.takeObj().getPosition().y);
@@ -773,7 +775,8 @@ void GameField::CheckOnCollisionTanks(Player& player)
 		tank.loadTank(
 			tank.optTank.col,
 			tank.optTank.mod,
-			tank.optTank.dir = tank.ClockWiseDirection(tank.optTank.dir)
+			tank.optTank.dir = tank.ClockWiseDirection(tank.optTank.dir),
+			tank.optTank.bonus
 		);
 
 		tank.setPosObj((float)posX, (float)posY);
@@ -842,7 +845,7 @@ void GameField::CheckOnMoore()
 		//processing player
 		while (crossing(block, tank))
 		{
-			MoveTank(tank, -1.f);
+			MoveTank(tank, -0.25f);
 			tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
 		}
 	};
@@ -856,7 +859,8 @@ void GameField::CheckOnMoore()
 		tank.loadTank(
 			tank.optTank.col,
 			tank.optTank.mod,
-			tank.optTank.dir = tank.ClockWiseDirection(dirlast = tank.optTank.dir)
+			tank.optTank.dir = tank.ClockWiseDirection(dirlast = tank.optTank.dir),
+			tank.optTank.bonus
 		);
 		tank.optTankShooting.bulletActivFlag = bulletActivFlag;
 		tank.setPosObj((float)pos.x, (float)pos.y);

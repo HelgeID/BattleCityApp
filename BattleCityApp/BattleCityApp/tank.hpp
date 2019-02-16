@@ -31,7 +31,7 @@ namespace spaceTank
 
 		float speed;
 		int coef_reload;
-
+		bool bonus;
 	};
 
 	struct SettingsShooting
@@ -45,6 +45,12 @@ namespace spaceTank
 	{
 		int tankTime_for_dir{ 10 };
 		sf::Clock tankClock_for_dir;
+	};
+
+	struct SettingsBonus
+	{
+		sf::Clock clockTank;
+		float timeBonus{ 0.f };
 	};
 
 	struct MapPosition
@@ -122,9 +128,10 @@ public:
 	spaceTank::Settings optTank;
 	spaceTank::SettingsShooting optTankShooting;
 	spaceTank::SettingsRDir optRDir;
+	spaceTank::SettingsBonus optBonus;
 	spaceTank::MapPosition mapPos;
 
-	void loadTank(Color col, Model mod, Direction dir)
+	void loadTank(Color col, Model mod, Direction dir, bool bonus)
 	{
 		srand((unsigned)time(NULL));
 
@@ -147,7 +154,7 @@ public:
 
 		this->setSpriteObj(coord.x, coord.y);
 
-		optTank = { col, mod, dir, 0.f, 0};
+		optTank = { col, mod, dir, 0.f, 0, bonus };
 		optTankShooting.bulletActivFlag = false;
 
 		switch (mod)
@@ -163,6 +170,20 @@ public:
 		}
 
 		return;
+	}
+
+	bool switchRW{ false };
+	void loadTank_RED_WHITE()
+	{
+		//todo restart WHITE
+		if (switchRW) {
+			loadTank(Color::WHITE, optTank.mod, optTank.dir, optTank.bonus);
+			switchRW = false;
+		}
+		else {
+			loadTank(Color::RED, optTank.mod, optTank.dir, optTank.bonus);
+			switchRW = true;
+		}
 	}
 
 	void loadIndex(std::vector<Tank>& tank)

@@ -32,7 +32,7 @@ void GameField::CreateActors()
 void GameField::RestartFirstPlayer(const bool flag)
 {
 	sf::Vector2f posFirstPlayer(64.f, 208.f);
-	firstPlayer->loadTank(YELLOW, modA, UP);
+	firstPlayer->loadTank(YELLOW, modA, UP, false);
 	firstPlayer->setPosObj(posFirstPlayer.x, posFirstPlayer.y);
 	firstPlayer->loadIndex(100); // One hundred - just a constant variable for firstPlayer
 
@@ -54,7 +54,7 @@ void GameField::RestartFirstPlayer(const bool flag)
 void GameField::RestartSecondPlayer(const bool flag)
 {
 	sf::Vector2f posSecondPlayer(192.f, 208.f);
-	secondPlayer->loadTank(GREEN, modA, UP);
+	secondPlayer->loadTank(GREEN, modA, UP, false);
 	secondPlayer->setPosObj(posSecondPlayer.x, posSecondPlayer.y);
 	secondPlayer->loadIndex(200); // Two hundred - just a constant variable for secondPlayer
 
@@ -73,6 +73,60 @@ void GameField::RestartSecondPlayer(const bool flag)
 	return;
 }
 
+void CorrectPosition(Player* player, const Direction currentDir, const Direction nextDir)
+{
+	{
+		if (player->getPosObj().x < 32.f && currentDir == LEFT) {
+			player->setPosObj(32.f, player->getPosObj().y);
+			player->setPosFrame(player->getPosObj().x, player->getPosObj().y);
+			return;
+		}
+
+		if (player->getPosObj().y < 16.f && currentDir == UP) {
+			player->setPosObj(player->getPosObj().x, 16.f);
+			player->setPosFrame(player->getPosObj().x, player->getPosObj().y);
+			return;
+		}
+
+		if (player->getPosObj().x > 224.f && currentDir == RIGHT) {
+			player->setPosObj(224.f, player->getPosObj().y);
+			player->setPosFrame(player->getPosObj().x, player->getPosObj().y);
+			return;
+		}
+
+		if (player->getPosObj().y > 208.f && currentDir == DOWN) {
+			player->setPosObj(player->getPosObj().x, 208.f);
+			player->setPosFrame(player->getPosObj().x, player->getPosObj().y);
+			return;
+		}
+	}
+
+	if (currentDir == nextDir)
+		return;
+
+	if ((currentDir == UP && nextDir == DOWN) || (currentDir == DOWN && nextDir == UP)
+		|| (currentDir == LEFT && nextDir == RIGHT) || (currentDir == RIGHT && nextDir == LEFT))
+		return;
+
+	const int correct(8); //half of the cell size
+	int posX_Correct, posY_Correct;
+	currentDir == UP || currentDir == LEFT ? posX_Correct = (int)player->getPosObj().x / correct * correct : NULL;
+	currentDir == UP || currentDir == LEFT ? posY_Correct = (int)player->getPosObj().y / correct * correct : NULL;
+	currentDir == DOWN || currentDir == RIGHT ? posX_Correct = ((int)player->getPosObj().x + correct - 1) / correct * correct : NULL;
+	currentDir == DOWN || currentDir == RIGHT ? posY_Correct = ((int)player->getPosObj().y + correct - 1) / correct * correct : NULL;
+
+	switch (nextDir)
+	{
+	case UP: case DOWN:
+		player->setPosObj((float)posX_Correct, player->getPosObj().y); break;
+	case LEFT: case RIGHT:
+		player->setPosObj(player->getPosObj().x, (float)posY_Correct); break;
+	}
+
+	player->setPosFrame(player->getPosObj().x, player->getPosObj().y);
+	return;
+}
+
 void MoveFirstPlayer(GameField& gField, const Direction nextDir)
 {
 	float posX(0.f), posY(0.f);
@@ -84,10 +138,14 @@ void MoveFirstPlayer(GameField& gField, const Direction nextDir)
 	case DOWN: posY = PlayerSpeed; break;
 	case RIGHT: posX = PlayerSpeed; break;
 	}
+
+	CorrectPosition(gField.firstPlayer, currentDir, nextDir);
+
 	currentDir != nextDir ?
-		gField.firstPlayer->loadTank(gField.firstPlayer->optTank.col, gField.firstPlayer->optTank.mod, nextDir) :
+		gField.firstPlayer->loadTank(gField.firstPlayer->optTank.col, gField.firstPlayer->optTank.mod, nextDir, gField.firstPlayer->optTank.bonus) :
 		gField.firstPlayer->moveObj(posX, posY);
 
+	std::cerr << "PL1:" << gField.firstPlayer->getPosObj().x << "::" << gField.firstPlayer->getPosObj().y << std::endl;
 	return;
 }
 
@@ -102,10 +160,14 @@ void MoveSecondPlayer(GameField& gField, const Direction nextDir)
 	case DOWN: posY = PlayerSpeed; break;
 	case RIGHT: posX = PlayerSpeed; break;
 	}
+
+	CorrectPosition(gField.secondPlayer, currentDir, nextDir);
+
 	currentDir != nextDir ?
-		gField.secondPlayer->loadTank(gField.secondPlayer->optTank.col, gField.secondPlayer->optTank.mod, nextDir) :
+		gField.secondPlayer->loadTank(gField.secondPlayer->optTank.col, gField.secondPlayer->optTank.mod, nextDir, gField.secondPlayer->optTank.bonus) :
 		gField.secondPlayer->moveObj(posX, posY);
 
+	std::cerr << "PL2:" << gField.secondPlayer->getPosObj().x << "::" << gField.secondPlayer->getPosObj().y << std::endl;
 	return;
 }
 
