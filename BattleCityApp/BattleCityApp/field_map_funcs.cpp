@@ -71,7 +71,7 @@ auto TakeTape = [&](std::string tape)
 void GameField::FillField()
 {
 	field.setPosition(32, 16);
-	field.setSize(sf::Vector2f(208.0, 208.0));
+	field.setSize(sf::Vector2f(SizeField, SizeField));
 	field.setFillColor(sf::Color::Black);
 	return;
 }

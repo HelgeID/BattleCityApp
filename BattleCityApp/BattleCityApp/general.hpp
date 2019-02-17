@@ -9,6 +9,7 @@ extern bool p_showfps;
 
 //consts
 extern int SizeCell; //todo
+extern float SizeField;
 
 //signals
 extern bool KeyActive;

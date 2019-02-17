@@ -16,6 +16,9 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	CreateMoore();
 	CreateActors();
 	CreateTanks();
+
+	//bonus
+	bonus = new BonusTank(texture);
 }
 
 GameField::~GameField()
@@ -44,13 +47,15 @@ void GameField::UpdateField()
 	DrawAnimSkin();
 	DrawAnimBoom();
 
+	DrawBonus();
+
 	UpdateCoefReload();
 	UpdateDirectionTanks();
 
-	window.draw(outsideUP);
-	window.draw(outsideDOWN);
-	window.draw(outsideLEFT);
-	window.draw(outsideRIGHT);
+	//window.draw(outsideUP);
+	//window.draw(outsideDOWN);
+	//window.draw(outsideLEFT);
+	//window.draw(outsideRIGHT);
 
 	objTankCollision.MonitoringCollision(*this);
 	objBulletCollision.MonitoringCollision(*this);
@@ -81,6 +86,8 @@ void GameField::UpdateTime()
 	
 	//
 	//to do time here...
+
+	bonus->UpdateTimer();
 	//
 
 	//Update Time for tanks

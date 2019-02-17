@@ -145,6 +145,7 @@
     <ClInclude Include="animation_game.h" />
     <ClInclude Include="block.hpp" />
     <ClInclude Include="block_spawn.hpp" />
+    <ClInclude Include="bonus.hpp" />
     <ClInclude Include="bullet.hpp" />
     <ClInclude Include="events.h" />
     <ClInclude Include="fps.h" />

@@ -8,6 +8,7 @@ bool p_showframe = false;
 bool p_showfps = false;
 
 int SizeCell = 16;
+float SizeField = 208.f;
 
 bool KeyActive = false;
 bool Key_A = false;

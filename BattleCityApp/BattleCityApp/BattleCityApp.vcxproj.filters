@@ -143,5 +143,8 @@
     <ClInclude Include="fps.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="bonus.hpp">
+      <Filter>Заголовочные файлы\objects</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

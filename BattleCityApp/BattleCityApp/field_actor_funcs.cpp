@@ -76,29 +76,26 @@ void GameField::RestartSecondPlayer(const bool flag)
 void CorrectPosition(Player* player, const Direction currentDir, const Direction nextDir)
 {
 	{
-		if (player->getPosObj().x < 32.f && currentDir == LEFT) {
-			player->setPosObj(32.f, player->getPosObj().y);
-			player->setPosFrame(player->getPosObj().x, player->getPosObj().y);
-			return;
-		}
+		bool posLeft = player->getPosObj().x < 32.f && currentDir == Direction::LEFT;
+		bool posUp = player->getPosObj().y < 16.f && currentDir == Direction::UP;
+		bool posRight = player->getPosObj().x > 224.f && currentDir == Direction::RIGHT;
+		bool posDown = player->getPosObj().y > 208.f && currentDir == Direction::DOWN;
 
-		if (player->getPosObj().y < 16.f && currentDir == UP) {
-			player->setPosObj(player->getPosObj().x, 16.f);
-			player->setPosFrame(player->getPosObj().x, player->getPosObj().y);
-			return;
-		}
+		bool f(false);
+		f = !f ? [=](const float position) {
+			posLeft ? player->setPosObj(position, player->getPosObj().y) : NULL; return posLeft;
+		} (32.f) : f;
+		f = !f ? [=](const float position) {
+			posUp ? player->setPosObj(player->getPosObj().x, position) : NULL; return posUp;
+		} (16.f) : f;
+		f = !f ? [=](const float position) {
+			posRight ? player->setPosObj(position, player->getPosObj().y) : NULL; return posRight;
+		} (224.f) : f;
+		f = !f ? [=](const float position) {
+			posDown ? player->setPosObj(player->getPosObj().x, position) : NULL; return posDown;
+		} (208.f) : f;
 
-		if (player->getPosObj().x > 224.f && currentDir == RIGHT) {
-			player->setPosObj(224.f, player->getPosObj().y);
-			player->setPosFrame(player->getPosObj().x, player->getPosObj().y);
-			return;
-		}
-
-		if (player->getPosObj().y > 208.f && currentDir == DOWN) {
-			player->setPosObj(player->getPosObj().x, 208.f);
-			player->setPosFrame(player->getPosObj().x, player->getPosObj().y);
-			return;
-		}
+		f ? player->setPosFrame(player->getPosObj().x, player->getPosObj().y) : NULL;
 	}
 
 	if (currentDir == nextDir)
@@ -108,7 +105,7 @@ void CorrectPosition(Player* player, const Direction currentDir, const Direction
 		|| (currentDir == LEFT && nextDir == RIGHT) || (currentDir == RIGHT && nextDir == LEFT))
 		return;
 
-	const int correct(8); //half of the cell size
+	const int correct(4); //quarter of the cell size
 	int posX_Correct, posY_Correct;
 	currentDir == UP || currentDir == LEFT ? posX_Correct = (int)player->getPosObj().x / correct * correct : NULL;
 	currentDir == UP || currentDir == LEFT ? posY_Correct = (int)player->getPosObj().y / correct * correct : NULL;

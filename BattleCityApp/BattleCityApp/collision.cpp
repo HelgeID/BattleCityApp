@@ -222,7 +222,7 @@ void GameField::CheckOnCollisionBlocks(Tank& tank, const bool fPL)
 							//processing player
 							if (fPL == true) {
 								while (crossing(indxBlock)) {
-									MoveTank(tank, -0.25f);
+									MoveTank(tank, -0.05f);
 									tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
 								}
 							}
@@ -845,7 +845,7 @@ void GameField::CheckOnMoore()
 		//processing player
 		while (crossing(block, tank))
 		{
-			MoveTank(tank, -0.25f);
+			MoveTank(tank, -0.05f);
 			tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
 		}
 	};

@@ -13,6 +13,8 @@ class Object
 	sf::Vector2f size;
 
 public:
+	int xRect, yRect; // for rect texture
+
 	Object(sf::Texture &texture, sf::Vector2f size = sf::Vector2f(16.f, 16.f)) : texture(texture)
 	{
 		sprite.setTexture(texture);
@@ -22,22 +24,38 @@ public:
 
 	void setSpriteObj(const int posX, const int posY)
 	{
-		sf::IntRect rect(posX, posY, this->size.x, this->size.y);
-		sprite.setTextureRect(rect);
+		xRect = posX; yRect = posY;
+		sf::IntRect rectInit(posX, posY, this->size.x, this->size.y);
+		sprite.setTextureRect(rectInit);
 		return;
 	}
 
 	void clearSpriteObj()
 	{
 		sf::Vector2u sizeTexture = this->texture.getSize();
-		sf::IntRect rect(
+		const sf::IntRect rectInit(
 			(int)sizeTexture.x - this->size.x,
 			(int)sizeTexture.y - this->size.y,
 			this->size.x,
 			this->size.y
 		);
-		sprite.setTextureRect(rect);
+		sprite.setTextureRect(rectInit);
 		return;
+	}
+
+	bool isClearObj()
+	{
+		sf::Vector2u sizeTexture = this->texture.getSize();
+		const sf::IntRect rectInit(
+			(int)sizeTexture.x - this->size.x,
+			(int)sizeTexture.y - this->size.y,
+			this->size.x,
+			this->size.y
+		);
+
+		const sf::IntRect rectObj = sprite.getTextureRect();
+
+		return (rectInit == rectObj);
 	}
 
 	void setPosObj(const float x, const float y)

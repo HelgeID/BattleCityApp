@@ -11,6 +11,7 @@
 #include "block.hpp"
 #include "block_spawn.hpp"
 #include "bullet.hpp"
+#include "bonus.hpp"
 #include "map.h"
 #include "tile_map.h"
 #include "part_bricks_map.h"
@@ -223,6 +224,8 @@ class GameField
 	std::unique_ptr<BlockSpawn> c_BS{ nullptr };
 	void CreatePointsSpawnEnemy();
 
+	void DrawBonus();
+	Bonus *bonus;
 public:
 	explicit GameField(sf::RenderWindow&, sf::Texture&);
 	~GameField();

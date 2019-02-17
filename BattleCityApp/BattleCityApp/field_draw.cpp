@@ -158,7 +158,7 @@ void GameField::DrawTanks()
 	return;
 }
 
-//drawings a bullets
+//drawing a bullets
 void GameField::DrawBullets()
 {
 	float speed = BulletSpeed;
@@ -181,7 +181,7 @@ void GameField::DrawBullets()
 	return;
 }
 
-//drawings a birth anim
+//drawing a birth anim
 void GameField::DrawAnimBirth()
 {
 	if (firstPlayerAnim.playerBirth != nullptr)
@@ -200,7 +200,7 @@ void GameField::DrawAnimBirth()
 	return;
 }
 
-//drawings a skin anim
+//drawing a skin anim
 void GameField::DrawAnimSkin()
 {
 	if (firstPlayerAnim.playerSkin != nullptr)
@@ -219,7 +219,7 @@ void GameField::DrawAnimSkin()
 	return;
 }
 
-//drawings a bullets boom anim
+//drawing a bullets boom anim
 void GameField::DrawAnimBoom()
 {
 	const size_t bulletBoomSize = sizeof(this->bulletBoom) / sizeof(*this->bulletBoom);
@@ -233,5 +233,12 @@ void GameField::DrawAnimBoom()
 		if (tankBoom[i] != nullptr)
 			window.draw(tankBoom[i]->TakeAnim());
 	}
+	return;
+}
+
+//drawing a bonus
+void GameField::DrawBonus()
+{
+	window.draw(bonus->takeObj());
 	return;
 }
