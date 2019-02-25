@@ -118,6 +118,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bonus_funcs.cpp" />
     <ClCompile Include="control_tanks.cpp" />
     <ClCompile Include="events.cpp" />
     <ClCompile Include="field_actor_funcs.cpp" />

@@ -135,6 +135,7 @@ class GameField
 	void CheckOnCollisionPlayers(Player&, Player&); //for the players
 
 	void CheckOnMoore();
+	void CheckOnBonus();
 
 	//actors
 	Player *firstPlayer;
@@ -225,7 +226,17 @@ class GameField
 	void CreatePointsSpawnEnemy();
 
 	void DrawBonus();
-	Bonus *bonus;
+	Bonus *bonus{ nullptr };
+
+	void onBonusTankFun(Tank&);
+	void onBonusSkinFun(Tank&);
+	void onBonusStarFun(Tank&);
+	void onBonusShovelFun(Tank&);
+	void onBonusClockFun(Tank&);
+	void onBonusGrenadeFun(Tank&);
+	void onBonusPistolFun(Tank&);
+
+	friend void WaitingShovel(GameField* );
 public:
 	explicit GameField(sf::RenderWindow&, sf::Texture&);
 	~GameField();

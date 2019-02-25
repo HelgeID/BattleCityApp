@@ -239,6 +239,9 @@ void GameField::DrawAnimBoom()
 //drawing a bonus
 void GameField::DrawBonus()
 {
+	if (bonus == nullptr)
+		return;
+
 	window.draw(bonus->takeObj());
 	return;
 }

@@ -47,9 +47,9 @@ protected:
 		this->setPosObj(positionX, positionY); //todo rnd Bonus
 	}
 
+public:
 	virtual ~Bonus() = 0 {}
 
-public:
 	void UpdateTimer()
 	{
 		endClock = std::chrono::steady_clock::now();

@@ -18,7 +18,7 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	CreateTanks();
 
 	//bonus
-	bonus = new BonusTank(texture);
+	bonus = new BonusShovel(texture);
 }
 
 GameField::~GameField()
@@ -61,6 +61,7 @@ void GameField::UpdateField()
 	objBulletCollision.MonitoringCollision(*this);
 	objPlayerCollision.MonitoringCollision(*this);
 	CheckOnMoore();
+	CheckOnBonus();
 
 	MonitoringKeys();
 	objChecking.CheckingShootingBullets(*this);
@@ -87,7 +88,7 @@ void GameField::UpdateTime()
 	//
 	//to do time here...
 
-	bonus->UpdateTimer();
+	bonus != nullptr ? bonus->UpdateTimer() : NULL;
 	//
 
 	//Update Time for tanks

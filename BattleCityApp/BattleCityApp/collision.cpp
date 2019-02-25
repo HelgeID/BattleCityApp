@@ -943,3 +943,50 @@ void GameField::CheckOnMoore()
 	}
 	return;
 }
+
+/////////////////////////////////////////////////////////////////////////////
+//Bonus
+/////////////////////////////////////////////////////////////////////////////
+void GameField::CheckOnBonus()
+{
+	auto GET_BONUS = [&](Tank& tank, const char* type)
+	{
+		if (type == "BonusTank")
+			onBonusTankFun(tank);
+		else if (type == "BonusSkin")
+			onBonusSkinFun(tank);
+		else if (type == "BonusStar")
+			onBonusStarFun(tank);
+		else if (type == "BonusShovel")
+			onBonusShovelFun(tank);
+		else if (type == "BonusClock")
+			onBonusClockFun(tank);
+		else if (type == "BonusGrenade")
+			onBonusGrenadeFun(tank);
+		else if (type == "BonusPistol")
+			onBonusPistolFun(tank);
+	};
+
+	if (firstPlayer->Presence() && bonus) {
+		bool crossing = (*firstPlayer).frame.getGlobalBounds().intersects(bonus->takeObj().getGlobalBounds());
+		if (crossing)
+		{
+			GET_BONUS(*firstPlayer, bonus->TakeType());
+			delete bonus;
+			bonus = nullptr;
+			return;
+		}
+	}
+
+	if (secondPlayer->Presence() && bonus) {
+		bool crossing = (*secondPlayer).frame.getGlobalBounds().intersects(bonus->takeObj().getGlobalBounds());
+		if (crossing)
+		{
+			GET_BONUS(*secondPlayer, bonus->TakeType());
+			delete bonus;
+			bonus = nullptr;
+			return;
+		}
+	}
+	return;
+}
