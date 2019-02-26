@@ -80,6 +80,7 @@ class GameField
 	void DrawMoore();
 
 	std::vector<Tank> tank;
+	bool sleeptanks{ false };
 	void CreateTanks();
 	void CreateTank(const sf::Vector2f);
 	void ReloadTank(Tank&, const sf::Vector2f);
@@ -141,6 +142,7 @@ class GameField
 	Player *firstPlayer;
 	Player *secondPlayer;
 	void CreateActors();
+	friend void RestartPlayer(GameField*, const std::string);
 	void RestartFirstPlayer(const bool flag = false);
 	void RestartSecondPlayer(const bool flag = false);
 	void DrawActors();
@@ -148,6 +150,7 @@ class GameField
 	friend void MoveSecondPlayer(GameField&, const Direction);
 	void MonitoringKeys();
 	void CheckPlayerBang(Player&, const bool off = false);
+	void PerfectionPlayer(Player&);
 	
 	struct AnimPlayer
 	{
@@ -228,15 +231,16 @@ class GameField
 	void DrawBonus();
 	Bonus *bonus{ nullptr };
 
-	void onBonusTankFun(Tank&);
-	void onBonusSkinFun(Tank&);
-	void onBonusStarFun(Tank&);
-	void onBonusShovelFun(Tank&);
-	void onBonusClockFun(Tank&);
-	void onBonusGrenadeFun(Tank&);
-	void onBonusPistolFun(Tank&);
+	void onBonusTankFun(Player&);
+	void onBonusSkinFun(Player&);
+	void onBonusStarFun(Player&);
+	void onBonusShovelFun(Player&);
+	void onBonusClockFun(Player&);
+	void onBonusGrenadeFun(Player&);
+	void onBonusPistolFun(Player&);
 
-	friend void WaitingShovel(GameField* );
+	friend void WaitingShovel(GameField*);
+	friend void WaitingClock(GameField*);
 public:
 	explicit GameField(sf::RenderWindow&, sf::Texture&);
 	~GameField();

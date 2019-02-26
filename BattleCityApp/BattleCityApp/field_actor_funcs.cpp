@@ -20,6 +20,20 @@ void AnimBirthPlayer(AnimArgPtr argPtr)
 	return;
 }
 
+void RestartPlayer(GameField* gField, const std::string player_name)
+{
+	sf::sleep(sf::milliseconds(2000));
+
+	mtx.lock();
+	player_name == "first player" ? gField->RestartFirstPlayer() 
+		: 0;
+	player_name == "second player" ? gField->RestartSecondPlayer() 
+		: 0;
+	mtx.unlock();
+
+	return;
+}
+
 void GameField::CreateActors()
 {
 	firstPlayer = new Player(texture, "first player", false);
@@ -35,6 +49,7 @@ void GameField::RestartFirstPlayer(const bool flag)
 	firstPlayer->loadTank(YELLOW, modA, UP, false);
 	firstPlayer->setPosObj(posFirstPlayer.x, posFirstPlayer.y);
 	firstPlayer->loadIndex(100); // One hundred - just a constant variable for firstPlayer
+	firstPlayer->numStar() = 0;
 
 	if (flag == true)
 	{
@@ -57,6 +72,7 @@ void GameField::RestartSecondPlayer(const bool flag)
 	secondPlayer->loadTank(GREEN, modA, UP, false);
 	secondPlayer->setPosObj(posSecondPlayer.x, posSecondPlayer.y);
 	secondPlayer->loadIndex(200); // Two hundred - just a constant variable for secondPlayer
+	secondPlayer->numStar() = 0;
 
 	if (flag == true)
 	{
@@ -240,6 +256,7 @@ void GameField::CheckPlayerBang(Player& player, const bool off)
 		player.Presence() = false;
 		const sf::Vector2f point = player.getPosObj();
 		CreateAnimBoom(point, "tankObj");
+		player.declife();
 
 		if (player.name == "first player" && firstPlayerAnim.playerSkin != nullptr)
 		{
@@ -254,9 +271,29 @@ void GameField::CheckPlayerBang(Player& player, const bool off)
 			secondPlayerAnim.playerSkin = nullptr;
 			player.SkinOff();
 		}
+
+		if (player.takelife() != 0) {
+			std::unique_ptr<std::thread> threadPlayer(new std::thread(&RestartPlayer, this, player.name));
+			threadPlayer->detach();
+		}
 	}
 
 exit:
 	;
+	return;
+}
+
+void GameField::PerfectionPlayer(Player& player)
+{
+	const Color col(player.optTank.col);
+	const Direction dir(player.optTank.dir);
+
+	switch (player.numStar())
+	{
+	case 0: firstPlayer->loadTank(col, modA, dir, false);
+	case 1: firstPlayer->loadTank(col, modB, dir, false);
+	case 2: firstPlayer->loadTank(col, modC, dir, false);
+	case 3: firstPlayer->loadTank(col, modD, dir, false);
+	}
 	return;
 }

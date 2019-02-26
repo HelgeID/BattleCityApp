@@ -305,6 +305,8 @@ start:
 	if (indexTank != -1) {
 		while (CONTROL_CollisionTanksTank(gField, gField->tank[indexTank]))
 			sf::sleep(sf::milliseconds(300));
+
+		gField->tank[indexTank].sleepTank() = false;
 		gField->tank[indexTank].onTank();
 	}
 

@@ -115,6 +115,11 @@ void GameField::DrawTank(Tank &tank)
 	if (!tank.isTank())
 		return;
 
+	if (tank.sleepTank()) {
+		p_showframe ? window.draw(tank.frame) : window.draw(tank.takeObj());
+		return;
+	}
+
 	float speed = tank.optTank.speed;
 	float time = this->time / speed;
 	

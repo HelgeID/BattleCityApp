@@ -11,8 +11,8 @@ void GameField::CreateTanks()
 		for (int i = 0; i < 6; i++) //max tank == 6, when two players
 			CreateTank(sf::Vector2f(0.f, 0.f));
 
-	//std::unique_ptr<std::thread> thread_control(new std::thread(&LAUNCHING_TANKS, this));
-	//thread_control->detach();
+	std::unique_ptr<std::thread> thread_control(new std::thread(&LAUNCHING_TANKS, this));
+	thread_control->detach();
 	return;
 }
 

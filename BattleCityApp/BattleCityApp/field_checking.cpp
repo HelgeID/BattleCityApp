@@ -14,7 +14,7 @@ void GameField::Checking::CheckingShootingBullets(GameField& gField)
 
 	std::for_each(gField.tank.begin(), gField.tank.end(), [&](Tank &tank)
 	{
-		if (!tank.isTank())
+		if (!tank.isTank() || tank.sleepTank())
 			;
 		else {
 			if (!tank.optTankShooting.bulletActivFlag && tank.optTankShooting.clockTank.getElapsedTime().asSeconds() > random) {

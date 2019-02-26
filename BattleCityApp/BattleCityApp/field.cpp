@@ -18,7 +18,7 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	CreateTanks();
 
 	//bonus
-	bonus = new BonusShovel(texture);
+	bonus = new BonusClock(texture);
 }
 
 GameField::~GameField()
@@ -171,7 +171,7 @@ void GameField::UpdateDirectionTanks()
 		return;
 
 	for (auto it = tank.begin(); it != tank.end(); ++it)
-		it->isTank() ? UPD(*it) : NULL;
+		it->isTank() && !it->sleepTank() ? UPD(*it) : NULL;
 
 	return;
 }

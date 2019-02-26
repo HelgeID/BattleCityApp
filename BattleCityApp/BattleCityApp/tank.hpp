@@ -98,7 +98,8 @@ class Tank : public Object, public Frame, public TankBoom
 	bool preReverseArr[4] = { false, false, false, false };
 	sf::Vector2f prePosReverse;
 
-	bool T{ false };
+	bool T{ false }; //on - off
+	bool sleeptank{ false };
 public:
 	Tank(sf::Texture &texture) : Object(texture), Frame("tank"), indexTank(0), skinTank(false)
 	{
@@ -111,6 +112,8 @@ public:
 	void onTank() { T = true; };
 	void offTank() { T = false; };
 	bool isTank() const { return T; };
+
+	bool& sleepTank() { return sleeptank; };
 
 	Tank& operator=(const Tank& obj)
 	{

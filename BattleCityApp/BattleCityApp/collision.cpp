@@ -311,7 +311,7 @@ void GameField::CheckOnCollisionTanks(Tank& tank1, Tank& tank2)
 			}
 		}
 
-		if (r1_flag == true) {
+		if (r1_flag == true && !tank1.sleepTank()) {
 			const bool bulletActivFlag(tank1.optTankShooting.bulletActivFlag);
 			tank1.loadTank(tank1.optTank.col, tank1.optTank.mod, tank1.ReverseDirection(dirTank), tank1.optTank.bonus);
 			tank1.optTankShooting.bulletActivFlag = bulletActivFlag;
@@ -319,7 +319,7 @@ void GameField::CheckOnCollisionTanks(Tank& tank1, Tank& tank2)
 			tank1.setPosFrame(tank1.takeObj().getPosition().x, tank1.takeObj().getPosition().y);
 		}
 
-		if (r2_flag == true) {
+		if (r2_flag == true && !tank2.sleepTank()) {
 			const bool bulletActivFlag(tank2.optTankShooting.bulletActivFlag);
 			tank2.loadTank(tank2.optTank.col, tank2.optTank.mod, tank1.ReverseDirection(dirTankOther), tank2.optTank.bonus);
 			tank2.optTankShooting.bulletActivFlag = bulletActivFlag;
@@ -949,22 +949,22 @@ void GameField::CheckOnMoore()
 /////////////////////////////////////////////////////////////////////////////
 void GameField::CheckOnBonus()
 {
-	auto GET_BONUS = [&](Tank& tank, const char* type)
+	auto GET_BONUS = [&](Player& player, const char* type)
 	{
 		if (type == "BonusTank")
-			onBonusTankFun(tank);
+			onBonusTankFun(player);
 		else if (type == "BonusSkin")
-			onBonusSkinFun(tank);
+			onBonusSkinFun(player);
 		else if (type == "BonusStar")
-			onBonusStarFun(tank);
+			onBonusStarFun(player);
 		else if (type == "BonusShovel")
-			onBonusShovelFun(tank);
+			onBonusShovelFun(player);
 		else if (type == "BonusClock")
-			onBonusClockFun(tank);
+			onBonusClockFun(player);
 		else if (type == "BonusGrenade")
-			onBonusGrenadeFun(tank);
+			onBonusGrenadeFun(player);
 		else if (type == "BonusPistol")
-			onBonusPistolFun(tank);
+			onBonusPistolFun(player);
 	};
 
 	if (firstPlayer->Presence() && bonus) {

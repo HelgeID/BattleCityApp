@@ -19,11 +19,28 @@ void WaitingShovel(GameField* obj)
 	return;
 }
 
-void GameField::onBonusTankFun(Tank& player)
+void WaitingClock(GameField* obj)
 {
+	auto sleep = [&](bool f) {
+		obj->sleeptanks = f;
+		std::for_each(obj->tank.begin(), obj->tank.end(), [&](Tank &tank) {
+			tank.isTank() ? tank.sleepTank() = f : NULL;
+		});
+	};
+
+	mtx.lock(); sleep(true); mtx.unlock(); //on sleep
+	sf::sleep(sf::milliseconds(60000));
+	mtx.lock(); sleep(false); mtx.unlock(); //off sleep
+	return;
 }
 
-void GameField::onBonusSkinFun(Tank& player)
+void GameField::onBonusTankFun(Player& player)
+{
+	player.inclife();
+	return;
+}
+
+void GameField::onBonusSkinFun(Player& player)
 {
 	if (!player.GetSkin())
 		player.SkinOn();
@@ -39,24 +56,30 @@ void GameField::onBonusSkinFun(Tank& player)
 	return;
 }
 
-void GameField::onBonusStarFun(Tank& player)
+void GameField::onBonusStarFun(Player& player)
 {
+	player.numStar() = player.numStar() + 1;
+	PerfectionPlayer(player);
+	return;
 }
 
-void GameField::onBonusShovelFun(Tank& player)
+void GameField::onBonusShovelFun(Player& player)
 {
 	std::unique_ptr<std::thread> threadPlayer(new std::thread(&WaitingShovel, this));
 	threadPlayer->detach();
 }
 
-void GameField::onBonusClockFun(Tank& player)
+void GameField::onBonusClockFun(Player& player)
+{
+	std::unique_ptr<std::thread> threadPlayer(new std::thread(&WaitingClock, this));
+	threadPlayer->detach();
+	return;
+}
+
+void GameField::onBonusGrenadeFun(Player& player)
 {
 }
 
-void GameField::onBonusGrenadeFun(Tank& player)
-{
-}
-
-void GameField::onBonusPistolFun(Tank& player)
+void GameField::onBonusPistolFun(Player& player)
 {
 }
