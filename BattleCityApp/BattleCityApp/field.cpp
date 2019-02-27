@@ -18,7 +18,7 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	CreateTanks();
 
 	//bonus
-	bonus = new BonusClock(texture);
+	bonus = new BonusGrenade(texture);
 }
 
 GameField::~GameField()

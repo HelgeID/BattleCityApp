@@ -508,7 +508,7 @@ void GameField::CheckOnCollisionTanks(Bullet& bullet)
 				continue;
 			if (bulletArr[indxBullet]->indexTank == 100 || bulletArr[indxBullet]->indexTank == 200) {
 				const int indexTank(it->takeIndex());
-				CheckTankBang(indexTank);
+				CheckTankBang(indexTank, false);
 			}
 			else
 				if (blocking_hit_for_enemy)

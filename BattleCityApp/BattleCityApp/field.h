@@ -89,7 +89,8 @@ class GameField
 	void MoveTank(Tank&, float);
 	void MoveTank(const Direction, Tank&, float);
 	void ControlTank_onFrame(Tank&);
-	void CheckTankBang(const int);
+	void CheckTankBang(const int, const bool);
+	void KillAllTanks();
 	friend void LAUNCHING_TANKS(GameField*);
 	friend void LOAD_TANK(GameField*, const bool);
 	friend bool CONTROL_CollisionTanksBS(GameField*);

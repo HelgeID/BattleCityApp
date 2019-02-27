@@ -2,7 +2,7 @@
 #include "general.hpp"
 #include <time.h>
 
-static bool LAUNCHING_TANKS_ON_START_FINISH = false; //todo restart
+static bool LAUNCHING_TANKS_ON_START_FINISH;
 
 bool CONTROL_CollisionTanksBS(GameField* gField)
 {
@@ -63,6 +63,8 @@ bool CONTROL_OffAllAnim(GameField* gField)
 void LAUNCHING_TANKS(GameField* gField)
 {
 	srand(time(NULL)); //for rand()
+
+	LAUNCHING_TANKS_ON_START_FINISH = false;
 
 	int indexTank(-1);
 	auto reload_tank = [&](sf::Vector2f pos)
@@ -254,6 +256,9 @@ void LOAD_TANK(GameField* gField, const bool newTank)
 start:
 	;
 
+	if (!gField->tank.size())
+		return;
+
 	sf::sleep(sf::milliseconds(1000));
 
 	sf::Vector2f pos{ 0.f, 0.f };
@@ -298,6 +303,9 @@ start:
 		case 2: gField->r_BS->Spawn() = false; break;
 		case 3: gField->c_BS->Spawn() = false; break;
 	}
+
+	if (!gField->tank.size())
+		return;
 
 	int indexTank(-1);
 	reload_tank(pos, indexTank);

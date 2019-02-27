@@ -68,7 +68,7 @@ void GameField::ControlTank_onFrame(Tank& tank)
 	return;
 }
 
-void GameField::CheckTankBang(const int indexTank)
+void GameField::CheckTankBang(const int indexTank, const bool killall)
 {
 	if (undying_enemy)
 		return;
@@ -94,11 +94,44 @@ void GameField::CheckTankBang(const int indexTank)
 			tank[index].setPosObj(0.f, 0.f);
 			tank[index].setPosFrame(tank[index].getPosObj().x, tank[index].getPosObj().y);
 
-			//launching a new tank on the field
-			std::unique_ptr<std::thread> thread_control(new std::thread(&LOAD_TANK, this, false));
-			thread_control->detach();
+			if (!killall) {
+				//launching a new tank on the field
+				std::unique_ptr<std::thread> thread_control(new std::thread(&LOAD_TANK, this, false));
+				thread_control->detach();
+			}
+			else
+				RemovalObj(tank, index);
+
 			break;
 		}
 	}
+	return;
+}
+
+void GameField::KillAllTanks()
+{
+	if (tank.size() == 0)
+		return;
+
+	std::vector<int> iT; //index tank
+	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) {
+		if (tank.isTank())
+			iT.push_back(tank.takeIndex());
+	});
+
+	for (int index = 0; index < iT.size(); index = index + 1)
+		CheckTankBang(iT[index], true);
+
+	bool allFlg = true;
+	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) {
+		if (tank.isTank())
+			allFlg = false;
+	});
+
+	if (!allFlg)
+		KillAllTanks();
+
+	if (tank.size() > 0)
+		tank.clear(); //clear array of tanks, who were not killed
 	return;
 }

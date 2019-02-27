@@ -65,19 +65,22 @@ void GameField::onBonusStarFun(Player& player)
 
 void GameField::onBonusShovelFun(Player& player)
 {
-	std::unique_ptr<std::thread> threadPlayer(new std::thread(&WaitingShovel, this));
-	threadPlayer->detach();
+	std::unique_ptr<std::thread> waitingshovel(new std::thread(&WaitingShovel, this));
+	waitingshovel->detach();
 }
 
 void GameField::onBonusClockFun(Player& player)
 {
-	std::unique_ptr<std::thread> threadPlayer(new std::thread(&WaitingClock, this));
-	threadPlayer->detach();
+	std::unique_ptr<std::thread> waitingclock(new std::thread(&WaitingClock, this));
+	waitingclock->detach();
 	return;
 }
 
 void GameField::onBonusGrenadeFun(Player& player)
 {
+	KillAllTanks(); // KILL ALL TANKS
+	CreateTanks(); // LAUNCHING NEW TANKS
+	return;
 }
 
 void GameField::onBonusPistolFun(Player& player)
