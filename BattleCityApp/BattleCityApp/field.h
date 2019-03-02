@@ -20,6 +20,8 @@
 #include "msg.h"
 #include "fps.h"
 
+#include "sound.h"
+
 //test
 #include <iostream>
 
@@ -29,6 +31,10 @@ class GameField
 {
 	sf::RenderWindow &window;
 	sf::Texture &texture;
+
+	Sound sound;
+	friend void ControlSound(GameField*);
+
 	sf::Clock clock;
 	float time;
 	struct CR

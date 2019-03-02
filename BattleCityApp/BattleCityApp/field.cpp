@@ -19,6 +19,9 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 
 	//bonus
 	bonus = new BonusGrenade(texture);
+
+	std::unique_ptr<std::thread> thread_control(new std::thread(&ControlSound, this));
+	thread_control->detach();
 }
 
 GameField::~GameField()

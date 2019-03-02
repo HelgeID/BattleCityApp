@@ -90,6 +90,9 @@
     <ClCompile Include="bonus_funcs.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="control_sound.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -148,6 +151,9 @@
     </ClInclude>
     <ClInclude Include="bonus.hpp">
       <Filter>Заголовочные файлы\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="sound.h">
+      <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

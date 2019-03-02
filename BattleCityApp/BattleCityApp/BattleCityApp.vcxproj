@@ -119,6 +119,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bonus_funcs.cpp" />
+    <ClCompile Include="control_sound.cpp" />
     <ClCompile Include="control_tanks.cpp" />
     <ClCompile Include="events.cpp" />
     <ClCompile Include="field_actor_funcs.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="object.hpp" />
     <ClInclude Include="part_bricks_map.h" />
     <ClInclude Include="field.h" />
+    <ClInclude Include="sound.h" />
     <ClInclude Include="tank.hpp" />
     <ClInclude Include="tile_map.h" />
   </ItemGroup>

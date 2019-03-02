@@ -158,7 +158,7 @@ void MoveFirstPlayer(GameField& gField, const Direction nextDir)
 		gField.firstPlayer->loadTank(gField.firstPlayer->optTank.col, gField.firstPlayer->optTank.mod, nextDir, gField.firstPlayer->optTank.bonus) :
 		gField.firstPlayer->moveObj(posX, posY);
 
-	std::cerr << "PL1:" << gField.firstPlayer->getPosObj().x << "::" << gField.firstPlayer->getPosObj().y << std::endl;
+	//std::cerr << "PL1:" << gField.firstPlayer->getPosObj().x << "::" << gField.firstPlayer->getPosObj().y << std::endl;
 	return;
 }
 
@@ -180,7 +180,7 @@ void MoveSecondPlayer(GameField& gField, const Direction nextDir)
 		gField.secondPlayer->loadTank(gField.secondPlayer->optTank.col, gField.secondPlayer->optTank.mod, nextDir, gField.secondPlayer->optTank.bonus) :
 		gField.secondPlayer->moveObj(posX, posY);
 
-	std::cerr << "PL2:" << gField.secondPlayer->getPosObj().x << "::" << gField.secondPlayer->getPosObj().y << std::endl;
+	//std::cerr << "PL2:" << gField.secondPlayer->getPosObj().x << "::" << gField.secondPlayer->getPosObj().y << std::endl;
 	return;
 }
 
@@ -214,6 +214,8 @@ void GameField::MonitoringKeys()
 			//		bulletArr[i] != nullptr ? std::cerr << bulletArr[i]->indexTank << "-" : std::cerr << "X" << "-";
 			//	std::cerr << std::endl;
 			//}
+
+			sound.Shoot();
 		}
 	}
 
@@ -240,6 +242,8 @@ void GameField::MonitoringKeys()
 			//		bulletArr[i] != nullptr ? std::cerr << bulletArr[i]->indexTank << "-" : std::cerr << "X" << "-";
 			//	std::cerr << std::endl;
 			//}
+
+			sound.Shoot();
 		}
 	}
 
