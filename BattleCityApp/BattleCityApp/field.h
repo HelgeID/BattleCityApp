@@ -25,7 +25,12 @@
 //test
 #include <iostream>
 
+class GameField;
+
 extern std::mutex mtx;
+
+typedef void (GameField::* pToCheckOnCollision)(Tank&);
+static pToCheckOnCollision CheckOnCollision;
 
 class GameField
 {
@@ -39,18 +44,18 @@ class GameField
 	float time;
 	struct CR
 	{
-		int cr_a{ 0 }, cr_b{ 0 }, cr_c{ 0 }, cr_d{ 0 }, cr_e{ 0 }, cr_f{ 0 }, cr_g{ 0 }, cr_h{ 0 };
+		int cr_aPlayer{ 0 }, cr_bPlayer{ 0 }, cr_cPlayer{ 0 }, cr_dPlayer{ 0 }, cr_aEnemy{ 0 }, cr_bEnemy{ 0 }, cr_cEnemy{ 0 }, cr_dEnemy{ 0 };
 
 		void operator+=(const int value)
 		{
-			cr_a += value;
-			cr_b += value;
-			cr_c += value;
-			cr_d += value;
-			cr_e += value;
-			cr_f += value;
-			cr_g += value;
-			cr_h += value;
+			cr_aPlayer += value;
+			cr_bPlayer += value;
+			cr_cPlayer += value;
+			cr_dPlayer += value;
+			cr_aEnemy += value;
+			cr_bEnemy += value;
+			cr_cEnemy += value;
+			cr_dEnemy += value;
 		}
 
 	} cr; //coef_reload
@@ -126,9 +131,12 @@ class GameField
 	template<typename T> void FormArrayCells(T **, const sf::Vector2i, const sf::Vector2i, RecShape&);
 	template<typename T> void DisbandArrayCells(T **);
 
+	friend void EnumerationTanks(GameField&);
+
+	bool fPL{ false };
 	void CheckOnCollisionFrame(Tank&); //for the tanks
 	void CheckOnCollisionBlocksSpawn(Tank&); //for the tanks
-	void CheckOnCollisionBlocks(Tank&, const bool fPL = false); //for the tanks
+	void CheckOnCollisionBlocks(Tank&); //for the tanks
 	void CheckOnCollisionTanks(Tank&, Tank&); //for the tanks
 	void CheckOnCollisionFrame(Bullet&); //for the bullets
 	void CheckOnCollisionBlocks(Bullet&); //for the bullets

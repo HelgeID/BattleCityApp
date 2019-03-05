@@ -10,16 +10,17 @@
 #define stringify( name ) # name
 
 enum Color { YELLOW, WHITE, GREEN, RED };
-enum Model { modA, modB, modC, modD, modE, modF, modG, modH };
+enum Model { playerModA, playerModB, playerModC, playerModD, enemyModA, enemyModB, enemyModC, enemyModD };
 
-#define CoefReloadModA 9
-#define CoefReloadModB 16
-#define CoefReloadModC 20
-#define CoefReloadModD 18
-#define CoefReloadModE 10
-#define CoefReloadModF 6
-#define CoefReloadModG 10
-#define CoefReloadModH 11
+#define CoefReloadPlayerModA 8
+#define CoefReloadPlayerModB 8
+#define CoefReloadPlayerModC 8
+#define CoefReloadPlayerModD 8
+
+#define CoefReloadEnemyModA 6
+#define CoefReloadEnemyModB 10
+#define CoefReloadEnemyModC 6
+#define CoefReloadEnemyModD 16
 
 namespace spaceTank
 {
@@ -29,7 +30,7 @@ namespace spaceTank
 		Model mod;
 		Direction dir;
 
-		float speed;
+		float step_speed;
 		int coef_reload;
 		bool bonus;
 	};
@@ -162,14 +163,14 @@ public:
 
 		switch (mod)
 		{
-		case modA: optTank.speed = 4500; optTank.coef_reload = CoefReloadModA; break;
-		case modB: optTank.speed = 8000; optTank.coef_reload = CoefReloadModB; break;
-		case modC: optTank.speed = 8500; optTank.coef_reload = CoefReloadModC; break;
-		case modD: optTank.speed = 7000; optTank.coef_reload = CoefReloadModD; break;
-		case modE: optTank.speed = 5000; optTank.coef_reload = CoefReloadModE; break;
-		case modF: optTank.speed = 1500; optTank.coef_reload = CoefReloadModF; break;
-		case modG: optTank.speed = 6000; optTank.coef_reload = CoefReloadModG; break;
-		case modH: optTank.speed = 7500; optTank.coef_reload = CoefReloadModH; break;
+		case playerModA: optTank.step_speed = 0.f; optTank.coef_reload = CoefReloadPlayerModA; break;
+		case playerModB: optTank.step_speed = 0.f; optTank.coef_reload = CoefReloadPlayerModB; break;
+		case playerModC: optTank.step_speed = 0.f; optTank.coef_reload = CoefReloadPlayerModC; break;
+		case playerModD: optTank.step_speed = 0.f; optTank.coef_reload = CoefReloadPlayerModD; break;
+		case enemyModA: optTank.step_speed = 0.3f; optTank.coef_reload = CoefReloadEnemyModA; break;
+		case enemyModB: optTank.step_speed = 0.5f; optTank.coef_reload = CoefReloadEnemyModB; break;
+		case enemyModC: optTank.step_speed = 0.35f; optTank.coef_reload = CoefReloadEnemyModC; break;
+		case enemyModD: optTank.step_speed = 0.15f; optTank.coef_reload = CoefReloadEnemyModD; break;
 		}
 
 		return;

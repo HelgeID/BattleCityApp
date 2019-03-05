@@ -28,3 +28,6 @@ bool undying_players = false;
 bool undying_hit_on_player = false;
 bool blocking_firing = false;
 bool blocking_hit_for_enemy = true;
+
+
+bool f_f = false;

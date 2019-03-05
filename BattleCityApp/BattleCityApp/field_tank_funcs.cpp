@@ -20,7 +20,7 @@ void GameField::CreateTank(const sf::Vector2f pos)
 {
 	static Tank tankObj(texture);
 	tank.push_back(tankObj);
-	(tank.end() - 1)->loadTank(RED, modA, DOWN, false);
+	(tank.end() - 1)->loadTank(RED, enemyModA, DOWN, false);
 	(tank.end() - 1)->loadIndex(tank);
 	(tank.end() - 1)->setPosObj(pos.x, pos.y);
 	return;
@@ -28,7 +28,7 @@ void GameField::CreateTank(const sf::Vector2f pos)
 
 void GameField::ReloadTank(Tank& tank, const sf::Vector2f pos)
 {
-	tank.loadTank(WHITE, modA, DOWN, true);
+	tank.loadTank(WHITE, enemyModD, DOWN, false);
 	tank.setPosObj(pos.x, pos.y);
 	return;
 }

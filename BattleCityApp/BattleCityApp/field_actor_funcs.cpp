@@ -46,10 +46,10 @@ void GameField::CreateActors()
 void GameField::RestartFirstPlayer(const bool flag)
 {
 	sf::Vector2f posFirstPlayer(64.f, 208.f);
-	firstPlayer->loadTank(YELLOW, modA, UP, false);
+	firstPlayer->numStar() = 0;
+	firstPlayer->loadTank(YELLOW, playerModA, UP, false);
 	firstPlayer->setPosObj(posFirstPlayer.x, posFirstPlayer.y);
 	firstPlayer->loadIndex(100); // One hundred - just a constant variable for firstPlayer
-	firstPlayer->numStar() = 0;
 
 	if (flag == true)
 	{
@@ -69,10 +69,10 @@ void GameField::RestartFirstPlayer(const bool flag)
 void GameField::RestartSecondPlayer(const bool flag)
 {
 	sf::Vector2f posSecondPlayer(192.f, 208.f);
-	secondPlayer->loadTank(GREEN, modA, UP, false);
+	secondPlayer->numStar() = 0;
+	secondPlayer->loadTank(GREEN, playerModA, UP, false);
 	secondPlayer->setPosObj(posSecondPlayer.x, posSecondPlayer.y);
 	secondPlayer->loadIndex(200); // Two hundred - just a constant variable for secondPlayer
-	secondPlayer->numStar() = 0;
 
 	if (flag == true)
 	{
@@ -294,10 +294,13 @@ void GameField::PerfectionPlayer(Player& player)
 
 	switch (player.numStar())
 	{
-	case 0: firstPlayer->loadTank(col, modA, dir, false);
-	case 1: firstPlayer->loadTank(col, modB, dir, false);
-	case 2: firstPlayer->loadTank(col, modC, dir, false);
-	case 3: firstPlayer->loadTank(col, modD, dir, false);
+	case 0: player.loadTank(col, playerModA, dir, false); goto exit;
+	case 1: player.loadTank(col, playerModB, dir, false); goto exit;
+	case 2: player.loadTank(col, playerModC, dir, false); goto exit;
+	case 3: player.loadTank(col, playerModD, dir, false); goto exit;
 	}
+
+exit:
+	;
 	return;
 }

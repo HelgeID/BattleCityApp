@@ -3,7 +3,7 @@
 #include "map.h"
 
 /////////////////////////////////////////////////////////////////////////////
-//ENEMIE
+//ENEMIES
 /////////////////////////////////////////////////////////////////////////////
 
 // Checking the tank on a collision with the frame
@@ -178,8 +178,9 @@ void GameField::CheckOnCollisionBlocksSpawn(Tank& tank)
 	return;
 }
 
-void GameField::CheckOnCollisionBlocks(Tank& tank, const bool fPL)
+void GameField::CheckOnCollisionBlocks(Tank& tank)
 {
+	const bool fPL = this->fPL;
 	struct POS { sf::Vector2i cell; } *arrCell(nullptr);
 	RecShape recShape;
 
@@ -761,7 +762,9 @@ void GameField::CheckOnCollisionBlocksSpawn(Player& player, const int num)
 // Checking the player on a collision with the block
 void GameField::CheckOnCollisionBlocks(Player& player)
 {
-	CheckOnCollisionBlocks(player, true);
+	this->fPL = true; //init TRUE for player
+	CheckOnCollisionBlocks(static_cast<Tank&>(player));
+	this->fPL = false; //init FALSE for enemy
 	return;
 }
 

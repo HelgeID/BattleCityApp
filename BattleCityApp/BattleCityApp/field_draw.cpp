@@ -76,14 +76,14 @@ void GameField::DrawActors()
 	auto fun = [=](Player& player, bool keyArray[])
 	{
 		if (
-			(cr.cr_a == player.optTank.coef_reload && player.optTank.mod == modA && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
-			(cr.cr_b == player.optTank.coef_reload && player.optTank.mod == modB && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
-			(cr.cr_c == player.optTank.coef_reload && player.optTank.mod == modC && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
-			(cr.cr_d == player.optTank.coef_reload && player.optTank.mod == modD && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
-			(cr.cr_e == player.optTank.coef_reload && player.optTank.mod == modE && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
-			(cr.cr_f == player.optTank.coef_reload && player.optTank.mod == modF && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
-			(cr.cr_g == player.optTank.coef_reload && player.optTank.mod == modG && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
-			(cr.cr_h == player.optTank.coef_reload && player.optTank.mod == modH && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])))
+			(cr.cr_aPlayer == player.optTank.coef_reload && player.optTank.mod == playerModA && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_bPlayer == player.optTank.coef_reload && player.optTank.mod == playerModB && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_cPlayer == player.optTank.coef_reload && player.optTank.mod == playerModC && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_dPlayer == player.optTank.coef_reload && player.optTank.mod == playerModD && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_aEnemy == player.optTank.coef_reload && player.optTank.mod == enemyModA && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_bEnemy == player.optTank.coef_reload && player.optTank.mod == enemyModB && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_cEnemy == player.optTank.coef_reload && player.optTank.mod == enemyModC && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_dEnemy == player.optTank.coef_reload && player.optTank.mod == enemyModD && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])))
 				player.reloadTank();
 
 		//frames position
@@ -115,32 +115,31 @@ void GameField::DrawTank(Tank &tank)
 	if (!tank.isTank())
 		return;
 
-	if (tank.sleepTank()) {
+	const float step_speed = tank.optTank.step_speed;
+
+	if (tank.sleepTank() || step_speed == 0.f) {
 		p_showframe ? window.draw(tank.frame) : window.draw(tank.takeObj());
 		return;
 	}
-
-	float speed = tank.optTank.speed;
-	float time = this->time / speed;
 	
 	if (tank.optTank.dir == UP)
-		tank.moveObj(0.f, -0.1f*time);
+		tank.moveObj(0.f, -step_speed);
 	else if (tank.optTank.dir == LEFT)
-		tank.moveObj(-0.1f*time, 0.f);
+		tank.moveObj(-step_speed, 0.f);
 	else if (tank.optTank.dir == DOWN)
-		tank.moveObj(0.f, 0.1f*time);
+		tank.moveObj(0.f, step_speed);
 	else if (tank.optTank.dir == RIGHT)
-		tank.moveObj(0.1f*time, 0.f);
+		tank.moveObj(step_speed, 0.f);
 
 	if (
-		(cr.cr_a == tank.optTank.coef_reload && tank.optTank.mod == modA) ||
-		(cr.cr_b == tank.optTank.coef_reload && tank.optTank.mod == modB) ||
-		(cr.cr_c == tank.optTank.coef_reload && tank.optTank.mod == modC) ||
-		(cr.cr_d == tank.optTank.coef_reload && tank.optTank.mod == modD) ||
-		(cr.cr_e == tank.optTank.coef_reload && tank.optTank.mod == modE) ||
-		(cr.cr_f == tank.optTank.coef_reload && tank.optTank.mod == modF) ||
-		(cr.cr_g == tank.optTank.coef_reload && tank.optTank.mod == modG) ||
-		(cr.cr_h == tank.optTank.coef_reload && tank.optTank.mod == modH))
+		(cr.cr_aPlayer == tank.optTank.coef_reload && tank.optTank.mod == playerModA) ||
+		(cr.cr_bPlayer == tank.optTank.coef_reload && tank.optTank.mod == playerModB) ||
+		(cr.cr_cPlayer == tank.optTank.coef_reload && tank.optTank.mod == playerModC) ||
+		(cr.cr_dPlayer == tank.optTank.coef_reload && tank.optTank.mod == playerModD) ||
+		(cr.cr_aEnemy == tank.optTank.coef_reload && tank.optTank.mod == enemyModA) ||
+		(cr.cr_bEnemy == tank.optTank.coef_reload && tank.optTank.mod == enemyModB) ||
+		(cr.cr_cEnemy == tank.optTank.coef_reload && tank.optTank.mod == enemyModC) ||
+		(cr.cr_dEnemy == tank.optTank.coef_reload && tank.optTank.mod == enemyModD))
 			tank.reloadTank();
 	
 	//frames position

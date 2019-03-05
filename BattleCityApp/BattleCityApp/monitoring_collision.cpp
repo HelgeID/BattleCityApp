@@ -2,6 +2,27 @@
 #include "general.hpp"
 #include "map.h"
 
+void EnumerationTanks(GameField& gField)
+{
+	if (gField.tank.size() == 0)
+		return;
+
+	if (f_f) {
+		for (auto it = gField.tank.begin(); it != gField.tank.end(); ++it) {
+			if (((it - gField.tank.begin()) % 2)) //unpaired values
+				it->isTank() ? (gField.*CheckOnCollision)(*it) : NULL;
+		}
+	}
+	else {
+		for (auto it = gField.tank.begin(); it != gField.tank.end(); ++it) {
+			if (!((it - gField.tank.begin()) % 2)) //paired values
+				it->isTank() ? (gField.*CheckOnCollision)(*it) : NULL;
+		}
+	}
+
+	return;
+}
+
 void GameField::TankCollision::MonitoringCollision(GameField& gField)
 {
 	CollisionFrame(gField);
@@ -37,31 +58,22 @@ void GameField::PlayerCollision::MonitoringCollision(GameField& gField)
 
 void GameField::TankCollision::CollisionFrame(GameField& gField)
 {
-	if (gField.tank.size() == 0)
-		return;
-
-	for (auto it = gField.tank.begin(); it != gField.tank.end(); ++it)
-		it->isTank() ? gField.CheckOnCollisionFrame(*it) : NULL;
+	CheckOnCollision = &GameField::CheckOnCollisionFrame;
+	EnumerationTanks(gField);
 	return;
 }
 
 void GameField::TankCollision::CollisionBlocksSpawn(GameField& gField)
 {
-	if (gField.tank.size() == 0)
-		return;
-
-	for (auto it = gField.tank.begin(); it != gField.tank.end(); ++it)
-		it->isTank() ? gField.CheckOnCollisionBlocksSpawn(*it) : NULL;
+	CheckOnCollision = &GameField::CheckOnCollisionBlocksSpawn;
+	EnumerationTanks(gField);
 	return;
 }
 
 void GameField::TankCollision::CollisionBlocks(GameField& gField)
 {
-	if (gField.tank.size() == 0)
-		return;
-
-	for (auto it = gField.tank.begin(); it != gField.tank.end(); ++it)
-		it->isTank() ? gField.CheckOnCollisionBlocks(*it) : NULL;
+	CheckOnCollision = &GameField::CheckOnCollisionBlocks;
+	EnumerationTanks(gField);
 	return;
 }
 
@@ -154,27 +166,27 @@ void GameField::BulletCollision::CollisionPlayers(GameField& gField)
 
 void GameField::PlayerCollision::CollisionFrame(GameField& gField)
 {
-	if (gField.firstPlayer->Presence())
+	if (gField.firstPlayer->Presence() && f_f)
 		gField.CheckOnCollisionFrame(*gField.firstPlayer);
-	if (gField.secondPlayer->Presence())
+	if (gField.secondPlayer->Presence() && !f_f)
 		gField.CheckOnCollisionFrame(*gField.secondPlayer);
 	return;
 }
 
 void GameField::PlayerCollision::CollisionBlocksSpawn(GameField& gField)
 {
-	if (gField.firstPlayer->Presence())
+	if (gField.firstPlayer->Presence() && f_f)
 		gField.CheckOnCollisionBlocksSpawn(*gField.firstPlayer, 1);
-	if (gField.secondPlayer->Presence())
+	if (gField.secondPlayer->Presence() && !f_f)
 		gField.CheckOnCollisionBlocksSpawn(*gField.secondPlayer, 2);
 	return;
 }
 
 void GameField::PlayerCollision::CollisionBlocks(GameField& gField)
 {
-	if (gField.firstPlayer->Presence())
+	if (gField.firstPlayer->Presence() && f_f)
 		gField.CheckOnCollisionBlocks(*gField.firstPlayer);
-	if (gField.secondPlayer->Presence())
+	if (gField.secondPlayer->Presence() && !f_f)
 		gField.CheckOnCollisionBlocks(*gField.secondPlayer);
 	return;
 }

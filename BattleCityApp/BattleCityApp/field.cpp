@@ -18,7 +18,7 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	CreateTanks();
 
 	//bonus
-	bonus = new BonusGrenade(texture);
+	bonus = new BonusStar(texture);
 
 	std::unique_ptr<std::thread> thread_control(new std::thread(&ControlSound, this));
 	thread_control->detach();
@@ -76,6 +76,7 @@ void GameField::UpdateField()
 
 	clock.restart();
 
+	f_f = !f_f; //for optimality
 	return;
 }
 
@@ -122,14 +123,14 @@ void GameField::UpdateTime()
 void GameField::UpdateCoefReload()
 {
 	cr += 1; //coef_reload
-	cr.cr_a > CoefReloadModA ? cr.cr_a = 0 : 0;
-	cr.cr_b > CoefReloadModB ? cr.cr_b = 0 : 0;
-	cr.cr_c > CoefReloadModC ? cr.cr_c = 0 : 0;
-	cr.cr_d > CoefReloadModD ? cr.cr_d = 0 : 0;
-	cr.cr_e > CoefReloadModE ? cr.cr_e = 0 : 0;
-	cr.cr_f > CoefReloadModF ? cr.cr_f = 0 : 0;
-	cr.cr_g > CoefReloadModG ? cr.cr_g = 0 : 0;
-	cr.cr_h > CoefReloadModH ? cr.cr_h = 0 : 0;
+	cr.cr_aPlayer > CoefReloadPlayerModA ? cr.cr_aPlayer = 0 : 0;
+	cr.cr_bPlayer > CoefReloadPlayerModB ? cr.cr_bPlayer = 0 : 0;
+	cr.cr_cPlayer > CoefReloadPlayerModC ? cr.cr_cPlayer = 0 : 0;
+	cr.cr_dPlayer > CoefReloadPlayerModD ? cr.cr_dPlayer = 0 : 0;
+	cr.cr_aEnemy > CoefReloadEnemyModA ? cr.cr_aEnemy = 0 : 0;
+	cr.cr_bEnemy > CoefReloadEnemyModB ? cr.cr_bEnemy = 0 : 0;
+	cr.cr_cEnemy > CoefReloadEnemyModC ? cr.cr_cEnemy = 0 : 0;
+	cr.cr_dEnemy > CoefReloadEnemyModD ? cr.cr_dEnemy = 0 : 0;
 
 	return;
 }
@@ -174,7 +175,7 @@ void GameField::UpdateDirectionTanks()
 		return;
 
 	for (auto it = tank.begin(); it != tank.end(); ++it)
-		it->isTank() && !it->sleepTank() ? UPD(*it) : NULL;
+		it->isTank() && !it->sleepTank() && it->optTank.step_speed ? UPD(*it) : NULL;
 
 	return;
 }

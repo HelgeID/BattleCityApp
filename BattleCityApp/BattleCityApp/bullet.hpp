@@ -5,7 +5,7 @@
 #include "object.hpp"
 #include "frame.hpp"
 
-#define BulletSpeed 750
+#define BulletSpeed 500
 
 class Bullet : public Object, public Frame
 {
