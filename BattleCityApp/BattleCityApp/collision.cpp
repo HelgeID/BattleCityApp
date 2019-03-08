@@ -509,7 +509,22 @@ void GameField::CheckOnCollisionTanks(Bullet& bullet)
 				continue;
 			if (bulletArr[indxBullet]->indexTank == 100 || bulletArr[indxBullet]->indexTank == 200) {
 				const int indexTank(it->takeIndex());
-				CheckTankBang(indexTank, false);
+				
+				// hitting a heavy tank (ModD)
+				if (it->optTank.mod == enemyModD && it->damage_heavy_tank) {
+					it->damage_heavy_tank--;
+					if (it->damage_heavy_tank == 1) {
+						std::unique_ptr<std::thread> DHT(new std::thread( //dht - damage heavy tank
+							[](Tank* tank) {
+								sf::sleep(sf::milliseconds(2000));
+								tank->damage_heavy_tank ? tank->damage_heavy_tank-- : tank->damage_heavy_tank;
+						}, it->GetThisObj()));
+						DHT->detach();
+					}
+				}
+				else
+					CheckTankBang(indexTank, false);
+
 			}
 			else
 				if (blocking_hit_for_enemy)
@@ -977,6 +992,8 @@ void GameField::CheckOnBonus()
 			GET_BONUS(*firstPlayer, bonus->TakeType());
 			delete bonus;
 			bonus = nullptr;
+			std::unique_ptr<std::thread> thread_snd(new std::thread(&BonusSnd, &sound));
+			thread_snd->detach();
 			return;
 		}
 	}
@@ -988,6 +1005,8 @@ void GameField::CheckOnBonus()
 			GET_BONUS(*secondPlayer, bonus->TakeType());
 			delete bonus;
 			bonus = nullptr;
+			std::unique_ptr<std::thread> thread_snd(new std::thread(&BonusSnd, &sound));
+			thread_snd->detach();
 			return;
 		}
 	}

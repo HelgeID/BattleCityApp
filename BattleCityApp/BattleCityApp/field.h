@@ -243,6 +243,7 @@ class GameField
 	std::unique_ptr<BlockSpawn> c_BS{ nullptr };
 	void CreatePointsSpawnEnemy();
 
+	void CreateBonus();
 	void DrawBonus();
 	Bonus *bonus{ nullptr };
 

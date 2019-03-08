@@ -110,6 +110,8 @@ public:
 	{
 	}
 	
+	Tank* GetThisObj() { return this; }
+
 	void onTank() { T = true; };
 	void offTank() { T = false; };
 	bool isTank() const { return T; };
@@ -158,6 +160,9 @@ public:
 
 		this->setSpriteObj(coord.x, coord.y);
 
+		if (mod == enemyModD)
+			bonus = false;
+
 		optTank = { col, mod, dir, 0.f, 0, bonus };
 		optTankShooting.bulletActivFlag = false;
 
@@ -176,19 +181,56 @@ public:
 		return;
 	}
 
-	bool switchRW{ false };
-	void loadTank_RED_WHITE()
+	void switchColorTank(const Color col_a, const Color col_b)
 	{
-		//todo restart WHITE
-		if (switchRW) {
-			loadTank(Color::WHITE, optTank.mod, optTank.dir, optTank.bonus);
-			switchRW = false;
+		if (optTank.col == col_a) {
+			loadTank(col_b, optTank.mod, optTank.dir, optTank.bonus);
+			return;
 		}
-		else {
-			loadTank(Color::RED, optTank.mod, optTank.dir, optTank.bonus);
-			switchRW = true;
+
+		if (optTank.col == col_b) {
+			loadTank(col_a, optTank.mod, optTank.dir, optTank.bonus);
+			return;
 		}
 	}
+
+	void switchColorHeavyTank__GREEN() {
+		loadTank(Color::GREEN, optTank.mod, optTank.dir, optTank.bonus);
+	}
+	void switchColorHeavyTank__YELLOW() {
+		loadTank(Color::YELLOW, optTank.mod, optTank.dir, optTank.bonus);
+	}
+	void switchColorHeavyTank__WHITE() {
+		loadTank(Color::WHITE, optTank.mod, optTank.dir, optTank.bonus);
+	}
+	void switchColorHeavyTank__GREEN_YELLOW() {
+		if (optTank.col == Color::GREEN) {
+			loadTank(Color::YELLOW, optTank.mod, optTank.dir, optTank.bonus);
+			return;
+		}
+		if (optTank.col == Color::YELLOW) {
+			loadTank(Color::GREEN, optTank.mod, optTank.dir, optTank.bonus);
+			return;
+		}
+	}
+	void switchColorHeavyTank__YELLOW_WHITE() {
+		if (optTank.col == Color::YELLOW) {
+			loadTank(Color::WHITE, optTank.mod, optTank.dir, optTank.bonus);
+			return;
+		}
+		if (optTank.col == Color::WHITE) {
+			loadTank(Color::YELLOW, optTank.mod, optTank.dir, optTank.bonus);
+			return;
+		}
+	}
+
+	unsigned int damage_heavy_tank{ 4 };
+	void init_heavy_tank_damage() { damage_heavy_tank = 4; return; }
+	bool is_heavy_tank_damage_4() const { return damage_heavy_tank == 4; }
+	bool is_heavy_tank_damage_3() const { return damage_heavy_tank == 3; }
+	bool is_heavy_tank_damage_2() const { return damage_heavy_tank == 2; }
+	bool is_heavy_tank_damage_1() const { return damage_heavy_tank == 1; }
+	bool is_heavy_tank_damage_0() const { return damage_heavy_tank == 0; }
 
 	void loadIndex(std::vector<Tank>& tank)
 	{

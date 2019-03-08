@@ -13,6 +13,11 @@ class Sound
 	sf::SoundBuffer movingBuff;
 	sf::SoundBuffer stoppingBuff;
 	sf::SoundBuffer shootBuff;
+	sf::SoundBuffer bonusBuff;
+	sf::SoundBuffer takebonusBuff;
+
+	sf::SoundBuffer explosion_fBuff;
+	sf::SoundBuffer explosion_tBuff;
 
 	void OpenSnd(const std::string FILENAME)
 	{
@@ -33,6 +38,24 @@ public:
 	~Sound();
 
 	Status getStatus() const { return mode; }
+
+	sf::SoundBuffer& getBufferSnd(const char* nameBuffSnd)
+	{
+		if (nameBuffSnd == "movingBuff")
+			return movingBuff;
+		if (nameBuffSnd == "stoppingBuff")
+			return stoppingBuff;
+		if (nameBuffSnd == "shootBuff")
+			return shootBuff;
+		if (nameBuffSnd == "bonusBuff")
+			return bonusBuff;
+		if (nameBuffSnd == "takebonusBuff")
+			return takebonusBuff;
+		if (nameBuffSnd == "explosion_fBuff")
+			return explosion_fBuff;
+		if (nameBuffSnd == "explosion_tBuff")
+			return explosion_tBuff;
+	}
 
 	void StartMusic()
 	{
@@ -80,13 +103,53 @@ public:
 		return;
 	}
 
-	void Shoot()
+	friend void ShootSnd(Sound* obj)
 	{
-		sound->setBuffer(shootBuff);
-		sound->setLoop(false);
-		sound->play();
-		while (sound->getStatus() != sf::SoundSource::Status::Stopped)
+		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
 			;
+		obj->sound->setBuffer(obj->getBufferSnd("shootBuff"));
+		obj->sound->setLoop(false);
+		obj->sound->play();
+		return;
+	}
+
+	friend void BonusSnd(Sound* obj)
+	{
+		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
+			;
+		obj->sound->setBuffer(obj->getBufferSnd("bonusBuff"));
+		obj->sound->setLoop(false);
+		obj->sound->play();
+		return;
+	}
+
+	friend void TakeBonusSnd(Sound* obj)
+	{
+		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
+			;
+		obj->sound->setBuffer(obj->getBufferSnd("takebonusBuff"));
+		obj->sound->setLoop(false);
+		obj->sound->play();
+		return;
+	}
+
+	friend void Explosion_fSnd(Sound* obj)
+	{
+		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
+			;
+		obj->sound->setBuffer(obj->getBufferSnd("explosion_fBuff"));
+		obj->sound->setLoop(false);
+		obj->sound->play();
+		return;
+	}
+
+	friend void Explosion_tSnd(Sound* obj)
+	{
+		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
+			;
+		obj->sound->setBuffer(obj->getBufferSnd("explosion_tBuff"));
+		obj->sound->setLoop(false);
+		obj->sound->play();
 		return;
 	}
 };
@@ -106,6 +169,15 @@ inline Sound::Sound()
 	FILENAME = "data/sounds/stopping.ogg"; OpenSnd(FILENAME, stoppingBuff);
 	//shoot
 	FILENAME = "data/sounds/shoot.ogg"; OpenSnd(FILENAME, shootBuff);
+	//bonus
+	FILENAME = "data/sounds/bonus.ogg"; OpenSnd(FILENAME, bonusBuff);
+	//takebonus
+	FILENAME = "data/sounds/takebonus.ogg"; OpenSnd(FILENAME, takebonusBuff);
+
+	//explosion_flag
+	FILENAME = "data/sounds/explosion_flag.ogg"; OpenSnd(FILENAME, explosion_fBuff);
+	//explosion_tank
+	FILENAME = "data/sounds/explosion_tank.ogg"; OpenSnd(FILENAME, explosion_tBuff);
 }
 
 inline Sound::~Sound()

@@ -1,6 +1,27 @@
 ﻿#include <thread>
+#include <random>
 #include "field.h"
 #include "general.hpp"
+
+void GameField::CreateBonus()
+{
+	if (bonus != nullptr)
+		delete bonus;
+
+	std::random_device dev;
+	std::mt19937 generator(dev());
+	std::uniform_int_distribution<std::mt19937::result_type> dist(1, 6);
+
+	switch (dist(generator))
+	{
+	case 1: bonus = new BonusTank(texture); break;
+	case 2: bonus = new BonusSkin(texture); break;
+	case 3: bonus = new BonusStar(texture); break;
+	case 4: bonus = new BonusShovel(texture); break;
+	case 5: bonus = new BonusClock(texture); break;
+	case 6: bonus = new BonusGrenade(texture); break;
+	}
+}
 
 void WaitingShovel(GameField* obj)
 {
@@ -29,7 +50,7 @@ void WaitingClock(GameField* obj)
 	};
 
 	mtx.lock(); sleep(true); mtx.unlock(); //on sleep
-	sf::sleep(sf::milliseconds(60000));
+	sf::sleep(sf::milliseconds(5000));
 	mtx.lock(); sleep(false); mtx.unlock(); //off sleep
 	return;
 }

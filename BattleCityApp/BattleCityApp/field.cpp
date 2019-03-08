@@ -17,9 +17,6 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	CreateActors();
 	CreateTanks();
 
-	//bonus
-	bonus = new BonusStar(texture);
-
 	std::unique_ptr<std::thread> thread_control(new std::thread(&ControlSound, this));
 	thread_control->detach();
 }
@@ -108,15 +105,36 @@ void GameField::UpdateTime()
 		tank.optBonus.timeBonus += deltaTime.asSeconds();
 		if (tank.optBonus.timeBonus > 0.40f)
 		{
-			tank.loadTank_RED_WHITE();
+			tank.switchColorTank(Color::RED, Color::WHITE);
 			tank.optBonus.timeBonus = 0.f;
 		}
 
 		return;
 	};
 
+	auto u_p_d_h_e_a_v_y_t_a_n_k = [&](Tank& tank)
+	{
+		static unsigned int t(0);
+
+		tank.is_heavy_tank_damage_0() ? t > 10 ? tank.switchColorHeavyTank__WHITE(), t = 0 : 0 :
+			tank.is_heavy_tank_damage_1() ? t > 10 ? tank.switchColorHeavyTank__YELLOW_WHITE(), t = 0 : 0 :
+			tank.is_heavy_tank_damage_2() ? t > 10 ? tank.switchColorHeavyTank__YELLOW(), t = 0 : 0 :
+			tank.is_heavy_tank_damage_3() ? t > 10 ? tank.switchColorHeavyTank__GREEN_YELLOW(), t = 0 : 0 :
+			tank.is_heavy_tank_damage_4() ? t > 10 ? tank.switchColorHeavyTank__GREEN(), t = 0 : 0 :
+			0;
+
+
+		t += 1;
+		return;
+	};
+
 	for (auto it = tank.begin(); it != tank.end(); ++it)
 		it->isTank() ? u_p_d_t_i_m_e_t_a_n_k(*it) : NULL;
+
+	for (auto it = tank.begin(); it != tank.end(); ++it)
+		if (it->isTank() && it->optTank.mod == Model::enemyModD)
+			u_p_d_h_e_a_v_y_t_a_n_k(*it);
+
 	return;
 }
 
