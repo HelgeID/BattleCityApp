@@ -2,6 +2,10 @@
 #define SOUND_H
 
 #include <SFML\Audio.hpp>
+#include <mutex>
+
+static std::mutex mtx_snd;
+
 class Sound
 {
 	enum Status { absent_mode, stopping_mode, moving_mode } mode{ absent_mode };
@@ -107,9 +111,12 @@ public:
 	{
 		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
 			;
-		obj->sound->setBuffer(obj->getBufferSnd("shootBuff"));
-		obj->sound->setLoop(false);
-		obj->sound->play();
+		{
+			std::lock_guard<std::mutex> lg(mtx_snd);
+			obj->sound->setBuffer(obj->getBufferSnd("shootBuff"));
+			obj->sound->setLoop(false);
+			obj->sound->play();
+		}
 		return;
 	}
 
@@ -117,9 +124,12 @@ public:
 	{
 		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
 			;
-		obj->sound->setBuffer(obj->getBufferSnd("bonusBuff"));
-		obj->sound->setLoop(false);
-		obj->sound->play();
+		{
+			std::lock_guard<std::mutex> lg(mtx_snd);
+			obj->sound->setBuffer(obj->getBufferSnd("bonusBuff"));
+			obj->sound->setLoop(false);
+			obj->sound->play();
+		}
 		return;
 	}
 
@@ -127,9 +137,12 @@ public:
 	{
 		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
 			;
-		obj->sound->setBuffer(obj->getBufferSnd("takebonusBuff"));
-		obj->sound->setLoop(false);
-		obj->sound->play();
+		{
+			std::lock_guard<std::mutex> lg(mtx_snd);
+			obj->sound->setBuffer(obj->getBufferSnd("takebonusBuff"));
+			obj->sound->setLoop(false);
+			obj->sound->play();
+		}
 		return;
 	}
 
@@ -137,9 +150,12 @@ public:
 	{
 		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
 			;
-		obj->sound->setBuffer(obj->getBufferSnd("explosion_fBuff"));
-		obj->sound->setLoop(false);
-		obj->sound->play();
+		{
+			std::lock_guard<std::mutex> lg(mtx_snd);
+			obj->sound->setBuffer(obj->getBufferSnd("explosion_fBuff"));
+			obj->sound->setLoop(false);
+			obj->sound->play();
+		}
 		return;
 	}
 
@@ -147,9 +163,12 @@ public:
 	{
 		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
 			;
-		obj->sound->setBuffer(obj->getBufferSnd("explosion_tBuff"));
-		obj->sound->setLoop(false);
-		obj->sound->play();
+		{
+			std::lock_guard<std::mutex> lg(mtx_snd);
+			obj->sound->setBuffer(obj->getBufferSnd("explosion_tBuff"));
+			obj->sound->setLoop(false);
+			obj->sound->play();
+		}
 		return;
 	}
 };

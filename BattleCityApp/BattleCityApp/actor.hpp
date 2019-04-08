@@ -7,6 +7,7 @@
 
 #define PlayerSpeed (0.4f)
 #define PlayerRechargeTime (2.f)
+#define PlayerRechargeTime_Star (0.5f)
 
 class Player : public Tank
 {

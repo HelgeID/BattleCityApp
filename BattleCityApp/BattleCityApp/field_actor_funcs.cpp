@@ -206,7 +206,8 @@ void GameField::MonitoringKeys()
 			MoveFirstPlayer(*this, DOWN);
 		}
 
-		if (Key_F == true && !firstPlayer->optTankShooting.bulletActivFlag && time_firstPlayer.asSeconds() >= PlayerRechargeTime) {
+		if (Key_F == true && !firstPlayer->optTankShooting.bulletActivFlag && 
+			time_firstPlayer.asSeconds() >= (firstPlayer->numStar() > 0 ? PlayerRechargeTime_Star : PlayerRechargeTime)) {
 			CreateBullet(*firstPlayer);
 			time_firstPlayer = clock_firstPlayer.restart();
 			//{
@@ -235,7 +236,8 @@ void GameField::MonitoringKeys()
 			MoveSecondPlayer(*this, DOWN);
 		}
 
-		if (Key_Ctrl == true && !secondPlayer->optTankShooting.bulletActivFlag && time_secondPlayer.asSeconds() >= PlayerRechargeTime) {
+		if (Key_Ctrl == true && !secondPlayer->optTankShooting.bulletActivFlag && 
+			time_secondPlayer.asSeconds() >= (secondPlayer->numStar() > 0 ? PlayerRechargeTime_Star : PlayerRechargeTime)) {
 			CreateBullet(*secondPlayer);
 			time_secondPlayer = clock_secondPlayer.restart();
 			//{

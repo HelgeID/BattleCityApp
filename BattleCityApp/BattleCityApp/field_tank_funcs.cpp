@@ -98,10 +98,10 @@ void GameField::MoveTank(const Direction dir, Tank& tank, float position)
 //todo fun
 void GameField::ControlTank_onFrame(Tank& tank)
 {
-	tank.takeObj().getPosition().y < field.getPosition().y ? tank.moveObj(0.f, 2.f) : NULL;
-	tank.takeObj().getPosition().y + 16 > field.getPosition().y + field.getSize().y ? tank.moveObj(0.f, -2.f) : NULL;
-	tank.takeObj().getPosition().x < field.getPosition().x ? tank.moveObj(2.f, 0.f) : NULL;
-	tank.takeObj().getPosition().x + 16 > field.getPosition().x + field.getSize().x ? tank.moveObj(-2.f, 0.f) : NULL;
+	tank.takeObj().getPosition().y < field.getPosition().y ? tank.moveObj(0.f, 1.f) : NULL;
+	tank.takeObj().getPosition().y + 16 > field.getPosition().y + field.getSize().y ? tank.moveObj(0.f, -1.f) : NULL;
+	tank.takeObj().getPosition().x < field.getPosition().x ? tank.moveObj(1.f, 0.f) : NULL;
+	tank.takeObj().getPosition().x + 16 > field.getPosition().x + field.getSize().x ? tank.moveObj(-1.f, 0.f) : NULL;
 	return;
 }
 

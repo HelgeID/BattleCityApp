@@ -10,7 +10,7 @@ void GameField::CreateBonus()
 
 	std::random_device dev;
 	std::mt19937 generator(dev());
-	std::uniform_int_distribution<std::mt19937::result_type> dist(1, 6);
+	std::uniform_int_distribution<std::mt19937::result_type> dist(1, 6);//1-6
 
 	switch (dist(generator))
 	{
@@ -80,7 +80,8 @@ void GameField::onBonusSkinFun(Player& player)
 void GameField::onBonusStarFun(Player& player)
 {
 	player.numStar() = player.numStar() + 1;
-	PerfectionPlayer(player);
+	player.numStar() > 3 ? player.numStar() = 3
+		: PerfectionPlayer(player);
 	return;
 }
 
