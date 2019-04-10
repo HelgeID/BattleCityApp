@@ -56,7 +56,7 @@ namespace spaceTank
 
 	struct MapPosition
 	{
-		int i, j;
+		int x, y;
 	};
 
 	static const char* myDirNames[]
@@ -175,7 +175,7 @@ public:
 		case enemyModA: optTank.step_speed = 0.3f; optTank.coef_reload = CoefReloadEnemyModA; break;
 		case enemyModB: optTank.step_speed = 0.5f; optTank.coef_reload = CoefReloadEnemyModB; break;
 		case enemyModC: optTank.step_speed = 0.35f; optTank.coef_reload = CoefReloadEnemyModC; break;
-		case enemyModD: optTank.step_speed = 0.15f; optTank.coef_reload = CoefReloadEnemyModD; break;
+		case enemyModD: optTank.step_speed = 0.2f; optTank.coef_reload = CoefReloadEnemyModD; break;
 		}
 
 		return;

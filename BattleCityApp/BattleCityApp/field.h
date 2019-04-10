@@ -102,6 +102,11 @@ class GameField
 	void ControlTank_onFrame(Tank&);
 	void CheckTankBang(const int, const bool);
 	void KillAllTanks();
+	void ControlHangPoint();
+	void ControlBonusTank();
+	void ControlHeavyTank();
+	void RotationTank(Tank&, const char*, const char*, const float);
+
 	friend void LAUNCHING_TANKS(GameField*);
 	friend void LOAD_TANK(GameField*, const bool);
 	friend bool CONTROL_CollisionTanksBS(GameField*);
@@ -156,6 +161,9 @@ class GameField
 	//actors
 	Player *firstPlayer;
 	Player *secondPlayer;
+	std::unique_ptr<BlockSpawn> lPlayer_BS{ nullptr };
+	std::unique_ptr<BlockSpawn> rPlayer_BS{ nullptr };
+
 	void CreateActors();
 	friend void RestartPlayer(GameField*, const std::string);
 	void RestartFirstPlayer(const bool flag = false);

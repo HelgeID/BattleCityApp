@@ -35,20 +35,21 @@ void GameField::CreateAnimBoom(const sf::Vector2f point, const char* name = "")
 void GameField::MonitoringAnim(const AnimBirth* ptr)
 {
 	//ptr - not used !!!
-	auto Monitoring = [&](AnimPlayer& playerAnim)
+	auto Monitoring = [&](AnimPlayer& playerAnim, BlockSpawn* bs)
 	{
 		if (playerAnim.playerBirth != nullptr) {
 			if (playerAnim.playerBirth->FinishTime()) {
 				playerAnim.playerBirth.reset();
 				playerAnim.playerBirth = nullptr;
+				bs->Spawn() = false;
 			}
 			else
 				playerAnim.playerBirth->Update();
 		}
 		return;
 	};
-	Monitoring(firstPlayerAnim);
-	Monitoring(secondPlayerAnim);
+	Monitoring(firstPlayerAnim, lPlayer_BS.get());
+	Monitoring(secondPlayerAnim, rPlayer_BS.get());
 
 	for (size_t i(0); i < 6; i++) {
 		if (tankAnimArr[i].tankBirth != nullptr) {

@@ -67,6 +67,10 @@ void GameField::UpdateField()
 	objChecking.CheckingShootingBullets(*this);
 	objChecking.CheckingSkin(*this);
 
+	ControlHangPoint();
+	ControlBonusTank();
+	ControlHeavyTank();
+
 	MonitoringAnim		(animBirth);
 	MonitoringAnim		(animSkin);
 	MonitoringAnim		(animBoom);
@@ -90,51 +94,6 @@ void GameField::UpdateTime()
 	//to do time here...
 
 	bonus != nullptr ? bonus->UpdateTimer() : NULL;
-	//
-
-	//Update Time for tanks
-	if (tank.size() == 0)
-		return;
-
-	auto u_p_d_t_i_m_e_t_a_n_k = [&](Tank& tank)
-	{
-		if (!tank.optTank.bonus)
-			return;
-
-		sf::Time deltaTime = tank.optBonus.clockTank.restart();
-		tank.optBonus.timeBonus += deltaTime.asSeconds();
-		if (tank.optBonus.timeBonus > 0.40f)
-		{
-			tank.switchColorTank(Color::RED, Color::WHITE);
-			tank.optBonus.timeBonus = 0.f;
-		}
-
-		return;
-	};
-
-	auto u_p_d_h_e_a_v_y_t_a_n_k = [&](Tank& tank)
-	{
-		static unsigned int t(0);
-
-		tank.is_heavy_tank_damage_0() ? t > 10 ? tank.switchColorHeavyTank__WHITE(), t = 0 : 0 :
-			tank.is_heavy_tank_damage_1() ? t > 10 ? tank.switchColorHeavyTank__YELLOW_WHITE(), t = 0 : 0 :
-			tank.is_heavy_tank_damage_2() ? t > 10 ? tank.switchColorHeavyTank__YELLOW(), t = 0 : 0 :
-			tank.is_heavy_tank_damage_3() ? t > 10 ? tank.switchColorHeavyTank__GREEN_YELLOW(), t = 0 : 0 :
-			tank.is_heavy_tank_damage_4() ? t > 10 ? tank.switchColorHeavyTank__GREEN(), t = 0 : 0 :
-			0;
-
-
-		t += 1;
-		return;
-	};
-
-	for (auto it = tank.begin(); it != tank.end(); ++it)
-		it->isTank() ? u_p_d_t_i_m_e_t_a_n_k(*it) : NULL;
-
-	for (auto it = tank.begin(); it != tank.end(); ++it)
-		if (it->isTank() && it->optTank.mod == Model::enemyModD)
-			u_p_d_h_e_a_v_y_t_a_n_k(*it);
-
 	return;
 }
 
@@ -161,24 +120,8 @@ void GameField::UpdateDirectionTanks()
 
 	sf::Time timeT;
 
-	auto r_DIR = [&](Tank& tank) //Reverse Direction
-	{
-		const int posX(round(tank.takeObj().getPosition().x)), posY(round(tank.takeObj().getPosition().y));
-		const bool bulletActivFlag(tank.optTankShooting.bulletActivFlag);
-		tank.SetBoomCoord(posX, posY);
-		tank.loadTank(
-			tank.optTank.col,
-			tank.optTank.mod,
-			tank.optTank.dir = tank.ReverseDirection(tank.optTank.dir),
-			tank.optTank.bonus
-		);
-		tank.optTankShooting.bulletActivFlag = bulletActivFlag;
-		tank.setPosObj((float)posX, (float)posY);
-		//std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
-		//std::cerr << " :" << posX << " :" << posY << std::endl;
-
-		tank.ResetBoomParam();
-	};
+	//Reverse Direction
+	auto r_DIR = [&](Tank& tank) { RotationTank(tank, "no_collision", "rotation_r", 0.f); return; };
 
 	auto UPD = [&](Tank& tank) {
 		timeT = tank.optRDir.tankClock_for_dir.getElapsedTime();
@@ -193,7 +136,16 @@ void GameField::UpdateDirectionTanks()
 		return;
 
 	for (auto it = tank.begin(); it != tank.end(); ++it)
-		it->isTank() && !it->sleepTank() && it->optTank.step_speed ? UPD(*it) : NULL;
+	{
+		it->isTank() //presence of the tank on the map
+		 && !it->sleepTank() //tank is not in sleep modes
+		 && it->optTank.step_speed //step speed is not zero
+		 && it->optTank.mod != Model::enemyModD //not a heavy tank
+				? UPD(*it) : NULL;
+
+		if (it->optTank.mod == Model::enemyModD)
+			it->optRDir.tankClock_for_dir.restart();
+	}
 
 	return;
 }

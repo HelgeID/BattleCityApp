@@ -9,24 +9,7 @@
 // Checking the tank on a collision with the frame
 void GameField::CheckOnCollisionFrame(Tank& tank)
 {
-	auto collisionframe = [&]
-	{
-		const int posX(round(tank.takeObj().getPosition().x)), posY(round(tank.takeObj().getPosition().y));
-		const bool bulletActivFlag(tank.optTankShooting.bulletActivFlag);
-		tank.SetBoomCoord(posX, posY);
-		tank.loadTank(
-			tank.optTank.col,
-			tank.optTank.mod,
-			tank.optTank.dir = tank.ClockWiseDirection(tank.optTank.dir),
-			tank.optTank.bonus
-		);
-		tank.optTankShooting.bulletActivFlag = bulletActivFlag;
-		tank.setPosObj((float)posX, (float)posY);
-		//std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
-		//std::cerr << " :" << posX << " :" << posY << std::endl;
-
-		tank.ResetBoomParam();
-	};
+	auto collisionFrameRotation = [&](Tank& tank) { RotationTank(tank, "collision_f", "rotation_cw", 0.f); return; };
 
 	tank.takeObj().getPosition().y < field.getPosition().y
 		||
@@ -35,7 +18,7 @@ void GameField::CheckOnCollisionFrame(Tank& tank)
 		tank.takeObj().getPosition().x < field.getPosition().x
 		||
 		tank.takeObj().getPosition().x + 16 > field.getPosition().x + field.getSize().x
-		? (collisionframe()) : NULL;
+		? (collisionFrameRotation(tank)) : NULL;
 
 	//todo
 	ControlTank_onFrame(tank);
@@ -154,26 +137,26 @@ void GameField::DisbandArrayCells(T **arrCell)
 
 void GameField::CheckOnCollisionBlocksSpawn(Tank& tank)
 {
-	auto ReverseTank = [&]
-	{
-		const bool bulletActivFlag(tank.optTankShooting.bulletActivFlag);
-		tank.loadTank(tank.optTank.col, tank.optTank.mod, tank.ReverseDirection(tank.optTank.dir), tank.optTank.bonus);
-		tank.optTankShooting.bulletActivFlag = bulletActivFlag;
-		MoveTank(tank, 2);
-		tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
-	};
+	auto collisionBlocksSpawnRotation = [&](Tank& tank) { RotationTank(tank, "collision_bs", "rotation_r", 2.f); return; };
 
+	//block spawn of enemies
 	if (l_BS->Spawn() == true)
 		if (tank.takeObj().getGlobalBounds().intersects(l_BS->takeObj().getGlobalBounds()))
-			ReverseTank();
-
+			collisionBlocksSpawnRotation(tank);
 	if (r_BS->Spawn() == true)
 		if (tank.takeObj().getGlobalBounds().intersects(r_BS->takeObj().getGlobalBounds()))
-			ReverseTank();
-
+			collisionBlocksSpawnRotation(tank);
 	if (c_BS->Spawn() == true)
 		if (tank.takeObj().getGlobalBounds().intersects(c_BS->takeObj().getGlobalBounds()))
-			ReverseTank();
+			collisionBlocksSpawnRotation(tank);
+
+	//block spawn of players
+	if (lPlayer_BS->Spawn() == true)
+		if (tank.takeObj().getGlobalBounds().intersects(lPlayer_BS->takeObj().getGlobalBounds()))
+			collisionBlocksSpawnRotation(tank);
+	if (rPlayer_BS->Spawn() == true)
+		if (tank.takeObj().getGlobalBounds().intersects(rPlayer_BS->takeObj().getGlobalBounds()))
+			collisionBlocksSpawnRotation(tank);
 
 	return;
 }
@@ -192,7 +175,9 @@ void GameField::CheckOnCollisionBlocks(Tank& tank)
 	matrixPos.x = ((posX / SizeCell) + 1) * SizeCell;
 	matrixPos.y = ((posY / SizeCell) + 1) * SizeCell;
 
-	auto CollisionBlocks = [&]() {
+	auto collisionBlocksRotation = [&](Tank& tank) { RotationTank(tank, "collision_b", "rotation_cw", -1.f); return; };
+
+	auto launch = [&]() {
 		int i; int j;
 		int indxBlock(0);
 		POS *ptr = &*arrCell;
@@ -229,24 +214,7 @@ void GameField::CheckOnCollisionBlocks(Tank& tank)
 							}
 							//processing enemie
 							else
-							{
-								Direction dirlast;
-								const bool bulletActivFlag(tank.optTankShooting.bulletActivFlag);
-								tank.SetBoomCoord(posX, posY);
-								tank.loadTank(
-									tank.optTank.col,
-									tank.optTank.mod,
-									tank.optTank.dir = tank.ClockWiseDirection(dirlast = tank.optTank.dir),
-									tank.optTank.bonus
-								);
-								tank.optTankShooting.bulletActivFlag = bulletActivFlag;
-								tank.setPosObj((float)posX, (float)posY);
-								MoveTank(dirlast, tank, -1.f);
-								tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
-
-								//std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
-								//std::cerr << " :" << posX << " :" << posY << std::endl;
-							}
+								collisionBlocksRotation(tank);
 						}
 						if (!tank.CompareBoomCoord(posX, posY) && !fPL)
 							tank.ResetBoomParam();
@@ -277,7 +245,7 @@ void GameField::CheckOnCollisionBlocks(Tank& tank)
 		ptr++;
 	}
 
-	CollisionBlocks();
+	launch();
 	DisbandArrayCells<POS>(&arrCell);
 	return;
 }
@@ -285,6 +253,8 @@ void GameField::CheckOnCollisionBlocks(Tank& tank)
 // Checking the tank on a collision with the other tank
 void GameField::CheckOnCollisionTanks(Tank& tank1, Tank& tank2)
 {
+	auto collisionTanksRotation = [&](Tank& tank) {  RotationTank(tank, "collision_t", "rotation_r", 2.f); return; };
+
 	if (tank1.takeObj().getGlobalBounds().intersects(tank2.takeObj().getGlobalBounds()))
 	{
 		bool r1_flag(false), r2_flag(false);
@@ -312,21 +282,11 @@ void GameField::CheckOnCollisionTanks(Tank& tank1, Tank& tank2)
 			}
 		}
 
-		if (r1_flag == true && !tank1.sleepTank()) {
-			const bool bulletActivFlag(tank1.optTankShooting.bulletActivFlag);
-			tank1.loadTank(tank1.optTank.col, tank1.optTank.mod, tank1.ReverseDirection(dirTank), tank1.optTank.bonus);
-			tank1.optTankShooting.bulletActivFlag = bulletActivFlag;
-			MoveTank(tank1, 2);
-			tank1.setPosFrame(tank1.takeObj().getPosition().x, tank1.takeObj().getPosition().y);
-		}
+		if (r1_flag == true && !tank1.sleepTank())
+			collisionTanksRotation(tank1);
 
-		if (r2_flag == true && !tank2.sleepTank()) {
-			const bool bulletActivFlag(tank2.optTankShooting.bulletActivFlag);
-			tank2.loadTank(tank2.optTank.col, tank2.optTank.mod, tank1.ReverseDirection(dirTankOther), tank2.optTank.bonus);
-			tank2.optTankShooting.bulletActivFlag = bulletActivFlag;
-			MoveTank(tank2, 2);
-			tank2.setPosFrame(tank2.takeObj().getPosition().x, tank2.takeObj().getPosition().y);
-		}
+		if (r2_flag == true && !tank2.sleepTank())
+			collisionTanksRotation(tank2);
 	}
 	return;
 }
@@ -739,27 +699,24 @@ void GameField::CheckOnCollisionFrame(Player& player)
 // Checking the player on a collision with the block spawn
 void GameField::CheckOnCollisionBlocksSpawn(Player& player, const int num)
 {
-	bool flag(false);
-	if (l_BS->Spawn() == true) {
-		if (player.takeObj().getGlobalBounds().intersects(l_BS->takeObj().getGlobalBounds())) {
-			CheckPlayerBang(player);
-			flag = !flag;
-		}
-	}
-	if (r_BS->Spawn() == true) {
-		if (player.takeObj().getGlobalBounds().intersects(r_BS->takeObj().getGlobalBounds())) {
-			CheckPlayerBang(player);
-			flag = !flag;
-		}
-	}
-	if (c_BS->Spawn() == true) {
-		if (player.takeObj().getGlobalBounds().intersects(c_BS->takeObj().getGlobalBounds())) {
-			CheckPlayerBang(player);
-			flag = !flag;
-		}
+	const bool u1((rPlayer_BS->Spawn() == true && num == 1) && (player.takeObj().getGlobalBounds().intersects(rPlayer_BS->takeObj().getGlobalBounds())));
+	const bool u2((lPlayer_BS->Spawn() == true && num == 2) && (player.takeObj().getGlobalBounds().intersects(lPlayer_BS->takeObj().getGlobalBounds())));
+	if (u1 || u2) {
+		MoveTank(player, -1.f);
+		return;
 	}
 
-	if (flag) {
+	bool flag(false);
+	const bool a1((r_BS->Spawn() == true) && (player.takeObj().getGlobalBounds().intersects(r_BS->takeObj().getGlobalBounds())));
+	const bool a2((l_BS->Spawn() == true) && (player.takeObj().getGlobalBounds().intersects(l_BS->takeObj().getGlobalBounds())));
+	const bool a3((c_BS->Spawn() == true) && (player.takeObj().getGlobalBounds().intersects(c_BS->takeObj().getGlobalBounds())));
+	if (a1 || a2 || a3) {
+		CheckPlayerBang(player);
+		flag = !flag;
+	}
+
+	if (flag)
+	{
 		if (num == 1 && firstPlayerAnim.playerSkin != nullptr) {
 			firstPlayerAnim.playerSkin.reset();
 			firstPlayerAnim.playerSkin = nullptr;
@@ -786,22 +743,7 @@ void GameField::CheckOnCollisionBlocks(Player& player)
 // Checking the player on a collision with the tank
 void GameField::CheckOnCollisionTanks(Player& player)
 {
-	auto rotation = [&](Tank& tank)
-	{
-		const int posX(round(tank.takeObj().getPosition().x)), posY(round(tank.takeObj().getPosition().y));
-		tank.SetBoomCoord(posX, posY);
-		tank.loadTank(
-			tank.optTank.col,
-			tank.optTank.mod,
-			tank.optTank.dir = tank.ClockWiseDirection(tank.optTank.dir),
-			tank.optTank.bonus
-		);
-
-		tank.setPosObj((float)posX, (float)posY);
-		//std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
-		//std::cerr << " :" << posX << " :" << posY << std::endl;
-		tank.ResetBoomParam();
-	};
+	auto collisionTanksRotation = [&](Tank& tank) { RotationTank(tank, "collision_p", "rotation_cw", 0.f); return; };
 
 	for (auto it = tank.begin(); it != tank.end(); ++it) {
 		if (!it->isTank())
@@ -812,7 +754,7 @@ void GameField::CheckOnCollisionTanks(Player& player)
 				(player.optTank.dir == LEFT && it->optTank.dir == RIGHT) ||
 				(player.optTank.dir == DOWN && it->optTank.dir == UP) ||
 				(player.optTank.dir == RIGHT && it->optTank.dir == LEFT))
-				//rotation(*it);
+				//collisionTanksRotation(*it);
 				CheckPlayerBang(player, true);
 		}
 	}		
@@ -860,39 +802,21 @@ void GameField::CheckOnMoore()
 
 	auto PlAYER_BOOM = [&](Block& block, Tank& tank)
 	{
-		//processing player
 		while (crossing(block, tank))
 		{
 			MoveTank(tank, -0.05f);
 			tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
 		}
+		return;
 	};
 
-	auto BOOM = [&](Block& block, Tank& tank, const sf::Vector2i pos)
-	{
-		//processing enemie
-		Direction dirlast;
-		const bool bulletActivFlag(tank.optTankShooting.bulletActivFlag);
-		tank.SetBoomCoord(pos.x, pos.y);
-		tank.loadTank(
-			tank.optTank.col,
-			tank.optTank.mod,
-			tank.optTank.dir = tank.ClockWiseDirection(dirlast = tank.optTank.dir),
-			tank.optTank.bonus
-		);
-		tank.optTankShooting.bulletActivFlag = bulletActivFlag;
-		tank.setPosObj((float)pos.x, (float)pos.y);
-		MoveTank(dirlast, tank, -1.f);
-		tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
-
-		//std::cerr << "tankDir: " << spaceTank::myDirNames[tank.optTank.dir] << std::endl;
-		//std::cerr << " :" << pos.x << " :" << pos.y << std::endl;
-	};
+	auto collisionBlocksMooreRotation = [&](Tank& tank) { RotationTank(tank, "collision_m", "rotation_cw", -1.f); return; };
 
 	auto Compare = [&](Tank& tank, const sf::Vector2i pos)
 	{
 		if (!tank.CompareBoomCoord(pos.x, pos.y))
 			tank.ResetBoomParam();
+		return;
 	};
 
 	for (size_t iMoore(0); iMoore < moore.size(); ++iMoore)
@@ -906,7 +830,7 @@ void GameField::CheckOnMoore()
 						round(tank[iTank].takeObj().getPosition().y)
 					);
 					if (crossing(moore[iMoore], tank[iTank]))
-						BOOM(moore[iMoore], tank[iTank], posTank);
+						collisionBlocksMooreRotation(tank[iTank]);
 					Compare(tank[iTank], posTank);
 				}
 			}

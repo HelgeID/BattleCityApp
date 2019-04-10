@@ -22,7 +22,33 @@ void AnimBirthPlayer(AnimArgPtr argPtr)
 
 void RestartPlayer(GameField* gField, const std::string player_name)
 {
+	//player_name - player, who must restart
 	sf::sleep(sf::milliseconds(2000));
+	while (true)
+	{
+		sf::sleep(sf::milliseconds(1000));
+		if (gField->tank.size() == 0)
+			break;
+
+		bool collisionF(false);
+		bool u1(false), u2(false);
+		std::for_each(gField->tank.begin(), gField->tank.end(), [&](Tank &tank)
+		{
+			//is the tank on the spawnpoint of the player
+			u1 = ((tank.isTank() && player_name == "first player") && (tank.takeObj().getGlobalBounds().intersects(gField->lPlayer_BS->takeObj().getGlobalBounds())));
+			u2 = ((tank.isTank() && player_name == "second player") && (tank.takeObj().getGlobalBounds().intersects(gField->rPlayer_BS->takeObj().getGlobalBounds())));
+			if (u1 || u2)
+				collisionF = true; //YES
+		});
+
+		//is the player on the spawnpoint of the other player
+		(gField->firstPlayer->takeObj().getGlobalBounds().intersects(gField->rPlayer_BS->takeObj().getGlobalBounds()) && player_name == "second player") ||
+			(gField->secondPlayer->takeObj().getGlobalBounds().intersects(gField->lPlayer_BS->takeObj().getGlobalBounds()) && player_name == "first player") ?
+				collisionF = true : 0;
+
+		if (!collisionF) //NO ->> exit of checks
+			break;
+	}
 
 	mtx.lock();
 	player_name == "first player" ? gField->RestartFirstPlayer() 
@@ -45,7 +71,7 @@ void GameField::CreateActors()
 
 void GameField::RestartFirstPlayer(const bool flag)
 {
-	sf::Vector2f posFirstPlayer(64.f, 208.f);
+	sf::Vector2f posFirstPlayer(lPlayer_BS->getPosObj().x, lPlayer_BS->getPosObj().y);
 	firstPlayer->numStar() = 0;
 	firstPlayer->loadTank(YELLOW, playerModA, UP, false);
 	firstPlayer->setPosObj(posFirstPlayer.x, posFirstPlayer.y);
@@ -63,12 +89,13 @@ void GameField::RestartFirstPlayer(const bool flag)
 
 	std::unique_ptr<std::thread> threadPlayer(new std::thread(&AnimBirthPlayer, argPtr));
 	threadPlayer->detach();
+	lPlayer_BS->Spawn() = true;
 	return;
 }
 
 void GameField::RestartSecondPlayer(const bool flag)
 {
-	sf::Vector2f posSecondPlayer(192.f, 208.f);
+	sf::Vector2f posSecondPlayer(rPlayer_BS->getPosObj().x, rPlayer_BS->getPosObj().y);
 	secondPlayer->numStar() = 0;
 	secondPlayer->loadTank(GREEN, playerModA, UP, false);
 	secondPlayer->setPosObj(posSecondPlayer.x, posSecondPlayer.y);
@@ -86,6 +113,7 @@ void GameField::RestartSecondPlayer(const bool flag)
 
 	std::unique_ptr<std::thread> threadPlayer(new std::thread(&AnimBirthPlayer, argPtr));
 	threadPlayer->detach();
+	rPlayer_BS->Spawn() = true;
 	return;
 }
 
