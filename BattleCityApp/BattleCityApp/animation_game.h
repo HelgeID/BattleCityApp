@@ -17,7 +17,7 @@ class AnimBirth : Animation, public Time
 	enum AnimFlag { zero, one, two } animFlag;
 
 public:
-	AnimBirth(sf::Texture& texture, const sf::Vector2f position, const float maxTime = 4.f)
+	AnimBirth(sf::Texture& texture, const sf::Vector2f position, const float maxTime = 2.f)
 	{
 		this->SetTexture(texture);
 		this->maxTime = maxTime;
@@ -51,13 +51,13 @@ public:
 		if (!obj.IsPlaying())
 			obj.PlayAnimation();
 
-		if (animFlag == zero && elapsedTime.asSeconds() >= 1.3f) {
+		if (animFlag == zero && elapsedTime.asSeconds() >= 0.7f) {
 			animation->DelHeadFrame();
 			animation->AddFrame(sf::IntRect(288, 96, 16, 16));
 			animFlag = one;
 		}
 
-		else if (animFlag == one && elapsedTime.asSeconds() >= 2.6f) {
+		else if (animFlag == one && elapsedTime.asSeconds() >= 1.4f) {
 			animation->DelHeadFrame();
 			animation->AddFrame(sf::IntRect(304, 96, 16, 16));
 			animFlag = two;

@@ -8,7 +8,7 @@ void AnimBirthPlayer(AnimArgPtr argPtr)
 	if (argPtr.animBirth == nullptr)
 		return;
 
-	sf::sleep(sf::milliseconds(3000)); //3s -> because AnimBirth 4s
+	sf::sleep(sf::milliseconds(1700)); //1.7s -> because AnimBirth 2s
 	while (!argPtr.animBirth->FinishTime())
 		;
 
@@ -23,7 +23,7 @@ void AnimBirthPlayer(AnimArgPtr argPtr)
 void RestartPlayer(GameField* gField, const std::string player_name)
 {
 	//player_name - player, who must restart
-	sf::sleep(sf::milliseconds(2000));
+	sf::sleep(sf::milliseconds(1000));
 	while (true)
 	{
 		sf::sleep(sf::milliseconds(1000));
