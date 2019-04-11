@@ -891,6 +891,22 @@ void GameField::CheckOnMoore()
 /////////////////////////////////////////////////////////////////////////////
 void GameField::CheckOnBonus()
 {
+	auto BonusSND = [&](const char* type)
+	{
+		if (type == "BonusGrenade") {
+			std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
+			thread_snd->detach();
+		}
+		else if (type == "BonusTank") {
+			std::unique_ptr<std::thread> thread_snd(new std::thread(&BonusSnd, &sound));
+			thread_snd->detach();
+		}
+		else {
+			std::unique_ptr<std::thread> thread_snd(new std::thread(&BonusSnd, &sound));
+			thread_snd->detach();
+		}
+	};
+
 	auto GET_BONUS = [&](Player& player, const char* type)
 	{
 		if (type == "BonusTank")
@@ -909,30 +925,21 @@ void GameField::CheckOnBonus()
 			onBonusPistolFun(player);
 	};
 
-	if (firstPlayer->Presence() && bonus) {
-		bool crossing = (*firstPlayer).frame.getGlobalBounds().intersects(bonus->takeObj().getGlobalBounds());
-		if (crossing)
-		{
-			GET_BONUS(*firstPlayer, bonus->TakeType());
+	if (bonus) {
+		bool crossingL = (firstPlayer->Presence() && (*firstPlayer).frame.getGlobalBounds().intersects(bonus->takeObj().getGlobalBounds()));
+		bool crossingR = (secondPlayer->Presence() && (*secondPlayer).frame.getGlobalBounds().intersects(bonus->takeObj().getGlobalBounds()));
+
+		if (crossingL || crossingR) {
+			const char* type(bonus->TakeType());
+			crossingL ? GET_BONUS(*firstPlayer, type) : NULL;
+			crossingR ? GET_BONUS(*secondPlayer, type) : NULL;
+
 			delete bonus;
 			bonus = nullptr;
-			std::unique_ptr<std::thread> thread_snd(new std::thread(&BonusSnd, &sound));
-			thread_snd->detach();
+			BonusSND(type);
 			return;
 		}
 	}
 
-	if (secondPlayer->Presence() && bonus) {
-		bool crossing = (*secondPlayer).frame.getGlobalBounds().intersects(bonus->takeObj().getGlobalBounds());
-		if (crossing)
-		{
-			GET_BONUS(*secondPlayer, bonus->TakeType());
-			delete bonus;
-			bonus = nullptr;
-			std::unique_ptr<std::thread> thread_snd(new std::thread(&BonusSnd, &sound));
-			thread_snd->detach();
-			return;
-		}
-	}
 	return;
 }

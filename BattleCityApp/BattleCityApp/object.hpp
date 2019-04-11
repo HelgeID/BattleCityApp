@@ -6,6 +6,12 @@
 
 enum Direction { UP, LEFT, DOWN, RIGHT };
 
+struct TileCoords
+{
+	sf::Vector2f mapCoords;
+	sf::Vector2i texCoords;
+};
+
 class Object
 {
 	sf::Texture &texture;

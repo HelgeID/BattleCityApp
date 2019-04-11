@@ -96,7 +96,7 @@ public:
 	bool IsPlaying() const;
 	sf::Time GetFrameTime() const;
 	void SetFrame(std::size_t, bool);
-
+	std::size_t GetCurrentFrame() const;
 	void Update(sf::Time);
 };
 
@@ -223,6 +223,11 @@ inline void AnimatedObject::SetFrame(std::size_t newFrame, bool resetTime)
 		currentTime = sf::Time::Zero;
 
 	return;
+}
+
+inline std::size_t AnimatedObject::GetCurrentFrame() const
+{
+	return currentFrame;
 }
 
 inline void AnimatedObject::Update(sf::Time deltaTime)

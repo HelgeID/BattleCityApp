@@ -138,8 +138,9 @@
     <ClCompile Include="part_bricks_map.cpp" />
     <ClCompile Include="field.cpp" />
     <ClCompile Include="point_spawn.cpp" />
+    <ClCompile Include="read_data_obj.cpp" />
     <ClCompile Include="source.cpp" />
-    <ClCompile Include="tile_map.cpp" />
+    <ClCompile Include="tile_map_dynamic.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="actor.hpp" />
@@ -161,7 +162,7 @@
     <ClInclude Include="field.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="tank.hpp" />
-    <ClInclude Include="tile_map.h" />
+    <ClInclude Include="tile_map_dynamic.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -69,3 +69,21 @@ Bullet* _createBulletRIGHT(const sf::Vector2f point, sf::Texture &texture)
 	float pY = point.y;
 	return (new Bullet(texture, sf::Vector2f(pX, pY-1), RIGHT));
 }
+
+void GameField::updBullets()
+{
+	float speed = BulletSpeed;
+	float time = this->time / speed;
+
+	const size_t bulletArrSize = this->bulletArr.size();
+	for (size_t indexBullet(0); indexBullet < bulletArrSize; ++indexBullet) {
+		if (this->bulletArr[indexBullet] != nullptr) {
+			this->bulletArr[indexBullet]->move(time);
+			this->bulletArr[indexBullet]->setPosFrame(
+				this->bulletArr[indexBullet]->takeObj().getPosition().x,
+				this->bulletArr[indexBullet]->takeObj().getPosition().y
+			);
+		}
+	}
+	return;
+}

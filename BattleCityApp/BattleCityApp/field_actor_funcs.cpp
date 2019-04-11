@@ -87,8 +87,8 @@ void GameField::RestartFirstPlayer(const bool flag)
 	firstPlayerAnim.playerBirth = std::move(anim);
 	AnimArgPtr argPtr{ firstPlayer, firstPlayerAnim.playerBirth.get() };
 
-	std::unique_ptr<std::thread> threadPlayer(new std::thread(&AnimBirthPlayer, argPtr));
-	threadPlayer->detach();
+	std::unique_ptr<std::thread> threadPlayerL(new std::thread(&AnimBirthPlayer, argPtr));
+	threadPlayerL->detach();
 	lPlayer_BS->Spawn() = true;
 	return;
 }
@@ -111,8 +111,8 @@ void GameField::RestartSecondPlayer(const bool flag)
 	secondPlayerAnim.playerBirth = std::move(anim);
 	AnimArgPtr argPtr{ secondPlayer, secondPlayerAnim.playerBirth.get() };
 
-	std::unique_ptr<std::thread> threadPlayer(new std::thread(&AnimBirthPlayer, argPtr));
-	threadPlayer->detach();
+	std::unique_ptr<std::thread> threadPlayerR(new std::thread(&AnimBirthPlayer, argPtr));
+	threadPlayerR->detach();
 	rPlayer_BS->Spawn() = true;
 	return;
 }
@@ -293,7 +293,7 @@ void GameField::CheckPlayerBang(Player& player, const bool off)
 		const sf::Vector2f point = player.getPosObj();
 		CreateAnimBoom(point, "tankObj");
 		player.declife();
-		std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
+		std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_tSnd, &sound));
 		thread_snd->detach();
 
 		if (player.name == "first player" && firstPlayerAnim.playerSkin != nullptr)
@@ -336,5 +336,42 @@ void GameField::PerfectionPlayer(Player& player)
 
 exit:
 	;
+	return;
+}
+
+void GameField::updPlayers()
+{
+	bool *keyArray(nullptr);
+
+	auto fun = [=](Player& player, bool keyArray[])
+	{
+		if (
+			(cr.cr_aPlayer == player.optTank.coef_reload && player.optTank.mod == playerModA && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_bPlayer == player.optTank.coef_reload && player.optTank.mod == playerModB && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_cPlayer == player.optTank.coef_reload && player.optTank.mod == playerModC && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_dPlayer == player.optTank.coef_reload && player.optTank.mod == playerModD && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_aEnemy == player.optTank.coef_reload && player.optTank.mod == enemyModA && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_bEnemy == player.optTank.coef_reload && player.optTank.mod == enemyModB && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_cEnemy == player.optTank.coef_reload && player.optTank.mod == enemyModC && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
+			(cr.cr_dEnemy == player.optTank.coef_reload && player.optTank.mod == enemyModD && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])))
+			player.reloadTank();
+
+		//frames position
+		player.setPosFrame(player.takeObj().getPosition().x, player.takeObj().getPosition().y);
+
+		delete[] keyArray;
+		keyArray = nullptr;
+	};
+
+	if (firstPlayer->Presence()) {
+		keyArray = new bool[4]{ Key_A, Key_D, Key_W, Key_S };
+		fun(*firstPlayer, keyArray);
+	}
+
+	if (secondPlayer->Presence()) {
+		keyArray = new bool[4]{ Key_Left, Key_Right, Key_Up, Key_Down };
+		fun(*secondPlayer, keyArray);
+	}
+
 	return;
 }

@@ -168,10 +168,10 @@ void GameField::LoadMap()
 	}
 
 	//loading tiles from texture
-	tmap.load(texture, level);
+	tMap.load(texture, level);
 
 	//setting the position identical to the field
-	tmap.setPosition(sf::Vector2f(field.getPosition()));
+	tMap.setPosition(sf::Vector2f(field.getPosition()));
 
 	return;
 }

@@ -124,9 +124,11 @@ void GameField::CheckTankBang(const int indexTank, const bool killall)
 					tank[index].optTank.bonus
 				);
 				tank[index].mapPos = { 0, 0 };
-				CreateBonus();
-				std::unique_ptr<std::thread> thread_snd(new std::thread(&TakeBonusSnd, &sound));
-				thread_snd->detach();
+				if (!killall) {
+					CreateBonus();
+					std::unique_ptr<std::thread> thread_snd(new std::thread(&TakeBonusSnd, &sound));
+					thread_snd->detach();
+				}
 				break;
 			}
 
@@ -134,8 +136,10 @@ void GameField::CheckTankBang(const int indexTank, const bool killall)
 			CreateAnimBoom(point, "tankObj");
 			tank[index].offTank();
 
-			std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
-			thread_snd->detach();
+			if (!killall) {
+				std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
+				thread_snd->detach();
+			}
 
 			//init pos to NULL
 			tank[index].setPosObj(0.f, 0.f);
@@ -343,3 +347,49 @@ void GameField::RotationTank(Tank& tank, const char* choice_name_collision, cons
 
 	return;
 };
+
+void GameField::updTanks()
+{
+	auto fun = [=](Tank &tank)
+	{
+		const float step_speed = tank.optTank.step_speed;
+
+		if (tank.sleepTank() || step_speed == 0.f)
+			return;
+
+		if (tank.optTank.dir == UP)
+			tank.moveObj(0.f, -step_speed);
+		else if (tank.optTank.dir == LEFT)
+			tank.moveObj(-step_speed, 0.f);
+		else if (tank.optTank.dir == DOWN)
+			tank.moveObj(0.f, step_speed);
+		else if (tank.optTank.dir == RIGHT)
+			tank.moveObj(step_speed, 0.f);
+
+		if (
+			(cr.cr_aPlayer == tank.optTank.coef_reload && tank.optTank.mod == playerModA) ||
+			(cr.cr_bPlayer == tank.optTank.coef_reload && tank.optTank.mod == playerModB) ||
+			(cr.cr_cPlayer == tank.optTank.coef_reload && tank.optTank.mod == playerModC) ||
+			(cr.cr_dPlayer == tank.optTank.coef_reload && tank.optTank.mod == playerModD) ||
+			(cr.cr_aEnemy == tank.optTank.coef_reload && tank.optTank.mod == enemyModA) ||
+			(cr.cr_bEnemy == tank.optTank.coef_reload && tank.optTank.mod == enemyModB) ||
+			(cr.cr_cEnemy == tank.optTank.coef_reload && tank.optTank.mod == enemyModC) ||
+			(cr.cr_dEnemy == tank.optTank.coef_reload && tank.optTank.mod == enemyModD))
+			tank.reloadTank();
+
+		//frames position
+		tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
+	};
+
+	//--------------------------------------
+	if (tank.size() == 0)
+		return;
+
+	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) {
+		tank.isTank() ? fun(tank) : NULL;
+	});
+
+	//--------------------------------------
+
+	return;
+}

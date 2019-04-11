@@ -13,7 +13,7 @@
 #include "bullet.hpp"
 #include "bonus.hpp"
 #include "map.h"
-#include "tile_map.h"
+#include "tile_map_dynamic.h"
 #include "part_bricks_map.h"
 #include "animation_game.h"
 
@@ -34,6 +34,8 @@ static pToCheckOnCollision CheckOnCollision;
 
 class GameField
 {
+	friend void READDATAOBJ(GameField*);
+
 	sf::RenderWindow &window;
 	sf::Texture &texture;
 
@@ -69,7 +71,7 @@ class GameField
 
 	sf::RectangleShape field, outsideUP, outsideDOWN, outsideLEFT, outsideRIGHT;
 	Map map;
-	TileMap tmap;
+	TileMap tMap;
 	Part_Bricks_Map pbmap;
 	void FillField();
 	void FillMap();
@@ -79,6 +81,9 @@ class GameField
 	void DrawField();
 	void DrawMap();
 	void DrawBrickDamage();
+
+	TileDynamic tDynamic{ texture };
+	void DrawDynamicElements(); // draw tDynamic
 
 	std::vector<Block> block;
 	std::vector<sf::RectangleShape> partsBrickVec;
@@ -95,6 +100,7 @@ class GameField
 	void CreateTanks();
 	void CreateTank(const sf::Vector2f);
 	void ReloadTank(Tank&, const sf::Vector2f);
+	void updTanks();
 	void DrawTanks();
 	void DrawTank(Tank&);
 	void MoveTank(Tank&, float);
@@ -130,6 +136,7 @@ class GameField
 	void CreateBullet(T&, sf::Vector2f);
 	void CreateBullet(Tank&);
 	void CreateBullet(Player&);
+	void updBullets();
 	void DrawBullets();
 
 	std::vector<RecShape> vecRecShape;
@@ -168,6 +175,7 @@ class GameField
 	friend void RestartPlayer(GameField*, const std::string);
 	void RestartFirstPlayer(const bool flag = false);
 	void RestartSecondPlayer(const bool flag = false);
+	void updPlayers();
 	void DrawActors();
 	friend void MoveFirstPlayer(GameField&, const Direction);
 	friend void MoveSecondPlayer(GameField&, const Direction);

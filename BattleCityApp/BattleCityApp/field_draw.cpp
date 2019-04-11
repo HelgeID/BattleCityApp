@@ -5,6 +5,16 @@
 //-- Update the game loop
 //----------------------------------------------------
 
+//drawing tDynamic
+void GameField::DrawDynamicElements()
+{
+	if (p_showframe == true)
+		return;
+
+	window.draw(tDynamic);
+	return;
+}
+
 //drawing a field, a black square the size of 208x208 px
 void GameField::DrawField()
 {
@@ -12,10 +22,10 @@ void GameField::DrawField()
 	return;
 }
 
-//drawing a loaded map (13x13 px), "13x16=208"
+//drawing a loaded map (13x13 cells), "13x16=208"
 void GameField::DrawMap()
 {
-	(!p_showframe) ? window.draw(tmap) : DrawBlocks();
+	(!p_showframe) ? window.draw(tMap) : DrawBlocks();
 	return;
 }
 
@@ -27,12 +37,6 @@ void GameField::DrawBrickDamage()
 }
 
 //drawing game blocks
-/*
-!!!
-not used, because the draw function eats a lot of CPU time in a loop
-an alternative - to draw once with vertex ARR
-!!!
-*/
 void GameField::DrawBlocks()
 {
 	int index(0);
@@ -64,48 +68,17 @@ void GameField::DrawMoore()
 		return;
 
 	for each(Block block in moore)
-		p_showframe ? window.draw(block.frame) : block.drawBlock(window);
+		(p_showframe) ? window.draw(block.frame) : block.drawBlock(window);
 	return;
 }
 
 //drawing players
 void GameField::DrawActors()
 {
-	bool *keyArray(nullptr);
-
-	auto fun = [=](Player& player, bool keyArray[])
-	{
-		if (
-			(cr.cr_aPlayer == player.optTank.coef_reload && player.optTank.mod == playerModA && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
-			(cr.cr_bPlayer == player.optTank.coef_reload && player.optTank.mod == playerModB && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
-			(cr.cr_cPlayer == player.optTank.coef_reload && player.optTank.mod == playerModC && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
-			(cr.cr_dPlayer == player.optTank.coef_reload && player.optTank.mod == playerModD && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
-			(cr.cr_aEnemy == player.optTank.coef_reload && player.optTank.mod == enemyModA && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
-			(cr.cr_bEnemy == player.optTank.coef_reload && player.optTank.mod == enemyModB && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
-			(cr.cr_cEnemy == player.optTank.coef_reload && player.optTank.mod == enemyModC && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])) ||
-			(cr.cr_dEnemy == player.optTank.coef_reload && player.optTank.mod == enemyModD && (keyArray[0] || keyArray[1] || keyArray[2] || keyArray[3])))
-				player.reloadTank();
-
-		//frames position
-		player.setPosFrame(player.takeObj().getPosition().x, player.takeObj().getPosition().y);
-
-		//draw
-		p_showframe ? window.draw(player.frame) : window.draw(player.takeObj());
-
-		delete[] keyArray;
-		keyArray = nullptr;
-	};
-
-	if (firstPlayer->Presence()) {
-		keyArray = new bool[4] {Key_A, Key_D, Key_W, Key_S};
-		fun(*firstPlayer, keyArray);
-	}
-
-	if (secondPlayer->Presence()) {
-		keyArray = new bool[4] {Key_Left, Key_Right, Key_Up, Key_Down};
-		fun(*secondPlayer, keyArray);
-	}
-
+	if (firstPlayer->Presence())
+		(p_showframe) ? window.draw(firstPlayer->frame) : window.draw(firstPlayer->takeObj());
+	if (secondPlayer->Presence())
+		(p_showframe) ? window.draw(secondPlayer->frame) : window.draw(secondPlayer->takeObj());
 	return;
 }
 
@@ -115,40 +88,12 @@ void GameField::DrawTank(Tank &tank)
 	if (!tank.isTank())
 		return;
 
-	const float step_speed = tank.optTank.step_speed;
-
-	if (tank.sleepTank() || step_speed == 0.f) {
-		p_showframe ? window.draw(tank.frame) : window.draw(tank.takeObj());
-		return;
-	}
-	
-	if (tank.optTank.dir == UP)
-		tank.moveObj(0.f, -step_speed);
-	else if (tank.optTank.dir == LEFT)
-		tank.moveObj(-step_speed, 0.f);
-	else if (tank.optTank.dir == DOWN)
-		tank.moveObj(0.f, step_speed);
-	else if (tank.optTank.dir == RIGHT)
-		tank.moveObj(step_speed, 0.f);
-
-	if (
-		(cr.cr_aPlayer == tank.optTank.coef_reload && tank.optTank.mod == playerModA) ||
-		(cr.cr_bPlayer == tank.optTank.coef_reload && tank.optTank.mod == playerModB) ||
-		(cr.cr_cPlayer == tank.optTank.coef_reload && tank.optTank.mod == playerModC) ||
-		(cr.cr_dPlayer == tank.optTank.coef_reload && tank.optTank.mod == playerModD) ||
-		(cr.cr_aEnemy == tank.optTank.coef_reload && tank.optTank.mod == enemyModA) ||
-		(cr.cr_bEnemy == tank.optTank.coef_reload && tank.optTank.mod == enemyModB) ||
-		(cr.cr_cEnemy == tank.optTank.coef_reload && tank.optTank.mod == enemyModC) ||
-		(cr.cr_dEnemy == tank.optTank.coef_reload && tank.optTank.mod == enemyModD))
-			tank.reloadTank();
-	
-	//frames position
-	tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
-
 	if (p_showframe)
 		window.draw(tank.frame);
 	else
+	{
 		window.draw(tank.takeObj());
+	}
 	return;
 }
 
@@ -165,21 +110,14 @@ void GameField::DrawTanks()
 //drawing a bullets
 void GameField::DrawBullets()
 {
-	float speed = BulletSpeed;
-	float time = this->time / speed;
-
 	const size_t bulletArrSize = this->bulletArr.size();
-	for (int i(0); i < bulletArrSize; ++i) {
-		if (this->bulletArr[i] != nullptr) {
-			this->bulletArr[i]->move(time);
-			this->bulletArr[i]->setPosFrame(
-				this->bulletArr[i]->takeObj().getPosition().x, 
-				this->bulletArr[i]->takeObj().getPosition().y
-			);
+	for (size_t indxBullet(0); indxBullet < bulletArrSize; ++indxBullet) {
+		if (this->bulletArr[indxBullet] != nullptr) {
 			if (p_showframe)
-				window.draw(this->bulletArr[i]->frame);
-			else
-				window.draw(this->bulletArr[i]->takeObj());
+				window.draw(this->bulletArr[indxBullet]->frame);
+			else {
+				window.draw(this->bulletArr[indxBullet]->takeObj());
+			}
 		}
 	}
 	return;
@@ -227,15 +165,15 @@ void GameField::DrawAnimSkin()
 void GameField::DrawAnimBoom()
 {
 	const size_t bulletBoomSize = sizeof(this->bulletBoom) / sizeof(*this->bulletBoom);
-	for (int i(0); i < bulletBoomSize; ++i) {
-		if (bulletBoom[i] != nullptr)
-			window.draw(bulletBoom[i]->TakeAnim());
+	for (size_t indexBulletBoom(0); indexBulletBoom < bulletBoomSize; ++indexBulletBoom) {
+		if (bulletBoom[indexBulletBoom] != nullptr)
+			window.draw(bulletBoom[indexBulletBoom]->TakeAnim());
 	}
 
 	const size_t tankBoomSize = sizeof(this->tankBoom) / sizeof(*this->tankBoom);
-	for (int i(0); i < tankBoomSize; ++i) {
-		if (tankBoom[i] != nullptr)
-			window.draw(tankBoom[i]->TakeAnim());
+	for (size_t indexTankBoom(0); indexTankBoom < tankBoomSize; ++indexTankBoom) {
+		if (tankBoom[indexTankBoom] != nullptr)
+			window.draw(tankBoom[indexTankBoom]->TakeAnim());
 	}
 	return;
 }

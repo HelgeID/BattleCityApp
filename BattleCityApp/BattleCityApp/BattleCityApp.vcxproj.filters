@@ -48,9 +48,6 @@
     <ClCompile Include="hit_brick.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
-    <ClCompile Include="tile_map.cpp">
-      <Filter>Файлы исходного кода</Filter>
-    </ClCompile>
     <ClCompile Include="part_bricks_map.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
@@ -93,6 +90,12 @@
     <ClCompile Include="control_sound.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="read_data_obj.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="tile_map_dynamic.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -122,9 +125,6 @@
     <ClInclude Include="frame.hpp">
       <Filter>Заголовочные файлы\objects</Filter>
     </ClInclude>
-    <ClInclude Include="tile_map.h">
-      <Filter>Заголовочные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="part_bricks_map.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
@@ -153,6 +153,9 @@
       <Filter>Заголовочные файлы\objects</Filter>
     </ClInclude>
     <ClInclude Include="sound.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="tile_map_dynamic.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>

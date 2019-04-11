@@ -29,55 +29,60 @@ GameField::~GameField()
 
 void GameField::UpdateField()
 {
+	//--------------------------------------
 	UpdateTime();
-
+	//--------------------------------------
 	window.clear(sf::Color(127, 127, 127));
-	DrawField();
-	DrawMap();
-	//DrawBlocks();
-	DrawMoore();
 	//--------------------------------------
-	DrawBrickDamage();
+	updPlayers(); updTanks(); updBullets();
 	//--------------------------------------
-
-	DrawActors();
-	DrawTanks();
-	DrawBullets();
-	DrawAnimBirth();
-	DrawAnimSkin();
-	DrawAnimBoom();
-
-	DrawBonus();
-
+	DrawField(); //ok
+	DrawMap(); //ok
+	//DrawBlocks(); //uses alternative: tMap
+	DrawMoore(); //ok
+	DrawBrickDamage(); //ok
+	//DrawActors(); //uses alternative: tDynamic
+	//DrawTanks(); //uses alternative: tDynamic
+	DrawBullets(); //ok
+	//DrawAnimBirth(); //uses alternative: tDynamic
+	//DrawAnimSkin(); //uses alternative: tDynamic
+	//DrawAnimBoom(); //uses alternative: tDynamic
+	DrawBonus(); //ok
+	//--------------------------------------
+	DrawDynamicElements(); //ok
+	//--------------------------------------
+	READDATAOBJ(this); //get data for tDynamic
+	//--------------------------------------
 	UpdateCoefReload();
 	UpdateDirectionTanks();
-
-	//window.draw(outsideUP);
-	//window.draw(outsideDOWN);
-	//window.draw(outsideLEFT);
-	//window.draw(outsideRIGHT);
-
+	//--------------------------------------
+	//window.draw(outsideUP); //for test
+	//window.draw(outsideDOWN); //for test
+	//window.draw(outsideLEFT); //for test
+	//window.draw(outsideRIGHT); //for test
+	//--------------------------------------
 	objTankCollision.MonitoringCollision(*this);
 	objBulletCollision.MonitoringCollision(*this);
 	objPlayerCollision.MonitoringCollision(*this);
 	CheckOnMoore();
 	CheckOnBonus();
-
+	//--------------------------------------
 	MonitoringKeys();
 	objChecking.CheckingShootingBullets(*this);
 	objChecking.CheckingSkin(*this);
-
+	//--------------------------------------
 	ControlHangPoint();
 	ControlBonusTank();
 	ControlHeavyTank();
-
+	//--------------------------------------
 	MonitoringAnim		(animBirth);
 	MonitoringAnim		(animSkin);
 	MonitoringAnim		(animBoom);
-
+	//--------------------------------------
 	clock.restart();
-
+	//--------------------------------------
 	f_f = !f_f; //for optimality
+	//--------------------------------------
 	return;
 }
 
