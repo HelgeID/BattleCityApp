@@ -97,6 +97,7 @@ class GameField
 
 	std::vector<Tank> tank;
 	bool sleeptanks{ false };
+	bool completion_generation_tanks{ false };
 	void CreateTanks();
 	void CreateTank(const sf::Vector2f);
 	void ReloadTank(Tank&, const sf::Vector2f);

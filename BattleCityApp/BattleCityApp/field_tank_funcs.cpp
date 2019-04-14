@@ -67,8 +67,14 @@ void GameField::ReloadTank(Tank& tank, const sf::Vector2f pos)
 		tank.init_heavy_tank_damage();
 	}
 
-	if (itMod != mapOfEnemy.end())
-		itMod++;
+	itMod++;
+
+	if (itMod == mapOfEnemy.end())
+	{
+		//completion of generation of tanks
+		itMod = mapOfEnemy.begin();
+		completion_generation_tanks = true;
+	}
 
 	return;
 }
@@ -147,8 +153,10 @@ void GameField::CheckTankBang(const int indexTank, const bool killall)
 
 			if (!killall) {
 				//launching a new tank on the field
-				std::unique_ptr<std::thread> thread_control(new std::thread(&LOAD_TANK, this, false));
-				thread_control->detach();
+				if (!completion_generation_tanks) {
+					std::unique_ptr<std::thread> thread_control(new std::thread(&LOAD_TANK, this, false));
+					thread_control->detach();
+				}
 			}
 			else
 				RemovalObj(tank, index);

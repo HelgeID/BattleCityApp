@@ -10,7 +10,7 @@ void GameField::CreateBonus()
 
 	std::random_device dev;
 	std::mt19937 generator(dev());
-	std::uniform_int_distribution<std::mt19937::result_type> dist(1, 6);//1-6
+	std::uniform_int_distribution<std::mt19937::result_type> dist(6, 6);//1-6
 
 	switch (dist(generator))
 	{
@@ -101,7 +101,7 @@ void GameField::onBonusClockFun(Player& player)
 void GameField::onBonusGrenadeFun(Player& player)
 {
 	KillAllTanks(); // KILL ALL TANKS
-	CreateTanks(); // LAUNCHING NEW TANKS
+	!completion_generation_tanks ? CreateTanks() : NULL; // LAUNCHING NEW TANKS
 	return;
 }
 

@@ -8,8 +8,16 @@
 //drawing tDynamic
 void GameField::DrawDynamicElements()
 {
+	//for test (showframe)
 	if (p_showframe == true)
+	{
+		DrawActors();
+		DrawTanks();
+		DrawAnimBirth();
+		DrawAnimSkin();
+		DrawAnimBoom();
 		return;
+	}
 
 	window.draw(tDynamic);
 	return;
