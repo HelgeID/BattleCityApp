@@ -109,6 +109,7 @@ public:
 
 	friend void ShootSnd(Sound* obj)
 	{
+		return;
 		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
 			;
 		{
@@ -122,6 +123,7 @@ public:
 
 	friend void BonusSnd(Sound* obj)
 	{
+		return;
 		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
 			;
 		{
@@ -135,6 +137,7 @@ public:
 
 	friend void TakeBonusSnd(Sound* obj)
 	{
+		return;
 		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
 			;
 		{
@@ -148,6 +151,7 @@ public:
 
 	friend void Explosion_fSnd(Sound* obj)
 	{
+		return;
 		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
 			;
 		{
@@ -161,6 +165,7 @@ public:
 
 	friend void Explosion_tSnd(Sound* obj)
 	{
+		return;
 		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
 			;
 		{

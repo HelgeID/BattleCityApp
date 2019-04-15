@@ -2,8 +2,6 @@
 #include "general.hpp"
 #include <time.h>
 
-static bool LAUNCHING_TANKS_ON_START_FINISH;
-
 bool CONTROL_CollisionTanksBS(GameField* gField)
 {
 	for (auto it = gField->tank.begin(); it != gField->tank.end(); ++it) {
@@ -62,9 +60,8 @@ bool CONTROL_OffAllAnim(GameField* gField)
 
 void LAUNCHING_TANKS(GameField* gField)
 {
+	gField->LAUNCHING_TANKS_ON_OFF = true;
 	srand(time(NULL)); //for rand()
-
-	LAUNCHING_TANKS_ON_START_FINISH = false;
 
 	int indexTank(-1);
 	auto reload_tank = [&](sf::Vector2f pos)
@@ -128,14 +125,14 @@ void LAUNCHING_TANKS(GameField* gField)
 	///random ->> 2  *     *
 	///random ->> 3  *  *  *
 
-	//part 1
+	//part 1, (add 1) or (add 2) or (add 3)
 	sf::sleep(sf::milliseconds(2000));
 
 	switch (variant)
 	{
-		case 1: random1(0, false); break;
-		case 2: random2(0, false); break;
-		case 3: random3(0, false); break;
+		case 1: random1(0, false); gField->number_loaded_tanks += 1; break;
+		case 2: random2(0, false); gField->number_loaded_tanks += 2; break;
+		case 3: random3(0, false); gField->number_loaded_tanks += 3; break;
 	}
 
 	if (variant == 1) {
@@ -153,7 +150,7 @@ void LAUNCHING_TANKS(GameField* gField)
 					;
 			}
 	
-	//part 2
+	//part 2, (add 3) or (add 2) or (add 1)
 	sf::sleep(sf::milliseconds(2000));
 	
 	while (CONTROL_CollisionTanksBS(gField))
@@ -161,9 +158,9 @@ void LAUNCHING_TANKS(GameField* gField)
 
 	switch (variant)
 	{
-		case 1: random3(1, true); break; // 1 + 3 == sum 4
-		case 2: random2(2, true); break; // 2 + 2 == sum 4
-		case 3: random1(3, true); break; // 3 + 1 == sum 4
+		case 1: random3(1, true); gField->number_loaded_tanks += 3; break; // 1 + 3 == sum 4
+		case 2: random2(2, true); gField->number_loaded_tanks += 2; break; // 2 + 2 == sum 4
+		case 3: random1(3, true); gField->number_loaded_tanks += 1; break; // 3 + 1 == sum 4
 	}
 
 	while (true) {
@@ -194,17 +191,32 @@ void LAUNCHING_TANKS(GameField* gField)
 		});
 
 	}
+	
+	if (p_player && p_player == 2) {
+		LOAD_TANK(gField); //(add 5)
+		sf::sleep(sf::milliseconds(1500));
+		LOAD_TANK(gField); //(add 6)
+	}
 
-	(p_player == 2) ?
-		LOAD_TANK(gField, true), LOAD_TANK(gField, true) : 0; //add 5, add 6
-
-	LAUNCHING_TANKS_ON_START_FINISH = true;
-
-	std::cout << "\a";
+	std::cerr << "\a";
+	gField->LAUNCHING_TANKS_ON_OFF = false;
 	return;
 }
 
-void LOAD_TANK(GameField* gField, const bool newTank)
+void LAUNCHING_TANKS_NUM(GameField* gField, const int numTanks)
+{
+	gField->LAUNCHING_TANKS_ON_OFF = true;
+	sf::sleep(sf::milliseconds(3500));
+	int index(numTanks);
+	do {
+		LOAD_TANK(gField);
+		sf::sleep(sf::milliseconds(750));
+	} while (--index);
+	gField->LAUNCHING_TANKS_ON_OFF = false;
+	return;
+}
+
+void LOAD_TANK(GameField* gField)
 {
 	srand(time(NULL)); //for rand()
 
@@ -247,14 +259,35 @@ void LOAD_TANK(GameField* gField, const bool newTank)
 	//********************************************************
 	//                      ** start **
 	//********************************************************
-	if (newTank)
-		goto start;
+	//some verification
+	gField->number_loaded_tanks = gField->number_loaded_tanks + 1;
+	if (gField->number_loaded_tanks > gField->number_all_tanks)
+	{
+		gField->number_loaded_tanks = gField->number_loaded_tanks - 1;
+		return;
+	}
 
-	while (!LAUNCHING_TANKS_ON_START_FINISH)
-		sf::sleep(sf::milliseconds(300));
+	//pass control to load the tank (wait)
+	if (!gField->permit_generation_tanks) {
+		std::lock_guard<std::mutex> lg(mtx);
+		gField->permit_generation_tanks = true;
+	}
+	else {
+		int counter(0);
+		while (gField->permit_generation_tanks) {
+			std::for_each(gField->tank.begin(), gField->tank.end(), [&](Tank &tank) { !tank.isTank() ? counter++ : NULL; });
+			if ((counter == 4 && p_player == 1) || (counter == 6 && p_player == 2))
+				gField->permit_generation_tanks = false;
+			else
+				counter = 0;
+			sf::sleep(sf::milliseconds(300));
+		}
 
-start:
-	;
+		{
+			std::lock_guard<std::mutex> lg(mtx);
+			gField->permit_generation_tanks = true;
+		}
+	}
 
 	if (!gField->tank.size())
 		return;
@@ -316,6 +349,7 @@ start:
 
 		gField->tank[indexTank].sleepTank() = false;
 		gField->tank[indexTank].onTank();
+		gField->permit_generation_tanks = false;
 	}
 
 	return;

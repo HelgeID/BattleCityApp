@@ -97,8 +97,13 @@ class GameField
 
 	std::vector<Tank> tank;
 	bool sleeptanks{ false };
-	bool completion_generation_tanks{ false };
+	bool completion_generation_tanks{ false }; //YES - when the pointer (model selection) of the tank came to the end. It is used for the array mapOfEnemy!!!
+	bool permit_generation_tanks{ false }; //YES - the tank is waiting for its turn
+	unsigned int number_all_tanks{ 0 };
+	unsigned int number_dead_tanks{ 0 };
+	unsigned int number_loaded_tanks{ 0 };
 	void CreateTanks();
+	void CreateTanks(const int);
 	void CreateTank(const sf::Vector2f);
 	void ReloadTank(Tank&, const sf::Vector2f);
 	void updTanks();
@@ -114,8 +119,10 @@ class GameField
 	void ControlHeavyTank();
 	void RotationTank(Tank&, const char*, const char*, const float);
 
+	bool LAUNCHING_TANKS_ON_OFF{ false };
 	friend void LAUNCHING_TANKS(GameField*);
-	friend void LOAD_TANK(GameField*, const bool);
+	friend void LAUNCHING_TANKS_NUM(GameField*, const int);
+	friend void LOAD_TANK(GameField*);
 	friend bool CONTROL_CollisionTanksBS(GameField*);
 	friend bool CONTROL_CollisionTanksTank(GameField*, Tank&);
 	friend bool CONTROL_CheckFinishTimeAnim(GameField*, const int);

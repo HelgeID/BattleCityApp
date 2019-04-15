@@ -5,16 +5,8 @@
 
 std::map<int, Model> mapOfEnemy
 {
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
-	{ 10, enemyModA },{ 11, enemyModB },{ 12, enemyModC },{ 13, enemyModB },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModC },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModC },
-	{ 20, enemyModC },{ 21, enemyModC },{ 22, enemyModA },{ 23, enemyModC },{ 24, enemyModA },{ 25, enemyModB },{ 26, enemyModD },{ 27, enemyModB },{ 28, enemyModC },{ 29, enemyModA },
-	{ 30, enemyModD },{ 31, enemyModC },{ 32, enemyModA },{ 33, enemyModA },{ 34, enemyModC },{ 35, enemyModA },{ 36, enemyModC },{ 37, enemyModD },{ 38, enemyModB },{ 39, enemyModC },
-	{ 40, enemyModB },{ 41, enemyModD },{ 42, enemyModA },{ 43, enemyModB },{ 44, enemyModC },{ 45, enemyModD },{ 46, enemyModA },{ 47, enemyModA },{ 48, enemyModD },{ 49, enemyModA },
-	{ 50, enemyModD },{ 51, enemyModB },{ 52, enemyModD },{ 53, enemyModC },{ 54, enemyModD },{ 55, enemyModA },{ 56, enemyModA },{ 57, enemyModD },{ 58, enemyModA },{ 59, enemyModA },
-	{ 60, enemyModA },{ 61, enemyModD },{ 62, enemyModA },{ 63, enemyModB },{ 64, enemyModD },{ 65, enemyModD },{ 66, enemyModB },{ 67, enemyModB },{ 68, enemyModD },{ 69, enemyModD },
-	{ 70, enemyModD },{ 71, enemyModD },{ 72, enemyModD },{ 73, enemyModB },{ 74, enemyModA },{ 75, enemyModD },{ 76, enemyModC },{ 77, enemyModA },{ 78, enemyModC },{ 79, enemyModD },
-	{ 80, enemyModD },{ 81, enemyModC },{ 82, enemyModD },{ 83, enemyModC },{ 84, enemyModD },{ 85, enemyModC },{ 86, enemyModC },{ 87, enemyModD },{ 88, enemyModC },{ 89, enemyModA },
-	{ 90, enemyModB },{ 91, enemyModD },{ 92, enemyModD },{ 93, enemyModD },{ 94, enemyModC },{ 95, enemyModC },{ 96, enemyModD },{ 7, enemyModD },{ 98, enemyModD },{ 99, enemyModD }
+	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },
+	{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },{ 10, enemyModA },{ 11, enemyModB },{ 12, enemyModD }
 };
 
 void GameField::CreateTanks()
@@ -26,7 +18,19 @@ void GameField::CreateTanks()
 		for (int i = 0; i < 6; i++) //max tank == 6, when two players
 			CreateTank(sf::Vector2f(0.f, 0.f));
 
+	number_all_tanks = mapOfEnemy.size();
+
 	std::unique_ptr<std::thread> thread_control(new std::thread(&LAUNCHING_TANKS, this));
+	thread_control->detach();
+	return;
+}
+
+void GameField::CreateTanks(const int numTanks)
+{
+	for (int i = 0; i < numTanks; i++) //max tank == numTanks, when one player or when two players
+		CreateTank(sf::Vector2f(0.f, 0.f));
+
+	std::unique_ptr<std::thread> thread_control(new std::thread(&LAUNCHING_TANKS_NUM, this, numTanks));
 	thread_control->detach();
 	return;
 }
@@ -67,13 +71,20 @@ void GameField::ReloadTank(Tank& tank, const sf::Vector2f pos)
 		tank.init_heavy_tank_damage();
 	}
 
-	itMod++;
+	//static int counter_loading(0);
+	//
+	//{
+	//	//Loaded tanks:
+	//	std::cerr << "loading tank... " << ++counter_loading << std::endl;
+	//}
 
+	itMod++;
 	if (itMod == mapOfEnemy.end())
 	{
 		//completion of generation of tanks
 		itMod = mapOfEnemy.begin();
 		completion_generation_tanks = true;
+		std::cerr << "END!!!" << std::endl;
 	}
 
 	return;
@@ -121,6 +132,7 @@ void GameField::CheckTankBang(const int indexTank, const bool killall)
 
 	//off tank
 	for (int index(0); index < tank.size(); ++index) {
+		//hit the bonus tank
 		if (tank[index].takeIndex() == indexTank) {
 			if (tank[index].optTank.bonus) {
 				tank[index].optTank.bonus = !tank[index].optTank.bonus;
@@ -130,7 +142,7 @@ void GameField::CheckTankBang(const int indexTank, const bool killall)
 					tank[index].optTank.bonus
 				);
 				tank[index].mapPos = { 0, 0 };
-				if (!killall) {
+				if (!killall) { //if did not take a bonus grenade
 					CreateBonus();
 					std::unique_ptr<std::thread> thread_snd(new std::thread(&TakeBonusSnd, &sound));
 					thread_snd->detach();
@@ -142,24 +154,28 @@ void GameField::CheckTankBang(const int indexTank, const bool killall)
 			CreateAnimBoom(point, "tankObj");
 			tank[index].offTank();
 
-			if (!killall) {
-				std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
-				thread_snd->detach();
-			}
-
 			//init pos to NULL
 			tank[index].setPosObj(0.f, 0.f);
 			tank[index].setPosFrame(tank[index].getPosObj().x, tank[index].getPosObj().y);
 
-			if (!killall) {
+			//number of dead tanks:
+			{
+				number_dead_tanks++;
+				std::cerr << "Dead tanks:" << number_dead_tanks << std::endl;
+			}
+
+			if (!killall) { //if did not take a bonus grenade
+				//play the explosion sound
+				std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
+				thread_snd->detach();
+
 				//launching a new tank on the field
-				if (!completion_generation_tanks) {
-					std::unique_ptr<std::thread> thread_control(new std::thread(&LOAD_TANK, this, false));
+				if (!completion_generation_tanks && number_dead_tanks <= number_all_tanks && !LAUNCHING_TANKS_ON_OFF) {
+				//if (!completion_generation_tanks && number_dead_tanks <= number_all_tanks) {
+					std::unique_ptr<std::thread> thread_control(new std::thread(&LOAD_TANK, this));
 					thread_control->detach();
 				}
 			}
-			else
-				RemovalObj(tank, index);
 
 			break;
 		}
@@ -179,19 +195,17 @@ void GameField::KillAllTanks()
 	});
 
 	for (int index = 0; index < iT.size(); index = index + 1)
-		CheckTankBang(iT[index], true);
+		CheckTankBang(iT[index], true); //kill all tanks
 
-	bool allFlg = true;
-	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) {
-		if (tank.isTank())
-			allFlg = false;
-	});
+//	bool allDead = true;
+//	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) {
+//		if (tank.isTank()) //looking for alive
+//			allDead = false; //not all dead
+//	});
 
-	if (!allFlg)
-		KillAllTanks();
+//	if (!allDead)
+//		KillAllTanks(); //again repeat procedure
 
-	if (tank.size() > 0)
-		tank.clear(); //clear array of tanks, who were not killed
 	return;
 }
 

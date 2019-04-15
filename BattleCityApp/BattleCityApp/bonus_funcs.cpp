@@ -101,7 +101,20 @@ void GameField::onBonusClockFun(Player& player)
 void GameField::onBonusGrenadeFun(Player& player)
 {
 	KillAllTanks(); // KILL ALL TANKS
-	!completion_generation_tanks ? CreateTanks() : NULL; // LAUNCHING NEW TANKS
+	permit_generation_tanks = false;
+
+	if (completion_generation_tanks)
+		return;
+
+	int control(0);
+	control = (p_player == 1 && (number_all_tanks - number_dead_tanks >= 4)) ? 4 : number_all_tanks - number_dead_tanks;
+	control = (p_player == 2 && (number_all_tanks - number_dead_tanks >= 6)) ? 6 : number_all_tanks - number_dead_tanks;
+	if (control) {
+		std::cerr << "ok" << std::endl;
+		std::unique_ptr<std::thread> thread_control(new std::thread(&LAUNCHING_TANKS_NUM, this, control));
+		thread_control->detach();
+	}
+	std::cerr << control << std::endl;
 	return;
 }
 
