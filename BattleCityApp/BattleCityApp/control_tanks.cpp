@@ -2,6 +2,15 @@
 #include "general.hpp"
 #include <time.h>
 
+int CONTROL_NUMBER_CURRENT_TANKS(GameField* gField)
+{
+	int counter_tanks(0);
+	for (auto it = gField->tank.begin(); it != gField->tank.end(); ++it)
+		if (it->isTank())
+			counter_tanks = counter_tanks + 1;
+	return counter_tanks;
+}
+
 bool CONTROL_CollisionTanksBS(GameField* gField)
 {
 	for (auto it = gField->tank.begin(); it != gField->tank.end(); ++it) {
@@ -212,6 +221,7 @@ void LAUNCHING_TANKS_NUM(GameField* gField, const int numTanks)
 		LOAD_TANK(gField);
 		sf::sleep(sf::milliseconds(750));
 	} while (--index);
+	std::cerr << "\a";
 	gField->LAUNCHING_TANKS_ON_OFF = false;
 	return;
 }
@@ -353,4 +363,47 @@ void LOAD_TANK(GameField* gField)
 	}
 
 	return;
+}
+
+
+
+//////////////////////////////////////////////////////////////////////////
+// main spawn enemies
+//////////////////////////////////////////////////////////////////////////
+
+void ControlSpawnEnemies(GameField* gField)
+{
+	int max_number_tanks{ 0 };
+	p_player == 1 ? max_number_tanks = 4 : 0;
+	p_player == 2 ? max_number_tanks = 6 : 0;
+
+	std::unique_ptr<std::thread> thread_launching_tanks_start(new std::thread(&LAUNCHING_TANKS, gField));
+	thread_launching_tanks_start->detach();
+
+	sf::sleep(sf::milliseconds(3000));
+
+	while (gField->number_dead_tanks < gField->number_all_tanks)
+	{
+		while (gField->LAUNCHING_TANKS_ON_OFF)
+			sf::sleep(sf::milliseconds(300));
+		
+		int numTanks(0); //number of tanks that have to go into the field
+
+		{
+			const int number_curr_tanks(CONTROL_NUMBER_CURRENT_TANKS(gField));
+			int var1, var2;
+			(var1 = max_number_tanks - number_curr_tanks) < (var2 = gField->number_all_tanks - gField->number_dead_tanks) ?
+				numTanks = var1 : numTanks = var2;
+		}
+
+		if (numTanks)
+		{
+			std::unique_ptr<std::thread> thread_launching_tanks_num(new std::thread(&LAUNCHING_TANKS_NUM, gField, numTanks));
+			thread_launching_tanks_num->detach();
+		}
+
+		sf::sleep(sf::milliseconds(3000));
+		if (gField->completion_generation_tanks)
+			return; 
+	}
 }

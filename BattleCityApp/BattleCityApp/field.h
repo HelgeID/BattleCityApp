@@ -119,10 +119,12 @@ class GameField
 	void ControlHeavyTank();
 	void RotationTank(Tank&, const char*, const char*, const float);
 
+	friend void ControlSpawnEnemies(GameField*);
 	bool LAUNCHING_TANKS_ON_OFF{ false };
 	friend void LAUNCHING_TANKS(GameField*);
 	friend void LAUNCHING_TANKS_NUM(GameField*, const int);
 	friend void LOAD_TANK(GameField*);
+	friend int CONTROL_NUMBER_CURRENT_TANKS(GameField*);
 	friend bool CONTROL_CollisionTanksBS(GameField*);
 	friend bool CONTROL_CollisionTanksTank(GameField*, Tank&);
 	friend bool CONTROL_CheckFinishTimeAnim(GameField*, const int);

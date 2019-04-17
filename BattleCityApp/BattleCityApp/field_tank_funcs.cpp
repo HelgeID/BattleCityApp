@@ -19,9 +19,6 @@ void GameField::CreateTanks()
 			CreateTank(sf::Vector2f(0.f, 0.f));
 
 	number_all_tanks = mapOfEnemy.size();
-
-	std::unique_ptr<std::thread> thread_control(new std::thread(&LAUNCHING_TANKS, this));
-	thread_control->detach();
 	return;
 }
 
@@ -71,12 +68,11 @@ void GameField::ReloadTank(Tank& tank, const sf::Vector2f pos)
 		tank.init_heavy_tank_damage();
 	}
 
-	//static int counter_loading(0);
-	//
-	//{
-	//	//Loaded tanks:
-	//	std::cerr << "loading tank... " << ++counter_loading << std::endl;
-	//}
+//	{
+//		//Loaded tanks:
+//		static int counter_loading(0);
+//		std::cerr << "loading tank... " << ++counter_loading << std::endl;
+//	}
 
 	itMod++;
 	if (itMod == mapOfEnemy.end())
@@ -84,7 +80,7 @@ void GameField::ReloadTank(Tank& tank, const sf::Vector2f pos)
 		//completion of generation of tanks
 		itMod = mapOfEnemy.begin();
 		completion_generation_tanks = true;
-		std::cerr << "END!!!" << std::endl;
+		std::cerr << "The END, completion of generation of tanks!!!" << std::endl;
 	}
 
 	return;
@@ -144,6 +140,7 @@ void GameField::CheckTankBang(const int indexTank, const bool killall)
 				tank[index].mapPos = { 0, 0 };
 				if (!killall) { //if did not take a bonus grenade
 					CreateBonus();
+					//play the bonus sound
 					std::unique_ptr<std::thread> thread_snd(new std::thread(&TakeBonusSnd, &sound));
 					thread_snd->detach();
 				}
@@ -168,13 +165,6 @@ void GameField::CheckTankBang(const int indexTank, const bool killall)
 				//play the explosion sound
 				std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
 				thread_snd->detach();
-
-				//launching a new tank on the field
-				if (!completion_generation_tanks && number_dead_tanks <= number_all_tanks && !LAUNCHING_TANKS_ON_OFF) {
-				//if (!completion_generation_tanks && number_dead_tanks <= number_all_tanks) {
-					std::unique_ptr<std::thread> thread_control(new std::thread(&LOAD_TANK, this));
-					thread_control->detach();
-				}
 			}
 
 			break;
@@ -187,6 +177,8 @@ void GameField::KillAllTanks()
 {
 	if (tank.size() == 0)
 		return;
+
+	permit_generation_tanks = false;
 
 	std::vector<int> iT; //index tank
 	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) {
