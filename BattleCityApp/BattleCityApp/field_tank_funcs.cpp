@@ -27,8 +27,7 @@ void GameField::CreateTanks(const int numTanks)
 	for (int i = 0; i < numTanks; i++) //max tank == numTanks, when one player or when two players
 		CreateTank(sf::Vector2f(0.f, 0.f));
 
-	std::unique_ptr<std::thread> thread_control(new std::thread(&LAUNCHING_TANKS_NUM, this, numTanks));
-	thread_control->detach();
+	number_all_tanks = mapOfEnemy.size();
 	return;
 }
 
@@ -189,14 +188,14 @@ void GameField::KillAllTanks()
 	for (int index = 0; index < iT.size(); index = index + 1)
 		CheckTankBang(iT[index], true); //kill all tanks
 
-//	bool allDead = true;
-//	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) {
-//		if (tank.isTank()) //looking for alive
-//			allDead = false; //not all dead
-//	});
+	bool allDead = true;
+	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) {
+		if (tank.isTank()) //looking for alive
+			allDead = false; //not all dead
+	});
 
-//	if (!allDead)
-//		KillAllTanks(); //again repeat procedure
+	if (!allDead)
+		KillAllTanks(); //again repeat procedure
 
 	return;
 }
