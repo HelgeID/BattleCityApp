@@ -111,12 +111,15 @@ class GameField
 	void DrawTank(Tank&);
 	void MoveTank(Tank&, float);
 	void MoveTank(const Direction, Tank&, float);
+	bool DistanceTank(Tank&, const float);
+	bool DistanceTank(Tank&, Tank&, const float);
 	void ControlTank_onFrame(Tank&);
 	void CheckTankBang(const int, const bool);
 	void KillAllTanks();
 	void ControlHangPoint();
 	void ControlBonusTank();
 	void ControlHeavyTank();
+	void ControlFrontMode();
 	void RotationTank(Tank&, const char*, const char*, const float);
 
 	friend void ControlSpawnEnemies(GameField*);

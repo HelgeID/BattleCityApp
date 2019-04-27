@@ -17,7 +17,10 @@ void GameField::Checking::CheckingShootingBullets(GameField& gField)
 		if (!tank.isTank() || tank.sleepTank())
 			;
 		else {
-			if (!tank.optTankShooting.bulletActivFlag && tank.optTankShooting.clockTank.getElapsedTime().asSeconds() > random) {
+			if (!tank.optTankShooting.bulletActivFlag && 
+					tank.frontModeTank() ? tank.optTankShooting.clockTank.getElapsedTime().asSeconds() > 1.f
+				: tank.optTankShooting.clockTank.getElapsedTime().asSeconds() > random)
+			{
 				gField.CreateBullet(tank, sf::Vector2f(0.f, 0.f));
 
 				//{

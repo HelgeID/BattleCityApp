@@ -1,6 +1,14 @@
 ﻿#include "field.h"
 #include "general.hpp"
 #include "map.h"
+#include <time.h>
+
+//add func, rnd_0_1
+bool rnd_0_1()
+{
+	srand((unsigned)time(NULL)); //for rand()
+	return rand() & 1;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 //ENEMIES
@@ -254,8 +262,11 @@ void GameField::CheckOnCollisionBlocks(Tank& tank)
 void GameField::CheckOnCollisionTanks(Tank& tank1, Tank& tank2)
 {
 	auto collisionTanksRotation = [&](Tank& tank) {  RotationTank(tank, "collision_t", "rotation_r", 2.f); return; };
+	
+	//DistanceTank(tank1, tank2, 24.f) ?
+	//	rnd_0_1() ? collisionTanksRotation(tank1) : collisionTanksRotation(tank2) : NULL;
 
-	if (tank1.takeObj().getGlobalBounds().intersects(tank2.takeObj().getGlobalBounds()))
+	if (DistanceTank(tank1, tank2, 18.f) || tank1.takeObj().getGlobalBounds().intersects(tank2.takeObj().getGlobalBounds()))
 	{
 		bool r1_flag(false), r2_flag(false);
 		const Direction dirTank(tank1.optTank.dir), dirTankOther(tank2.optTank.dir);
@@ -282,10 +293,10 @@ void GameField::CheckOnCollisionTanks(Tank& tank1, Tank& tank2)
 			}
 		}
 
-		if (r1_flag == true && !tank1.sleepTank())
+		if (r1_flag == true && !tank1.sleepTank()) //&& !tank1.frontModeTank()
 			collisionTanksRotation(tank1);
 
-		if (r2_flag == true && !tank2.sleepTank())
+		if (r2_flag == true && !tank2.sleepTank()) //&& !tank2.frontModeTank()
 			collisionTanksRotation(tank2);
 	}
 	return;

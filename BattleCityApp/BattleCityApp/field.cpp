@@ -77,6 +77,7 @@ void GameField::UpdateField()
 	ControlHangPoint();
 	ControlBonusTank();
 	ControlHeavyTank();
+	ControlFrontMode();
 	//--------------------------------------
 	MonitoringAnim		(animBirth);
 	MonitoringAnim		(animSkin);
@@ -146,9 +147,10 @@ void GameField::UpdateDirectionTanks()
 	for (auto it = tank.begin(); it != tank.end(); ++it)
 	{
 		it->isTank() //presence of the tank on the map
-		 && !it->sleepTank() //tank is not in sleep modes
-		 && it->optTank.step_speed //step speed is not zero
-		 && it->optTank.mod != Model::enemyModD //not a heavy tank
+			&& !it->sleepTank() //tank is not in sleep modes
+			&& it->optTank.step_speed //step speed is not zero
+			&& it->optTank.mod != Model::enemyModD //not a heavy tank
+			&& !it->frontModeTank()
 				? UPD(*it) : NULL;
 
 		if (it->optTank.mod == Model::enemyModD)

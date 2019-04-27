@@ -3,6 +3,16 @@
 #include <map>
 #include <thread>
 
+///////////////////////////////////////////////////////////////////////////////////////
+#include <random>
+auto random = [](const int a, const int b)
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_int_distribution<int> dist(a, b); //results between a and b inclusive
+	return dist(gen); //random generation
+};
+
 std::map<int, Model> mapOfEnemy
 {
 	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },
@@ -59,6 +69,9 @@ void GameField::ReloadTank(Tank& tank, const sf::Vector2f pos)
 	tank.mapPos = { 0, 0 };
 	tank.setPosObj(pos.x, pos.y);
 
+	tank.optFM.random = random(1, 9);
+	tank.optFM.clockTank.restart();
+
 	//for a heavy tank
 	if (tank.optTank.mod == enemyModD)
 	{
@@ -108,6 +121,46 @@ void GameField::MoveTank(const Direction dir, Tank& tank, float position)
 	else if (dir == RIGHT)
 		tank.moveObj(position, 0.f);
 	return;
+}
+
+bool GameField::DistanceTank(Tank& controlTank, const float distance)
+{
+	bool range(false);
+	for (Tank &tank : tank)
+	{
+		if (tank.takeIndex() == controlTank.takeIndex())
+			continue;
+
+		tank.isTank() ? [&](bool& range) {
+			const sf::Vector2f posTcentral(tank.getPosObj().x + 8, tank.getPosObj().y + 8);
+			const sf::Vector2f posCTcentral(controlTank.getPosObj().x + 8, controlTank.getPosObj().y + 8);	
+			range = (abs(posTcentral.x - posCTcentral.x) <= distance) && (abs(posTcentral.y - posCTcentral.y) <= distance);
+		}(range) : NULL;
+		if (range == true) {
+			//std::cerr << " tank:" << tank.takeIndex() 
+			//	<< " tank:" << controlTank.takeIndex()
+			//<< std::endl;
+			break;
+		}
+	}
+	return range;
+}
+
+bool GameField::DistanceTank(Tank& tank1, Tank& tank2, const float distance)
+{
+	if (!tank1.isTank() && !tank2.isTank())
+		return false;
+
+	bool range(false);
+	const sf::Vector2f posT1central(tank1.getPosObj().x + 8, tank1.getPosObj().y + 8);
+	const sf::Vector2f posT2central(tank2.getPosObj().x + 8, tank2.getPosObj().y + 8);
+	range = (abs(posT1central.x - posT2central.x) <= distance) && (abs(posT1central.y - posT2central.y) <= distance);
+	if (range == true) {
+		//std::cerr << " tank:" << tank1.takeIndex()
+		//	<< " tank:" << tank2.takeIndex()
+		//<< std::endl;
+	}
+	return range;
 }
 
 //todo fun
@@ -211,7 +264,7 @@ void GameField::ControlHangPoint()
 	{
 		for (int index(0); index < tank.size(); ++index)
 		{
-			if (!tank[index].isTank() || tank[index].sleepTank() || tank[index].optTank.mod == Model::enemyModD)
+			if (!tank[index].isTank() || tank[index].sleepTank() || tank[index].optTank.mod == Model::enemyModD || tank[index].frontModeTank())
 				continue;
 
 			rectMap.setPosition(tank[index].mapPos.x, tank[index].mapPos.y);
@@ -300,6 +353,77 @@ void GameField::ControlHeavyTank()
 	return;
 }
 
+void GameField::ControlFrontMode()
+{
+	auto fmFun = [&](Tank &tank)
+	{
+		auto GetDIR = [&]()
+		{
+			if ((round(tank.takeObj().getPosition().x) == field.getPosition().x) && (tank.optTank.dir == UP || tank.optTank.dir == DOWN))
+				return RIGHT;
+			else if ((round(tank.takeObj().getPosition().x + 16) == (field.getPosition().x + field.getSize().x)) && (tank.optTank.dir == UP || tank.optTank.dir == DOWN))
+				return LEFT;
+			else if ((round(tank.takeObj().getPosition().y) == field.getPosition().y) && (tank.optTank.dir == LEFT || tank.optTank.dir == RIGHT))
+				return DOWN;
+			else if ((round(tank.takeObj().getPosition().y + 16) == (field.getPosition().y + field.getSize().y)) && (tank.optTank.dir == LEFT || tank.optTank.dir == RIGHT))
+				return UP;
+			else
+				return tank.ClockWiseDirection(tank.optTank.dir);
+		};
+
+
+		bool condition(tank.optFM.clockTank.getElapsedTime().asSeconds() > tank.optFM.random * 2.5);
+		bool checkPos(
+			((int)tank.getPosObj().x % 8 == 0 && (tank.optTank.dir == LEFT || tank.optTank.dir == RIGHT))
+			||
+			((int)tank.getPosObj().y % 8 == 0 && (tank.optTank.dir == UP || tank.optTank.dir == DOWN))
+		);
+		
+		if (DistanceTank(tank, 24.f))
+			return;
+
+		if (condition && checkPos && tank.frontModeTank() == false)
+		{
+
+			tank.optFM.clockTank.restart();
+			tank.optFM.random = random(1, 2);
+			tank.frontModeTank() = true;
+			condition = tank.optFM.clockTank.getElapsedTime().asSeconds() > tank.optFM.random * 0.25;
+
+			{
+				const int posX(round(tank.takeObj().getPosition().x)), posY(round(tank.takeObj().getPosition().y));
+				const bool bulletActivFlag(tank.optTankShooting.bulletActivFlag);
+
+				tank.loadTank(
+					tank.optTank.col,
+					tank.optTank.mod,
+					tank.optTank.dir = GetDIR(),
+					tank.optTank.bonus
+				);
+				tank.mapPos = { 0, 0 };
+				tank.optTankShooting.bulletActivFlag = bulletActivFlag;
+				tank.setPosObj((float)posX, (float)posY);
+			}
+		}
+
+		if (condition && tank.frontModeTank() == true)
+		{
+			tank.optFM.clockTank.restart();
+			tank.optFM.random = random(1, 9);
+			tank.frontModeTank() = false;
+		}
+	};
+
+	if (tank.size() == 0)
+		return;
+
+	for (Tank &tank : tank)
+		tank.isTank() && tank.optTank.mod != enemyModB && tank.optTank.mod != enemyModD ? 
+			fmFun(tank) : NULL;
+
+	return;
+}
+
 void GameField::RotationTank(Tank& tank, const char* choice_name_collision, const char* choice_name_rotation, const float move)
 {
 	/*
@@ -367,7 +491,7 @@ void GameField::updTanks()
 	{
 		const float step_speed = tank.optTank.step_speed;
 
-		if (tank.sleepTank() || step_speed == 0.f)
+		if (tank.sleepTank() || step_speed == 0.f || tank.frontModeTank())
 			return;
 
 		if (tank.optTank.dir == UP)

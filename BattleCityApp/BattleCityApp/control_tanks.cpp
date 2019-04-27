@@ -358,6 +358,7 @@ void LOAD_TANK(GameField* gField)
 			sf::sleep(sf::milliseconds(300));
 
 		gField->tank[indexTank].sleepTank() = false;
+		gField->tank[indexTank].frontModeTank() = false;
 		gField->tank[indexTank].onTank();
 		gField->permit_generation_tanks = false;
 	}

@@ -59,6 +59,12 @@ namespace spaceTank
 		int x, y;
 	};
 
+	struct SettingsFM //Front Mode
+	{
+		int random{ 0 };
+		sf::Clock clockTank;
+	};
+
 	static const char* myDirNames[]
 	{
 		stringify(UP),
@@ -100,6 +106,7 @@ class Tank : public Object, public Frame, public TankBoom
 	sf::Vector2f prePosReverse;
 
 	bool T{ false }; //on - off
+	bool FM{ false };
 	bool sleeptank{ false };
 public:
 	Tank(sf::Texture &texture) : Object(texture), Frame("tank"), indexTank(0), skinTank(false)
@@ -117,6 +124,7 @@ public:
 	bool isTank() const { return T; };
 
 	bool& sleepTank() { return sleeptank; };
+	bool& frontModeTank() { return FM; };
 
 	Tank& operator=(const Tank& obj)
 	{
@@ -136,6 +144,7 @@ public:
 	spaceTank::SettingsRDir optRDir;
 	spaceTank::SettingsBonus optBonus;
 	spaceTank::MapPosition mapPos;
+	spaceTank::SettingsFM optFM;
 
 	void loadTank(Color col, Model mod, Direction dir, bool bonus)
 	{
