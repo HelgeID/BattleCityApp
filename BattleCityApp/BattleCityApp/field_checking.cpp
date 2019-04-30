@@ -9,7 +9,7 @@ void GameField::Checking::CheckingShootingBullets(GameField& gField)
 
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_int_distribution<int> dist(4, 8); //results between 4 and 8 inclusive
+	std::uniform_int_distribution<int> dist(2, 5); //results between 2 and 5 inclusive
 	int random(dist(gen)); //random generation
 
 	std::for_each(gField.tank.begin(), gField.tank.end(), [&](Tank &tank)

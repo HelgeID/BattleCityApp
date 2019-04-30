@@ -357,6 +357,9 @@ void GameField::ControlFrontMode()
 {
 	auto fmFun = [&](Tank &tank)
 	{
+		bool condition;
+
+		//the tank does not rotate in the direction of the frame
 		auto GetDIR = [&]()
 		{
 			if ((round(tank.takeObj().getPosition().x) == field.getPosition().x) && (tank.optTank.dir == UP || tank.optTank.dir == DOWN))
@@ -371,23 +374,30 @@ void GameField::ControlFrontMode()
 				return tank.ClockWiseDirection(tank.optTank.dir);
 		};
 
+		//waiting for the necessary time (from 2.5sec to 22.5sec, 1-9 rnd)
+		condition = (tank.optFM.clockTank.getElapsedTime().asSeconds() > tank.optFM.random * 2.5);
 
-		bool condition(tank.optFM.clockTank.getElapsedTime().asSeconds() > tank.optFM.random * 2.5);
+		//waiting for the desired position (x && y: 0, 8, 16, 32 ...)
 		bool checkPos(
 			((int)tank.getPosObj().x % 8 == 0 && (tank.optTank.dir == LEFT || tank.optTank.dir == RIGHT))
 			||
 			((int)tank.getPosObj().y % 8 == 0 && (tank.optTank.dir == UP || tank.optTank.dir == DOWN))
 		);
 		
-		if (DistanceTank(tank, 24.f))
+		//if the distance to the tank < 24 && fm (frontMode) is off - do not turn on the mode
+		if (DistanceTank(tank, 24.f) && tank.frontModeTank() == false)
 			return;
 
+		////////////////////////////////////////////////////////////
+		// input into mode
+		////////////////////////////////////////////////////////////
 		if (condition && checkPos && tank.frontModeTank() == false)
 		{
-
 			tank.optFM.clockTank.restart();
 			tank.optFM.random = random(1, 2);
 			tank.frontModeTank() = true;
+
+			//write new condition
 			condition = tank.optFM.clockTank.getElapsedTime().asSeconds() > tank.optFM.random * 0.25;
 
 			{
@@ -406,6 +416,9 @@ void GameField::ControlFrontMode()
 			}
 		}
 
+		////////////////////////////////////////////////////////////
+		// output from mode
+		////////////////////////////////////////////////////////////
 		if (condition && tank.frontModeTank() == true)
 		{
 			tank.optFM.clockTank.restart();
@@ -414,12 +427,18 @@ void GameField::ControlFrontMode()
 		}
 	};
 
+////////////////////////////////////////////////////////////////////////
+//START FUNC ControlFrontMode
+////////////////////////////////////////////////////////////////////////
+
 	if (tank.size() == 0)
 		return;
 
 	for (Tank &tank : tank)
-		tank.isTank() && tank.optTank.mod != enemyModB && tank.optTank.mod != enemyModD ? 
-			fmFun(tank) : NULL;
+		tank.isTank() && tank.takeIndex() % 2 == 0 && 
+				tank.optTank.mod != enemyModB && tank.optTank.mod != enemyModD 
+		
+		? fmFun(tank) : NULL;
 
 	return;
 }

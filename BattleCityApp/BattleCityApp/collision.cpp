@@ -14,6 +14,89 @@ bool rnd_0_1()
 //ENEMIES
 /////////////////////////////////////////////////////////////////////////////
 
+// some checking
+auto T_BOOM = [](Tank& tank1, Tank& tank2)
+{
+	sf::FloatRect rect_Tank1 = tank1.takeObj().getGlobalBounds();
+	sf::FloatRect rect_Tank2 = tank2.takeObj().getGlobalBounds();
+
+	const bool fX(rect_Tank1.left > rect_Tank2.left);
+	const bool fY(rect_Tank1.top > rect_Tank2.top);
+
+	if (tank2.optTank.dir == UP) {
+		if (tank1.optTank.dir == UP) {
+			fY == true ? tank1.moveObj(0.f, 1.f) :
+				tank2.moveObj(0.f, 1.f);
+		}
+		else if (tank1.optTank.dir == LEFT) {
+			fX == true ? tank1.moveObj(1.f, 0.f) :
+				!fY ? tank2.moveObj(0.f, 1.f) : NULL;
+		}
+		else if (tank1.optTank.dir == DOWN) {
+			!fY ? tank1.moveObj(0.f, -1.f),
+				tank2.moveObj(0.f, 1.f) : NULL;
+		}
+		else if (tank1.optTank.dir == RIGHT) {
+			!fX ? tank1.moveObj(-1.f, 0.f) :
+				!fY ? tank2.moveObj(0.f, 1.f) : NULL;
+		}
+	}
+	else if (tank2.optTank.dir == LEFT) {
+		if (tank1.optTank.dir == UP) {
+			fY == true ? tank1.moveObj(0.f, 1.f) :
+				!fX ? tank2.moveObj(1.f, 0.f) : NULL;
+		}
+		else if (tank1.optTank.dir == LEFT) {
+			fX == true ? tank1.moveObj(1.f, 0.f) :
+				tank2.moveObj(1.f, 0.f);
+		}
+		else if (tank1.optTank.dir == DOWN) {
+			!fY ? tank1.moveObj(0.f, -1.f) :
+				!fX ? tank2.moveObj(1.f, 0.f) : NULL;
+		}
+		else if (tank1.optTank.dir == RIGHT) {
+			!fX ? tank1.moveObj(-1.f, 0.f),
+				tank2.moveObj(1.f, 0.f) : NULL;
+		}
+	}
+	else if (tank2.optTank.dir == DOWN) {
+		if (tank1.optTank.dir == UP) {
+			fY == true ? tank1.moveObj(0.f, 1.f),
+				tank2.moveObj(0.f, -1.f) : NULL;
+		}
+		else if (tank1.optTank.dir == LEFT) {
+			fX == true ? tank1.moveObj(1.f, 0.f) :
+				fY == true ? tank2.moveObj(0.f, -1.f) : NULL;
+		}
+		else if (tank1.optTank.dir == DOWN) {
+			!fY ? tank1.moveObj(0.f, -1.f) :
+				tank2.moveObj(0.f, -1.f);
+		}
+		else if (tank1.optTank.dir == RIGHT) {
+			!fX ? tank1.moveObj(-1.f, 0.f) :
+				fY == true ? tank2.moveObj(0.f, -1.f) : NULL;
+		}
+	}
+	else if (tank2.optTank.dir == RIGHT) {
+		if (tank1.optTank.dir == UP) {
+			fY == true ? tank1.moveObj(0.f, 1.f) :
+				fX == true ? tank2.moveObj(-1.f, 0.f) : NULL;
+		}
+		else if (tank1.optTank.dir == LEFT) {
+			fX == true ? tank1.moveObj(1.f, 0.f),
+				tank2.moveObj(-1.f, 0.f) : NULL;
+		}
+		else if (tank1.optTank.dir == DOWN) {
+			!fY ? tank1.moveObj(0.f, -1.f) :
+				fX == true ? tank2.moveObj(-1.f, 0.f) : NULL;
+		}
+		else if (tank1.optTank.dir == RIGHT) {
+			!fX ? tank1.moveObj(-1.f, 0.f) :
+				tank2.moveObj(-1.f, 0.f);
+		}
+	}
+};
+
 // Checking the tank on a collision with the frame
 void GameField::CheckOnCollisionFrame(Tank& tank)
 {
@@ -221,8 +304,13 @@ void GameField::CheckOnCollisionBlocks(Tank& tank)
 								}
 							}
 							//processing enemie
-							else
+							else {
+								while (crossing(indxBlock)) {
+									MoveTank(tank, -0.05f);
+									tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
+								}
 								collisionBlocksRotation(tank);
+							}
 						}
 						if (!tank.CompareBoomCoord(posX, posY) && !fPL)
 							tank.ResetBoomParam();
@@ -262,43 +350,51 @@ void GameField::CheckOnCollisionBlocks(Tank& tank)
 void GameField::CheckOnCollisionTanks(Tank& tank1, Tank& tank2)
 {
 	auto collisionTanksRotation = [&](Tank& tank) {  RotationTank(tank, "collision_t", "rotation_r", 2.f); return; };
-	
-	//DistanceTank(tank1, tank2, 24.f) ?
-	//	rnd_0_1() ? collisionTanksRotation(tank1) : collisionTanksRotation(tank2) : NULL;
 
-	if (DistanceTank(tank1, tank2, 18.f) || tank1.takeObj().getGlobalBounds().intersects(tank2.takeObj().getGlobalBounds()))
-	{
-		bool r1_flag(false), r2_flag(false);
-		const Direction dirTank(tank1.optTank.dir), dirTankOther(tank2.optTank.dir);
+	bool crossing(DistanceTank(tank1, tank2, 18.f) || tank1.takeObj().getGlobalBounds().intersects(tank2.takeObj().getGlobalBounds()));
 
-		if ((int)tank1.takeObj().getPosition().x + 16 > (int)tank2.takeObj().getPosition().x) {
-			if (dirTankOther != LEFT && dirTank == RIGHT)
-				r1_flag = true;
-			else if (dirTank != RIGHT && dirTankOther == LEFT)
-				r2_flag = true;
-			else {
-				r1_flag = true;
-				r2_flag = true;
-			}
+	if (crossing == true) {
+		if (rnd_0_1()) {
+			//v1
+			T_BOOM(tank1, tank2);
+			return;
 		}
-
-		else if ((int)tank1.takeObj().getPosition().y + 16 > (int)tank2.takeObj().getPosition().y) {
-			if (dirTankOther != UP && dirTank == DOWN)
-				r1_flag = true;
-			else if (dirTank != DOWN && dirTankOther == UP)
-				r2_flag = true;
-			else {
-				r1_flag = true;
-				r2_flag = true;
-			}
-		}
-
-		if (r1_flag == true && !tank1.sleepTank()) //&& !tank1.frontModeTank()
-			collisionTanksRotation(tank1);
-
-		if (r2_flag == true && !tank2.sleepTank()) //&& !tank2.frontModeTank()
-			collisionTanksRotation(tank2);
 	}
+	else
+		return;
+
+	//v2
+	bool r1_flag(false), r2_flag(false);
+	const Direction dirTank(tank1.optTank.dir), dirTankOther(tank2.optTank.dir);
+
+	if ((int)tank1.takeObj().getPosition().x + 16 > (int)tank2.takeObj().getPosition().x) {
+		if (dirTankOther != LEFT && dirTank == RIGHT)
+			r1_flag = true;
+		else if (dirTank != RIGHT && dirTankOther == LEFT)
+			r2_flag = true;
+		else {
+			r1_flag = true;
+			r2_flag = true;
+		}
+	}
+
+	else if ((int)tank1.takeObj().getPosition().y + 16 > (int)tank2.takeObj().getPosition().y) {
+		if (dirTankOther != UP && dirTank == DOWN)
+			r1_flag = true;
+		else if (dirTank != DOWN && dirTankOther == UP)
+			r2_flag = true;
+		else {
+			r1_flag = true;
+			r2_flag = true;
+		}
+	}
+
+	if (r1_flag == true && !tank1.sleepTank())
+		collisionTanksRotation(tank1);
+
+	if (r2_flag == true && !tank2.sleepTank())
+		collisionTanksRotation(tank2);
+
 	return;
 }
 
@@ -605,89 +701,6 @@ void GameField::CheckOnCollisionPlayers(Bullet& bullet)
 //PLAYERs
 /////////////////////////////////////////////////////////////////////////////
 
-// Checking FirstPlayer & SecondPlayer
-auto PLAYER_BOOM = [](Tank& tank1, Tank& tank2)
-{
-	sf::FloatRect bulletRectPlayer1 = tank1.takeObj().getGlobalBounds();
-	sf::FloatRect bulletRectPlayer2 = tank2.takeObj().getGlobalBounds();
-
-	const bool fX(bulletRectPlayer1.left > bulletRectPlayer2.left);
-	const bool fY(bulletRectPlayer1.top > bulletRectPlayer2.top);
-
-	if (tank2.optTank.dir == UP) {
-		if (tank1.optTank.dir == UP) {
-			fY == true ? tank1.moveObj(0.f, 1.f) :
-				tank2.moveObj(0.f, 1.f);
-		}
-		else if (tank1.optTank.dir == LEFT) {
-			fX == true ? tank1.moveObj(1.f, 0.f) :
-				!fY ? tank2.moveObj(0.f, 1.f) : NULL;
-		}
-		else if (tank1.optTank.dir == DOWN) {
-			!fY ? tank1.moveObj(0.f, -1.f),
-				tank2.moveObj(0.f, 1.f) : NULL;
-		}
-		else if (tank1.optTank.dir == RIGHT) {
-			!fX ? tank1.moveObj(-1.f, 0.f) :
-				!fY ? tank2.moveObj(0.f, 1.f) : NULL;
-		}
-	}
-	else if (tank2.optTank.dir == LEFT) {
-		if (tank1.optTank.dir == UP) {
-			fY == true ? tank1.moveObj(0.f, 1.f) :
-				!fX ? tank2.moveObj(1.f, 0.f) : NULL;
-		}
-		else if (tank1.optTank.dir == LEFT) {
-			fX == true ? tank1.moveObj(1.f, 0.f) :
-				tank2.moveObj(1.f, 0.f);
-		}
-		else if (tank1.optTank.dir == DOWN) {
-			!fY ? tank1.moveObj(0.f, -1.f) :
-				!fX ? tank2.moveObj(1.f, 0.f) : NULL;
-		}
-		else if (tank1.optTank.dir == RIGHT) {
-			!fX ? tank1.moveObj(-1.f, 0.f),
-				tank2.moveObj(1.f, 0.f) : NULL;
-		}
-	}
-	else if (tank2.optTank.dir == DOWN) {
-		if (tank1.optTank.dir == UP) {
-			fY == true ? tank1.moveObj(0.f, 1.f),
-				tank2.moveObj(0.f, -1.f) : NULL;
-		}
-		else if (tank1.optTank.dir == LEFT) {
-			fX == true ? tank1.moveObj(1.f, 0.f) :
-				fY == true ? tank2.moveObj(0.f, -1.f) : NULL;
-		}
-		else if (tank1.optTank.dir == DOWN) {
-			!fY ? tank1.moveObj(0.f, -1.f) :
-				tank2.moveObj(0.f, -1.f);
-		}
-		else if (tank1.optTank.dir == RIGHT) {
-			!fX ? tank1.moveObj(-1.f, 0.f) :
-				fY == true ? tank2.moveObj(0.f, -1.f) : NULL;
-		}
-	}
-	else if (tank2.optTank.dir == RIGHT) {
-		if (tank1.optTank.dir == UP) {
-			fY == true ? tank1.moveObj(0.f, 1.f) :
-				fX == true ? tank2.moveObj(-1.f, 0.f) : NULL;
-		}
-		else if (tank1.optTank.dir == LEFT) {
-			fX == true ? tank1.moveObj(1.f, 0.f),
-				tank2.moveObj(-1.f, 0.f) : NULL;
-		}
-		else if (tank1.optTank.dir == DOWN) {
-			!fY ? tank1.moveObj(0.f, -1.f) :
-				fX == true ? tank2.moveObj(-1.f, 0.f) : NULL;
-		}
-		else if (tank1.optTank.dir == RIGHT) {
-			!fX ? tank1.moveObj(-1.f, 0.f) :
-				tank2.moveObj(-1.f, 0.f);
-		}
-	}
-};
-
 // Checking the player on a collision with the frame
 void GameField::CheckOnCollisionFrame(Player& player)
 {
@@ -760,7 +773,7 @@ void GameField::CheckOnCollisionTanks(Player& player)
 		if (!it->isTank())
 			continue;
 		if (player.takeObj().getGlobalBounds().intersects(it->takeObj().getGlobalBounds())) {
-			PLAYER_BOOM(player, *it);
+			T_BOOM(player, *it);
 			if ((player.optTank.dir == UP && it->optTank.dir == DOWN) ||
 				(player.optTank.dir == LEFT && it->optTank.dir == RIGHT) ||
 				(player.optTank.dir == DOWN && it->optTank.dir == UP) ||
@@ -783,9 +796,9 @@ void GameField::CheckOnCollisionPlayers(Player& player1, Player& player2)
 {
 	if (player1.takeObj().getGlobalBounds().intersects(player2.takeObj().getGlobalBounds())) {
 		(Key_A || Key_D || Key_W || Key_S) ?
-			PLAYER_BOOM(player1, player2) : NULL;
+			T_BOOM(player1, player2) : NULL;
 		(Key_Left || Key_Right || Key_Up || Key_Down) ?
-			PLAYER_BOOM(player2, player1) : NULL;
+			T_BOOM(player2, player1) : NULL;
 	}
 	return;
 }
@@ -840,8 +853,13 @@ void GameField::CheckOnMoore()
 						round(tank[iTank].takeObj().getPosition().x), 
 						round(tank[iTank].takeObj().getPosition().y)
 					);
-					if (crossing(moore[iMoore], tank[iTank]))
+					if (crossing(moore[iMoore], tank[iTank])) {
+						while (crossing(moore[iMoore], tank[iTank])) {
+							MoveTank(tank[iTank], -0.05f);
+							tank[iTank].setPosFrame(tank[iTank].takeObj().getPosition().x, tank[iTank].takeObj().getPosition().y);
+						}
 						collisionBlocksMooreRotation(tank[iTank]);
+					}
 					Compare(tank[iTank], posTank);
 				}
 			}
