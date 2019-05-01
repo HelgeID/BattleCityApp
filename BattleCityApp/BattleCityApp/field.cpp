@@ -17,11 +17,11 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	CreateActors();
 	CreateTanks();
 
-	std::unique_ptr<std::thread> thread_ControlSpawnEnemies(new std::thread(&ControlSpawnEnemies, this));
-	thread_ControlSpawnEnemies->detach();
+	//std::unique_ptr<std::thread> thread_ControlSpawnEnemies(new std::thread(&ControlSpawnEnemies, this));
+	//thread_ControlSpawnEnemies->detach();
 
-	std::unique_ptr<std::thread> thread_ControlSound(new std::thread(&ControlSound, this));
-	thread_ControlSound->detach();
+	//std::unique_ptr<std::thread> thread_ControlSound(new std::thread(&ControlSound, this));
+	//thread_ControlSound->detach();
 }
 
 GameField::~GameField()

@@ -3,7 +3,7 @@
 #include "map.h"
 #include <time.h>
 
-//add func, rnd_0_1
+// add func, rnd_0_1
 bool rnd_0_1()
 {
 	srand((unsigned)time(NULL)); //for rand()
@@ -349,51 +349,82 @@ void GameField::CheckOnCollisionBlocks(Tank& tank)
 // Checking the tank on a collision with the other tank
 void GameField::CheckOnCollisionTanks(Tank& tank1, Tank& tank2)
 {
-	auto collisionTanksRotation = [&](Tank& tank) {  RotationTank(tank, "collision_t", "rotation_r", 2.f); return; };
+	auto collisionTanksRotation = [&](Tank& tank) { !tank.frontModeTank() || !tank.sleepTank() ? RotationTank(tank, "collision_t", "rotation_r", 2.f) : NULL; return; };
 
 	bool crossing(DistanceTank(tank1, tank2, 18.f) || tank1.takeObj().getGlobalBounds().intersects(tank2.takeObj().getGlobalBounds()));
 
-	if (crossing == true) {
-		if (rnd_0_1()) {
-			//v1
-			T_BOOM(tank1, tank2);
+	auto T_BOOM_NEW = [&](Tank& tank1, Tank& tank2)
+	{
+		const Direction DIR1(tank1.optTank.dir);
+		const Direction DIR2(tank2.optTank.dir);
+
+		const sf::Vector2f pos1 = tank1.getPosObj();
+		const sf::Vector2f pos2 = tank2.getPosObj();
+		const float SIZE(16.f);
+
+		if ((DIR1 == LEFT || DIR1 == RIGHT) && DIR2 == UP) {
+			if (pos2.y + 1 > pos1.y + SIZE)
+				collisionTanksRotation(tank2);
+			if (pos2.y + 1 < pos1.y + SIZE)
+				collisionTanksRotation(tank1);
 			return;
 		}
-	}
-	else
-		return;
-
-	//v2
-	bool r1_flag(false), r2_flag(false);
-	const Direction dirTank(tank1.optTank.dir), dirTankOther(tank2.optTank.dir);
-
-	if ((int)tank1.takeObj().getPosition().x + 16 > (int)tank2.takeObj().getPosition().x) {
-		if (dirTankOther != LEFT && dirTank == RIGHT)
-			r1_flag = true;
-		else if (dirTank != RIGHT && dirTankOther == LEFT)
-			r2_flag = true;
-		else {
-			r1_flag = true;
-			r2_flag = true;
+		else if ((DIR1 == LEFT || DIR1 == RIGHT) && DIR2 == DOWN) {
+			if (pos2.y + SIZE - 1 < pos1.y)
+				collisionTanksRotation(tank2);
+			if (pos2.y + SIZE - 1 > pos1.y)
+				collisionTanksRotation(tank1);
+			return;
 		}
-	}
-
-	else if ((int)tank1.takeObj().getPosition().y + 16 > (int)tank2.takeObj().getPosition().y) {
-		if (dirTankOther != UP && dirTank == DOWN)
-			r1_flag = true;
-		else if (dirTank != DOWN && dirTankOther == UP)
-			r2_flag = true;
-		else {
-			r1_flag = true;
-			r2_flag = true;
+		else if ((DIR1 == UP || DIR1 == DOWN) && DIR2 == LEFT) {
+			if (pos2.x + 1 > pos1.x + SIZE)
+				collisionTanksRotation(tank2);
+			if (pos2.x + 1 < pos1.x + SIZE)
+				collisionTanksRotation(tank1);
+			return;
 		}
-	}
+		else if ((DIR1 == UP || DIR1 == DOWN) && DIR2 == RIGHT) {
+			if (pos2.x + SIZE - 1 < pos1.x)
+				collisionTanksRotation(tank2);
+			if (pos2.x + SIZE - 1 > pos1.x)
+				collisionTanksRotation(tank1);
+			return;
+		}
+		else if (DIR1 == DIR2 && DIR2 == UP) {
+			if (pos2.y + 1 > pos1.y + SIZE)
+				collisionTanksRotation(tank2);
+			if (pos1.y + 1 > pos2.y + SIZE)
+				collisionTanksRotation(tank1);
+		}
+		else if (DIR1 == DIR2 && DIR2 == DOWN) {
+			if (pos2.y + SIZE < pos1.y)
+				collisionTanksRotation(tank2);
+			if (pos1.y + SIZE < pos2.y)
+				collisionTanksRotation(tank1);
+		}
+		else if (DIR1 == DIR2 && DIR2 == LEFT) {
+			if (pos2.x + 1 > pos1.x + SIZE)
+				collisionTanksRotation(tank2);
+			if (pos1.x + 1 > pos2.x + SIZE)
+				collisionTanksRotation(tank1);
+		}
+		else if (DIR1 == DIR2 && DIR2 == RIGHT) {
+			if (pos2.x + SIZE < pos1.x)
+				collisionTanksRotation(tank2);
+			if (pos1.x + SIZE < pos2.x)
+				collisionTanksRotation(tank1);
+		}
+		else {
+			collisionTanksRotation(tank1);
+			collisionTanksRotation(tank2);
+			return;
+		}
+	};
 
-	if (r1_flag == true && !tank1.sleepTank())
-		collisionTanksRotation(tank1);
-
-	if (r2_flag == true && !tank2.sleepTank())
-		collisionTanksRotation(tank2);
+	//start :
+	crossing ? 
+		rnd_0_1() ? T_BOOM(tank1, tank2) : T_BOOM_NEW(tank1, tank2) : 
+		NULL;
 
 	return;
 }
