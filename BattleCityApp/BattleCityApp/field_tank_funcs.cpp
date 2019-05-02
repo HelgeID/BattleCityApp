@@ -98,14 +98,14 @@ void GameField::ReloadTank(Tank& tank, const sf::Vector2f pos)
 	return;
 }
 
-void GameField::MoveTank(Tank& tank, float position)
+void GameField::MoveTank(Tank& tank, float position, bool inverse)
 {
 	switch (tank.optTank.dir)
 	{
-		case UP: MoveTank(UP, tank, position); break;
-		case LEFT: MoveTank(LEFT, tank, position); break;
-		case DOWN: MoveTank(DOWN, tank, position); break;
-		case RIGHT: MoveTank(RIGHT, tank, position); break;
+		case UP:		!inverse ? MoveTank(UP, tank, position) :		MoveTank(DOWN, tank, position);    break;
+		case LEFT:		!inverse ? MoveTank(LEFT, tank, position) :		MoveTank(RIGHT, tank, position);   break;
+		case DOWN:		!inverse ? MoveTank(DOWN, tank, position) :		MoveTank(UP, tank, position);      break;
+		case RIGHT:		!inverse ? MoveTank(RIGHT, tank, position) :	MoveTank(LEFT, tank, position);    break;
 	}
 	return;
 }
@@ -485,7 +485,7 @@ void GameField::RotationTank(Tank& tank, const char* choice_name_collision, cons
 		; //move == 0.f
 	else
 		if (choice_name_collision == "collision_bs" || choice_name_collision == "collision_t") {
-			MoveTank(tank, move);
+			MoveTank(tank, move, false);
 		}
 		else
 			if (choice_name_collision == "collision_b" || choice_name_collision == "collision_m") {

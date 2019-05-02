@@ -296,21 +296,17 @@ void GameField::CheckOnCollisionBlocks(Tank& tank)
 					if (block[indxBlock].type == Brick || block[indxBlock].type == Steel)
 					{
 						if (crossing(indxBlock)) {
-							//processing player
-							if (fPL == true) {
-								while (crossing(indxBlock)) {
-									MoveTank(tank, -0.05f);
-									tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
-								}
+							const bool crossUPf((tank.optTank.dir == UP) && (tank.getPosObj().y < block[indxBlock].getPosObj().y + 16) && (tank.getPosObj().y > block[indxBlock].getPosObj().y));
+							const bool crossDOWNf((tank.optTank.dir == DOWN) && (tank.getPosObj().y + 16 > block[indxBlock].getPosObj().y) && (tank.getPosObj().y + 16 < block[indxBlock].getPosObj().y + 16));
+							const bool crossLEFTf((tank.optTank.dir == LEFT) && (tank.getPosObj().x < block[indxBlock].getPosObj().x + 16) && (tank.getPosObj().x > block[indxBlock].getPosObj().x));
+							const bool crossRIGHTf((tank.optTank.dir == RIGHT) && (tank.getPosObj().x + 16 > block[indxBlock].getPosObj().x) && (tank.getPosObj().x + 16 < block[indxBlock].getPosObj().x + 16));
+
+							unsigned int counter(0);
+							while (crossing(indxBlock)) {
+								++counter <= 15 || crossUPf || crossDOWNf || crossLEFTf || crossRIGHTf ? MoveTank(tank, -0.05f, false) : MoveTank(tank, -0.05f, true);
+								tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
 							}
-							//processing enemie
-							else {
-								while (crossing(indxBlock)) {
-									MoveTank(tank, -0.05f);
-									tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
-								}
-								collisionBlocksRotation(tank);
-							}
+							!fPL ? collisionBlocksRotation(tank) : NULL;
 						}
 						if (!tank.CompareBoomCoord(posX, posY) && !fPL)
 							tank.ResetBoomParam();
@@ -757,7 +753,7 @@ void GameField::CheckOnCollisionBlocksSpawn(Player& player, const int num)
 	const bool u1((rPlayer_BS->Spawn() == true && num == 1) && (player.takeObj().getGlobalBounds().intersects(rPlayer_BS->takeObj().getGlobalBounds())));
 	const bool u2((lPlayer_BS->Spawn() == true && num == 2) && (player.takeObj().getGlobalBounds().intersects(lPlayer_BS->takeObj().getGlobalBounds())));
 	if (u1 || u2) {
-		MoveTank(player, -1.f);
+		MoveTank(player, -1.f, false);
 		return;
 	}
 
@@ -855,11 +851,21 @@ void GameField::CheckOnMoore()
 		return tank.frame.getGlobalBounds().intersects(block.frame.getGlobalBounds()); // for player
 	};
 
+	auto crossF = [&](Block& block, Tank& tank)
+	{
+		const bool crossUPf((tank.optTank.dir == UP) && (tank.getPosObj().y < block.getPosObj().y + 16) && (tank.getPosObj().y > block.getPosObj().y));
+		const bool crossDOWNf((tank.optTank.dir == DOWN) && (tank.getPosObj().y + 16 > block.getPosObj().y) && (tank.getPosObj().y + 16 < block.getPosObj().y + 16));
+		const bool crossLEFTf((tank.optTank.dir == LEFT) && (tank.getPosObj().x < block.getPosObj().x + 16) && (tank.getPosObj().x > block.getPosObj().x));
+		const bool crossRIGHTf((tank.optTank.dir == RIGHT) && (tank.getPosObj().x + 16 > block.getPosObj().x) && (tank.getPosObj().x + 16 < block.getPosObj().x + 16));
+		return crossUPf || crossDOWNf || crossLEFTf || crossRIGHTf;
+	};
+
 	auto PlAYER_BOOM = [&](Block& block, Tank& tank)
 	{
+		unsigned int counter(0);
 		while (crossing(block, tank))
 		{
-			MoveTank(tank, -0.05f);
+			++counter <= 15 || crossF(block, tank) ? MoveTank(tank, -0.05f, false) : MoveTank(tank, -0.05f, true);
 			tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
 		}
 		return;
@@ -885,8 +891,9 @@ void GameField::CheckOnMoore()
 						round(tank[iTank].takeObj().getPosition().y)
 					);
 					if (crossing(moore[iMoore], tank[iTank])) {
+						unsigned int counter(0);
 						while (crossing(moore[iMoore], tank[iTank])) {
-							MoveTank(tank[iTank], -0.05f);
+							++counter <= 15 || crossF(moore[iMoore], tank[iTank]) ? MoveTank(tank[iTank], -0.05f, false) : MoveTank(tank[iTank], -0.05f, true);
 							tank[iTank].setPosFrame(tank[iTank].takeObj().getPosition().x, tank[iTank].takeObj().getPosition().y);
 						}
 						collisionBlocksMooreRotation(tank[iTank]);

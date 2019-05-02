@@ -109,7 +109,7 @@ class GameField
 	void updTanks();
 	void DrawTanks();
 	void DrawTank(Tank&);
-	void MoveTank(Tank&, float);
+	void MoveTank(Tank&, float, bool);
 	void MoveTank(const Direction, Tank&, float);
 	bool DistanceTank(Tank&, const float);
 	bool DistanceTank(Tank&, Tank&, const float);
