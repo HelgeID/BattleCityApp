@@ -35,7 +35,7 @@ void GameField::UpdateField()
 	//--------------------------------------
 	UpdateTime();
 	//--------------------------------------
-	window.clear(sf::Color(127, 127, 127));
+	window.clear(sf::Color(99, 99, 99));
 	//--------------------------------------
 	updPlayers(); updTanks(); updBullets();
 	//--------------------------------------
@@ -53,6 +53,8 @@ void GameField::UpdateField()
 	DrawBonus(); //ok
 	//--------------------------------------
 	DrawDynamicElements(); //ok
+
+	//window.draw(storage_tanks); //uses alternative: tDynamic
 	//--------------------------------------
 	READDATAOBJ(this); //get data for tDynamic
 	//--------------------------------------

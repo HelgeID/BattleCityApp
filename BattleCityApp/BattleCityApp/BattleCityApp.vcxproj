@@ -156,6 +156,8 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="general.hpp" />
     <ClInclude Include="map.h" />
+    <ClInclude Include="storage_tank.hpp" />
+    <ClInclude Include="ui.hpp" />
     <ClInclude Include="msg.h" />
     <ClInclude Include="object.hpp" />
     <ClInclude Include="part_bricks_map.h" />

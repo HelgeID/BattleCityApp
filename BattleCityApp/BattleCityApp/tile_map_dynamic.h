@@ -37,7 +37,7 @@ private:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 
 public:
-	void setSprite(const int, const sf::Vector2f, const sf::Vector2i);
+	void setSprite(const int, const sf::Vector2f, const sf::Vector2i, float size_TILE = 0.f);
 };
 
 #endif

@@ -158,5 +158,11 @@
     <ClInclude Include="tile_map_dynamic.h">
       <Filter>Заголовочные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="ui.hpp">
+      <Filter>Заголовочные файлы\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="storage_tank.hpp">
+      <Filter>Заголовочные файлы\objects</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

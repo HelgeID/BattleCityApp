@@ -105,7 +105,7 @@ TileDynamic::TileDynamic(sf::Texture& texture) : texture(&texture)
 {
 	//resize the vertex array to fit the level size
 	this->vertices.setPrimitiveType(sf::Quads);
-	this->vertices.resize(40 * 4);
+	this->vertices.resize(60 * 4); //here change, when add elements
 }
 
 TileDynamic::~TileDynamic()
@@ -126,22 +126,24 @@ void TileDynamic::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	return;
 }
 
-void TileDynamic::setSprite(const int index, const sf::Vector2f mapCoords, const sf::Vector2i texCoords)
+void TileDynamic::setSprite(const int index, const sf::Vector2f mapCoords, const sf::Vector2i texCoords, float size_TILE)
 {
+	size_TILE == 0 ? size_TILE = SIZE_TILE : 0;
+
 	//calculate the step: 0, 4, 8, 12 ...
 	const int step(index * 4);
 
 	//define its 4 corners
 	this->vertices[step + 0].position = sf::Vector2f(mapCoords.x, mapCoords.y);
-	this->vertices[step + 1].position = sf::Vector2f(mapCoords.x + SIZE_TILE, mapCoords.y);
-	this->vertices[step + 2].position = sf::Vector2f(mapCoords.x + SIZE_TILE, mapCoords.y + SIZE_TILE);
-	this->vertices[step + 3].position = sf::Vector2f(mapCoords.x, mapCoords.y + SIZE_TILE);
+	this->vertices[step + 1].position = sf::Vector2f(mapCoords.x + size_TILE, mapCoords.y);
+	this->vertices[step + 2].position = sf::Vector2f(mapCoords.x + size_TILE, mapCoords.y + size_TILE);
+	this->vertices[step + 3].position = sf::Vector2f(mapCoords.x, mapCoords.y + size_TILE);
 
 	//define its 4 texture coordinates (16x16)
 	this->vertices[step + 0].texCoords = sf::Vector2f(texCoords.x, texCoords.y);
-	this->vertices[step + 1].texCoords = sf::Vector2f(texCoords.x + SIZE_TILE, texCoords.y);
-	this->vertices[step + 2].texCoords = sf::Vector2f(texCoords.x + SIZE_TILE, texCoords.y + SIZE_TILE);
-	this->vertices[step + 3].texCoords = sf::Vector2f(texCoords.x, texCoords.y + SIZE_TILE);
+	this->vertices[step + 1].texCoords = sf::Vector2f(texCoords.x + size_TILE, texCoords.y);
+	this->vertices[step + 2].texCoords = sf::Vector2f(texCoords.x + size_TILE, texCoords.y + size_TILE);
+	this->vertices[step + 3].texCoords = sf::Vector2f(texCoords.x, texCoords.y + size_TILE);
 
 	return;
 }

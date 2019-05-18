@@ -22,6 +22,9 @@
 
 #include "sound.h"
 
+//ui
+#include "storage_tank.hpp"
+
 //test
 #include <iostream>
 
@@ -41,6 +44,8 @@ class GameField
 
 	Sound sound;
 	friend void ControlSound(GameField*);
+
+	StorageTanks storage_tanks{ texture };
 
 	sf::Clock clock;
 	float time;

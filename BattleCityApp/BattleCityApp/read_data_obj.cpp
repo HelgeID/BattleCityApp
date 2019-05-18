@@ -5,10 +5,11 @@
 //2) texture coordinates
 
 
-/* SUMM = 40 elem.
+/* SUMM = 60 elem. : TileDynamic::TileDynamic
 Obj: (6) tanks, (2) players
 Anim: (6) BirthTank, (6) SkinTank, (2) BirthPl, (2) SkinPl
 BoomAnim: (8) tankBoom, (8) bulletBoom
+UITank: (20)
 */
 
 #include "field.h"
@@ -21,6 +22,19 @@ void TakeDataObj(T& obj, TileCoords& data, int& index)
 	{
 		obj.takeObj().getTextureRect().left,
 		obj.takeObj().getTextureRect().top
+	};
+	index++;
+	return;
+}
+
+template <typename T>
+void TakeDataUIObj(StorageTanks& obj, TileCoords& data, int& index, const int uiIndexTank)
+{
+	data.mapCoords = obj.TakeArrUITank()[uiIndexTank].getPosObj();
+	data.texCoords =
+	{
+		obj.TakeArrUITank()[uiIndexTank].takeObj().getTextureRect().left,
+		obj.TakeArrUITank()[uiIndexTank].takeObj().getTextureRect().top,
 	};
 	index++;
 	return;
@@ -56,7 +70,7 @@ void READDATAOBJ(GameField* gFieldPtr)
 	TileCoords data;
 	int index(0);
 
-	auto SetSprite = [&] { gFieldPtr->tDynamic.setSprite(index - 1, data.mapCoords, data.texCoords); };
+	auto SetSprite = [&](const float size_TILE = 0.f) { gFieldPtr->tDynamic.setSprite(index - 1, data.mapCoords, data.texCoords, size_TILE); }; //var: NULL - by default (16px)
 
 	//for obj tanks
 	{
@@ -116,4 +130,11 @@ void READDATAOBJ(GameField* gFieldPtr)
 		}
 	}
 
+	//for ui tanks
+	{
+		const size_t uiTankSize(gFieldPtr->storage_tanks.TakeArrUITankSize());
+		for (int uiIndexTank(0); uiIndexTank < uiTankSize; ++uiIndexTank) {
+			TakeDataUIObj<StorageTanks>(gFieldPtr->storage_tanks, data, index, uiIndexTank); SetSprite(9.f);
+		}
+	}
 }
