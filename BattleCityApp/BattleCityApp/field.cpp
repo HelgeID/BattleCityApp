@@ -22,6 +22,9 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 
 	std::unique_ptr<std::thread> thread_ControlSound(new std::thread(&ControlSound, this));
 	thread_ControlSound->detach();
+
+	usesUI_nlifes();
+	usesUI_nflags();
 }
 
 GameField::~GameField()
@@ -54,7 +57,11 @@ void GameField::UpdateField()
 	//--------------------------------------
 	DrawDynamicElements(); //ok
 
+	//test
 	//window.draw(storage_tanks); //uses alternative: tDynamic
+	window.draw(number_lifes_first);
+	window.draw(number_lifes_second);
+	window.draw(number_flags);
 	//--------------------------------------
 	READDATAOBJ(this); //get data for tDynamic
 	//--------------------------------------

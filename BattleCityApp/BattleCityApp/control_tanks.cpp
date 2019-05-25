@@ -84,7 +84,7 @@ void LAUNCHING_TANKS(GameField* gField)
 		{ //searching for an empty place
 			for (size_t index = _index; index < 6; index++)
 				if (gField->tankAnimArr[index].tankBirth == nullptr) {
-					{ std::lock_guard<std::mutex> lg(mtx); gField->CreateAnimBirth(pos, index); }
+					{ std::lock_guard<std::mutex> lg(mtx); gField->CreateAnimBirth(pos, index); gField->usesUI_tank(); }
 					break;
 				}
 		}
@@ -207,7 +207,7 @@ void LAUNCHING_TANKS(GameField* gField)
 		LOAD_TANK(gField); //(add 6)
 	}
 
-	std::cerr << "\a";
+	//std::cerr << "\a";
 	gField->LAUNCHING_TANKS_ON_OFF = false;
 	return;
 }
@@ -221,7 +221,7 @@ void LAUNCHING_TANKS_NUM(GameField* gField, const int numTanks)
 		LOAD_TANK(gField);
 		sf::sleep(sf::milliseconds(750));
 	} while (--index);
-	std::cerr << "\a";
+	//std::cerr << "\a";
 	gField->LAUNCHING_TANKS_ON_OFF = false;
 	return;
 }
@@ -252,7 +252,7 @@ void LOAD_TANK(GameField* gField)
 			;
 			for (size_t index = 0; index < 6; index++) {
 				if (gField->tankAnimArr[index].tankBirth == nullptr) {
-					{ std::lock_guard<std::mutex> lg(mtx); gField->CreateAnimBirth(pos, index); }
+					{ std::lock_guard<std::mutex> lg(mtx); gField->CreateAnimBirth(pos, index); gField->usesUI_tank(); }
 					_index = index;
 					goto exit;
 				}

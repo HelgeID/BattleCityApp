@@ -23,7 +23,9 @@
 #include "sound.h"
 
 //ui
-#include "storage_tank.hpp"
+#include "ui_storage_tanks.hpp"
+#include "ui_number_lifes.hpp"
+#include "ui_number_flags.hpp"
 
 //test
 #include <iostream>
@@ -46,6 +48,9 @@ class GameField
 	friend void ControlSound(GameField*);
 
 	StorageTanks storage_tanks{ texture };
+	NumberLifes number_lifes_first{ texture, "first player" }; //todo
+	NumberLifes number_lifes_second{ texture, "second player" }; //todo
+	NumberFlags number_flags{ texture }; //todo
 
 	sf::Clock clock;
 	float time;
@@ -189,6 +194,8 @@ class GameField
 	std::unique_ptr<BlockSpawn> lPlayer_BS{ nullptr };
 	std::unique_ptr<BlockSpawn> rPlayer_BS{ nullptr };
 
+	bool TwoPlayer() const { return p_player > 1; }
+
 	void CreateActors();
 	friend void RestartPlayer(GameField*, const std::string);
 	void RestartFirstPlayer(const bool flag = false);
@@ -291,6 +298,12 @@ class GameField
 
 	friend void WaitingShovel(GameField*);
 	friend void WaitingClock(GameField*);
+
+
+	//UI FUNCS
+	void usesUI_tank();
+	void usesUI_nflags();
+	void usesUI_nlifes();
 public:
 	explicit GameField(sf::RenderWindow&, sf::Texture&);
 	~GameField();

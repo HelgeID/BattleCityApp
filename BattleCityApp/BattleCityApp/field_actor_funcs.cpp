@@ -64,15 +64,14 @@ void GameField::CreateActors()
 {
 	firstPlayer = new Player(texture, "first player", false);
 	secondPlayer = new Player(texture, "second player", false);
-	RestartFirstPlayer();
-	RestartSecondPlayer();
+	TwoPlayer() ? RestartFirstPlayer(), RestartSecondPlayer() : RestartFirstPlayer();
 	return;
 }
 
 void GameField::RestartFirstPlayer(const bool flag)
 {
 	sf::Vector2f posFirstPlayer(lPlayer_BS->getPosObj().x, lPlayer_BS->getPosObj().y);
-	firstPlayer->numStar() = 1; //todo 0
+	firstPlayer->numStar() = 0; //NULL by default
 	firstPlayer->loadTank(YELLOW, playerModA, UP, false);
 	firstPlayer->setPosObj(posFirstPlayer.x, posFirstPlayer.y);
 	firstPlayer->loadIndex(100); // One hundred - just a constant variable for firstPlayer
@@ -96,7 +95,7 @@ void GameField::RestartFirstPlayer(const bool flag)
 void GameField::RestartSecondPlayer(const bool flag)
 {
 	sf::Vector2f posSecondPlayer(rPlayer_BS->getPosObj().x, rPlayer_BS->getPosObj().y);
-	secondPlayer->numStar() = 1; //todo 0
+	secondPlayer->numStar() = 0; //NULL by default
 	secondPlayer->loadTank(GREEN, playerModA, UP, false);
 	secondPlayer->setPosObj(posSecondPlayer.x, posSecondPlayer.y);
 	secondPlayer->loadIndex(200); // Two hundred - just a constant variable for secondPlayer

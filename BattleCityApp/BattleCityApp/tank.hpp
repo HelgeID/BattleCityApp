@@ -44,7 +44,7 @@ namespace spaceTank
 
 	struct SettingsRDir
 	{
-		int tankTime_for_dir{ 10 };
+		int tankTime_for_dir{ 0 };
 		sf::Clock tankClock_for_dir;
 	};
 

@@ -141,6 +141,7 @@
     <ClCompile Include="read_data_obj.cpp" />
     <ClCompile Include="source.cpp" />
     <ClCompile Include="tile_map_dynamic.cpp" />
+    <ClCompile Include="ui_funcs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="actor.hpp" />
@@ -156,7 +157,9 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="general.hpp" />
     <ClInclude Include="map.h" />
-    <ClInclude Include="storage_tank.hpp" />
+    <ClInclude Include="ui_number_flags.hpp" />
+    <ClInclude Include="ui_number_lifes.hpp" />
+    <ClInclude Include="ui_storage_tanks.hpp" />
     <ClInclude Include="ui.hpp" />
     <ClInclude Include="msg.h" />
     <ClInclude Include="object.hpp" />

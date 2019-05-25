@@ -96,6 +96,9 @@
     <ClCompile Include="tile_map_dynamic.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="ui_funcs.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -161,7 +164,13 @@
     <ClInclude Include="ui.hpp">
       <Filter>Заголовочные файлы\objects</Filter>
     </ClInclude>
-    <ClInclude Include="storage_tank.hpp">
+    <ClInclude Include="ui_number_flags.hpp">
+      <Filter>Заголовочные файлы\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_number_lifes.hpp">
+      <Filter>Заголовочные файлы\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_storage_tanks.hpp">
       <Filter>Заголовочные файлы\objects</Filter>
     </ClInclude>
   </ItemGroup>

@@ -26,7 +26,8 @@ public:
 	bool& Presence() { return presenceflag; }
 
 	void inclife() {
-		life_counter++;
+		if (life_counter < 10)
+			life_counter++;
 		return;
 	}
 
