@@ -1,6 +1,7 @@
 ﻿#pragma once
 extern bool p_zoom;
-extern int p_level;
+extern bool p_no_sound;
+extern int p_level; // 1, 2, 3 , ...
 extern int p_player; //1 or 2
 
 //test
@@ -34,3 +35,5 @@ extern bool blocking_hit_for_enemy;
 
 
 extern bool f_f;//for optimality
+
+extern bool gameover;

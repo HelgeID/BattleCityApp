@@ -134,7 +134,11 @@ void READDATAOBJ(GameField* gFieldPtr)
 	{
 		const size_t uiTankSize(gFieldPtr->storage_tanks.TakeArrUITankSize());
 		for (int uiIndexTank(0); uiIndexTank < uiTankSize; ++uiIndexTank) {
-			TakeDataUIObj<StorageTanks>(gFieldPtr->storage_tanks, data, index, uiIndexTank); SetSprite(9.f);
+			if (gFieldPtr->curtain == nullptr) {
+				TakeDataUIObj<StorageTanks>(gFieldPtr->storage_tanks, data, index, uiIndexTank); SetSprite(9.f);
+			}
+			else
+				index++;
 		}
 	}
 }

@@ -99,6 +99,9 @@
     <ClCompile Include="ui_funcs.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="control_curtain.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -171,6 +174,12 @@
       <Filter>Заголовочные файлы\objects</Filter>
     </ClInclude>
     <ClInclude Include="ui_storage_tanks.hpp">
+      <Filter>Заголовочные файлы\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="curtain.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_number_tanks.hpp">
       <Filter>Заголовочные файлы\objects</Filter>
     </ClInclude>
   </ItemGroup>

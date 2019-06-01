@@ -119,6 +119,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bonus_funcs.cpp" />
+    <ClCompile Include="control_curtain.cpp" />
     <ClCompile Include="control_sound.cpp" />
     <ClCompile Include="control_tanks.cpp" />
     <ClCompile Include="events.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="block_spawn.hpp" />
     <ClInclude Include="bonus.hpp" />
     <ClInclude Include="bullet.hpp" />
+    <ClInclude Include="curtain.h" />
     <ClInclude Include="events.h" />
     <ClInclude Include="fps.h" />
     <ClInclude Include="frame.hpp" />
@@ -159,6 +161,7 @@
     <ClInclude Include="map.h" />
     <ClInclude Include="ui_number_flags.hpp" />
     <ClInclude Include="ui_number_lifes.hpp" />
+    <ClInclude Include="ui_number_tanks.hpp" />
     <ClInclude Include="ui_storage_tanks.hpp" />
     <ClInclude Include="ui.hpp" />
     <ClInclude Include="msg.h" />

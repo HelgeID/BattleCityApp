@@ -10,8 +10,8 @@ class Sound
 {
 	enum Status { absent_mode, stopping_mode, moving_mode } mode{ absent_mode };
 
-	sf::Sound* sound;
-	sf::Sound* sound_ms;//moving-stopping
+	sf::Sound *sound_shoot, *sound_bonus, *sound_takebonus, *sound_explosion_f, *sound_explosion_t;
+	sf::Sound *sound_ms;//moving-stopping
 
 	sf::Music music;
 	sf::SoundBuffer movingBuff;
@@ -85,6 +85,9 @@ public:
 
 	void Moving()
 	{
+		if (p_no_sound || gameover)
+			return;
+
 		if (mode != moving_mode) {
 			sound_ms->stop();
 			sound_ms->setBuffer(movingBuff);
@@ -97,6 +100,9 @@ public:
 
 	void Stopping()
 	{
+		if (p_no_sound || gameover)
+			return;
+
 		if (mode != stopping_mode) {
 			sound_ms->stop();
 			sound_ms->setBuffer(stoppingBuff);
@@ -109,70 +115,80 @@ public:
 
 	friend void ShootSnd(Sound* obj)
 	{
-		return;
-		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
+		if (p_no_sound || gameover)
+			return;
+
+		while (obj->sound_shoot->getStatus() != sf::SoundSource::Status::Stopped)
 			;
 		{
 			std::lock_guard<std::mutex> lg(mtx_snd);
-			obj->sound->setBuffer(obj->getBufferSnd("shootBuff"));
-			obj->sound->setLoop(false);
-			obj->sound->play();
+			obj->sound_shoot->setBuffer(obj->getBufferSnd("shootBuff"));
+			obj->sound_shoot->setLoop(false);
+			obj->sound_shoot->play();
 		}
 		return;
 	}
 
 	friend void BonusSnd(Sound* obj)
 	{
-		return;
-		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
+		if (p_no_sound || gameover)
+			return;
+
+		while (obj->sound_bonus->getStatus() != sf::SoundSource::Status::Stopped)
 			;
 		{
 			std::lock_guard<std::mutex> lg(mtx_snd);
-			obj->sound->setBuffer(obj->getBufferSnd("bonusBuff"));
-			obj->sound->setLoop(false);
-			obj->sound->play();
+			obj->sound_bonus->setBuffer(obj->getBufferSnd("bonusBuff"));
+			obj->sound_bonus->setLoop(false);
+			obj->sound_bonus->play();
 		}
 		return;
 	}
 
 	friend void TakeBonusSnd(Sound* obj)
 	{
-		return;
-		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
+		if (p_no_sound || gameover)
+			return;
+
+		while (obj->sound_takebonus->getStatus() != sf::SoundSource::Status::Stopped)
 			;
 		{
 			std::lock_guard<std::mutex> lg(mtx_snd);
-			obj->sound->setBuffer(obj->getBufferSnd("takebonusBuff"));
-			obj->sound->setLoop(false);
-			obj->sound->play();
+			obj->sound_takebonus->setBuffer(obj->getBufferSnd("takebonusBuff"));
+			obj->sound_takebonus->setLoop(false);
+			obj->sound_takebonus->play();
 		}
 		return;
 	}
 
 	friend void Explosion_fSnd(Sound* obj)
 	{
-		return;
-		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
+		if (p_no_sound || gameover)
+			return;
+
+		while (obj->sound_explosion_f->getStatus() != sf::SoundSource::Status::Stopped)
 			;
 		{
 			std::lock_guard<std::mutex> lg(mtx_snd);
-			obj->sound->setBuffer(obj->getBufferSnd("explosion_fBuff"));
-			obj->sound->setLoop(false);
-			obj->sound->play();
+			obj->sound_explosion_f->setBuffer(obj->getBufferSnd("explosion_fBuff"));
+			obj->sound_explosion_f->setLoop(false);
+			obj->sound_explosion_f->play();
 		}
 		return;
 	}
 
 	friend void Explosion_tSnd(Sound* obj)
 	{
-		return;
-		while (obj->sound->getStatus() != sf::SoundSource::Status::Stopped)
+		if (p_no_sound || gameover)
+			return;
+
+		while (obj->sound_explosion_t->getStatus() != sf::SoundSource::Status::Stopped)
 			;
 		{
 			std::lock_guard<std::mutex> lg(mtx_snd);
-			obj->sound->setBuffer(obj->getBufferSnd("explosion_tBuff"));
-			obj->sound->setLoop(false);
-			obj->sound->play();
+			obj->sound_explosion_t->setBuffer(obj->getBufferSnd("explosion_tBuff"));
+			obj->sound_explosion_t->setLoop(false);
+			obj->sound_explosion_t->play();
 		}
 		return;
 	}
@@ -180,8 +196,12 @@ public:
 
 inline Sound::Sound()
 {
+	sound_shoot = new sf::Sound();
+	sound_bonus = new sf::Sound();
+	sound_takebonus = new sf::Sound();
+	sound_explosion_f = new sf::Sound();
+	sound_explosion_t = new sf::Sound();
 	sound_ms = new sf::Sound();
-	sound = new sf::Sound();
 
 	std::string FILENAME("");
 
@@ -206,8 +226,8 @@ inline Sound::Sound()
 
 inline Sound::~Sound()
 {
+	delete sound_shoot; delete sound_bonus; delete sound_takebonus; delete sound_explosion_f; delete sound_explosion_t;
 	delete sound_ms;
-	delete sound;
 }
 
 #endif

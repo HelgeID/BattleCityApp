@@ -32,6 +32,20 @@ public:
 	UITank* TakeArrUITank() { return arrUITank; }
 	size_t TakeArrUITankSize() { return (sizeof arrUITank / sizeof *arrUITank); }
 
+	void EnableStorageTanks()
+	{
+		int counter(0);
+		for (int index(0); index < 20; ++index)
+			if (arrUITank[index].isClearObj())
+				counter++;
+
+		if (counter == 20)
+			for (int index(0); index < 20; ++index)
+				arrUITank[index].onUITank();
+
+		return;
+	}
+
 private:
 	virtual void draw(sf::RenderTarget&, sf::RenderStates) const;
 };

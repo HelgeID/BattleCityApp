@@ -26,6 +26,9 @@
 #include "ui_storage_tanks.hpp"
 #include "ui_number_lifes.hpp"
 #include "ui_number_flags.hpp"
+#include "ui_number_tanks.hpp"
+
+#include "curtain.h"
 
 //test
 #include <iostream>
@@ -48,9 +51,12 @@ class GameField
 	friend void ControlSound(GameField*);
 
 	StorageTanks storage_tanks{ texture };
-	NumberLifes number_lifes_first{ texture, "first player" }; //todo
-	NumberLifes number_lifes_second{ texture, "second player" }; //todo
-	NumberFlags number_flags{ texture }; //todo
+	NumberLifes number_lifes_first{ texture, "first player" };
+	NumberLifes number_lifes_second{ texture, "second player" };
+	NumberFlags number_flags{ texture };
+	NumberAllTanks numberAllTanks{ texture };
+	NumberTanksForPlayer numberTanksForFirstPlayer{ texture, "first player" };
+	NumberTanksForPlayer numberTanksForSecondPlayer{ texture, "second player" };
 
 	sf::Clock clock;
 	float time;
@@ -112,6 +118,8 @@ class GameField
 	unsigned int number_all_tanks{ 0 };
 	unsigned int number_dead_tanks{ 0 };
 	unsigned int number_loaded_tanks{ 0 };
+	unsigned int number_killed_tanks_PL1{ 0 };
+	unsigned int number_killed_tanks_PL2{ 0 };
 	void CreateTanks();
 	void CreateTanks(const int);
 	void CreateTank(const sf::Vector2f);
@@ -124,7 +132,7 @@ class GameField
 	bool DistanceTank(Tank&, const float);
 	bool DistanceTank(Tank&, Tank&, const float);
 	void ControlTank_onFrame(Tank&);
-	void CheckTankBang(const int, const bool);
+	void CheckTankBang(const int, const int, const bool);
 	void KillAllTanks();
 	void ControlHangPoint();
 	void ControlBonusTank();
@@ -301,9 +309,17 @@ class GameField
 
 
 	//UI FUNCS
+	void DrawUI();
 	void usesUI_tank();
 	void usesUI_nflags();
 	void usesUI_nlifes();
+	void usesUI_nalltanks();
+	void usesUI_ntanksforplayer1();
+	void usesUI_ntanksforplayer2();
+
+	Curtain *curtain{ nullptr };
+	void DrawCurtain();
+	friend void ControlCurtain(GameField*);
 public:
 	explicit GameField(sf::RenderWindow&, sf::Texture&);
 	~GameField();

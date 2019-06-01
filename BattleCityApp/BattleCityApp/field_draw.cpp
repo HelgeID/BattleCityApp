@@ -195,3 +195,24 @@ void GameField::DrawBonus()
 	window.draw(bonus->takeObj());
 	return;
 }
+
+void GameField::DrawUI()
+{
+	if (curtain == nullptr)
+	{
+		window.draw(number_lifes_first);
+		window.draw(number_lifes_second);
+		window.draw(number_flags);
+		window.draw(numberAllTanks);
+		window.draw(numberTanksForFirstPlayer);
+		window.draw(numberTanksForSecondPlayer);
+	}
+	return;
+}
+
+void GameField::DrawCurtain()
+{
+	if (curtain != nullptr)
+		window.draw(*curtain);
+	return;
+}

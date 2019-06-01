@@ -617,7 +617,7 @@ void GameField::CheckOnCollisionTanks(Bullet& bullet)
 					}
 				}
 				else
-					CheckTankBang(indexTank, false);
+					CheckTankBang(indexTank, bulletArr[indxBullet]->indexTank, false);
 
 			}
 			else

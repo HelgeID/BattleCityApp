@@ -70,3 +70,14 @@ public:
 		this->setSpriteObj(376, 184);
 	}
 };
+
+class UImPlayer : public Object
+{
+public:
+	UImPlayer(sf::Texture &texture, const std::string player_name) :
+		Object(texture, sf::Vector2f(9.f, 9.f))
+	{
+		player_name == "first player" ? this->setSpriteObj(376, 212) : NULL;
+		player_name == "second player" ? this->setSpriteObj(385, 212) : NULL;
+	}
+};

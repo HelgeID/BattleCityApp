@@ -1,6 +1,7 @@
 ﻿#include "general.hpp"
 
 bool p_zoom = false;
+bool p_no_sound = false;
 int p_level = 1; //todo < 99
 int p_player = 2;
 
@@ -31,3 +32,5 @@ bool blocking_hit_for_enemy = true;
 
 
 bool f_f = false;
+
+bool gameover = false;

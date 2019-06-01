@@ -6,7 +6,13 @@
 GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	: window(window), texture(texture)
 {
-	window.clear(sf::Color(127, 127, 127));
+	{
+		//wait
+		window.clear(sf::Color(127, 127, 127));
+		window.display();
+		sf::sleep(sf::milliseconds(1500));
+	}
+
 	FillField();
 	FillMap();
 	LoadMap();
@@ -23,8 +29,15 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	std::unique_ptr<std::thread> thread_ControlSound(new std::thread(&ControlSound, this));
 	thread_ControlSound->detach();
 
+	curtain = new Curtain(field);
+	std::unique_ptr<std::thread> thread_ControlCurtain(new std::thread(&ControlCurtain, this));
+	thread_ControlCurtain->detach();
+
 	usesUI_nlifes();
 	usesUI_nflags();
+	usesUI_nalltanks();
+	usesUI_ntanksforplayer1();
+	usesUI_ntanksforplayer2();
 }
 
 GameField::~GameField()
@@ -57,11 +70,8 @@ void GameField::UpdateField()
 	//--------------------------------------
 	DrawDynamicElements(); //ok
 
-	//test
-	//window.draw(storage_tanks); //uses alternative: tDynamic
-	window.draw(number_lifes_first);
-	window.draw(number_lifes_second);
-	window.draw(number_flags);
+	DrawUI(); //ok
+	DrawCurtain(); //ok
 	//--------------------------------------
 	READDATAOBJ(this); //get data for tDynamic
 	//--------------------------------------

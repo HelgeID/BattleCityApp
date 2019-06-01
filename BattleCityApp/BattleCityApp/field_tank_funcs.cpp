@@ -15,8 +15,16 @@ auto random = [](const int a, const int b)
 
 std::map<int, Model> mapOfEnemy
 {
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },
-	{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },{ 10, enemyModA },{ 11, enemyModB },{ 12, enemyModD }
+	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
+	{ 10, enemyModA },{ 11, enemyModB },{ 12, enemyModC },{ 13, enemyModB },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModC },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModC },
+	{ 20, enemyModC },{ 21, enemyModC },{ 22, enemyModA },{ 23, enemyModC },{ 24, enemyModA },{ 25, enemyModB },{ 26, enemyModD },{ 27, enemyModB },{ 28, enemyModC },{ 29, enemyModA },
+	{ 30, enemyModD },{ 31, enemyModC },{ 32, enemyModA },{ 33, enemyModA },{ 34, enemyModC },{ 35, enemyModA },{ 36, enemyModC },{ 37, enemyModD },{ 38, enemyModB },{ 39, enemyModC },
+	{ 40, enemyModB },{ 41, enemyModD },{ 42, enemyModA },{ 43, enemyModB },{ 44, enemyModC },{ 45, enemyModD },{ 46, enemyModA },{ 47, enemyModA },{ 48, enemyModD },{ 49, enemyModA },
+	{ 50, enemyModD },{ 51, enemyModB },{ 52, enemyModD },{ 53, enemyModC },{ 54, enemyModD },{ 55, enemyModA },{ 56, enemyModA },{ 57, enemyModD },{ 58, enemyModA },{ 59, enemyModA },
+	{ 60, enemyModA },{ 61, enemyModD },{ 62, enemyModA },{ 63, enemyModB },{ 64, enemyModD },{ 65, enemyModD },{ 66, enemyModB },{ 67, enemyModB },{ 68, enemyModD },{ 69, enemyModD },
+	{ 70, enemyModD },{ 71, enemyModD },{ 72, enemyModD },{ 73, enemyModB },{ 74, enemyModA },{ 75, enemyModD },{ 76, enemyModC },{ 77, enemyModA },{ 78, enemyModC },{ 79, enemyModD },
+	{ 80, enemyModD },{ 81, enemyModC },{ 82, enemyModD },{ 83, enemyModC },{ 84, enemyModD },{ 85, enemyModC },{ 86, enemyModC },{ 87, enemyModD },{ 88, enemyModC },{ 89, enemyModA },
+	{ 90, enemyModB },{ 91, enemyModD },{ 92, enemyModD },{ 93, enemyModD },{ 94, enemyModC },{ 95, enemyModC },{ 96, enemyModD },{ 97, enemyModD },{ 98, enemyModD },{ 99, enemyModD }
 };
 
 void GameField::CreateTanks()
@@ -94,6 +102,8 @@ void GameField::ReloadTank(Tank& tank, const sf::Vector2f pos)
 		completion_generation_tanks = true;
 		std::cerr << "The END, completion of generation of tanks!!!" << std::endl;
 	}
+	else
+		storage_tanks.EnableStorageTanks();
 
 	return;
 }
@@ -173,7 +183,7 @@ void GameField::ControlTank_onFrame(Tank& tank)
 	return;
 }
 
-void GameField::CheckTankBang(const int indexTank, const bool killall)
+void GameField::CheckTankBang(const int indexTank, const int _indexTank, const bool killall)
 {
 	if (undying_enemy)
 		return;
@@ -208,15 +218,25 @@ void GameField::CheckTankBang(const int indexTank, const bool killall)
 			tank[index].setPosFrame(tank[index].getPosObj().x, tank[index].getPosObj().y);
 
 			//number of dead tanks:
-			{
-				number_dead_tanks++;
-				std::cerr << "Dead tanks:" << number_dead_tanks << std::endl;
-			}
+			number_dead_tanks++;
+			std::cerr << "Dead tanks:" << number_dead_tanks << std::endl;
 
 			if (!killall) { //if did not take a bonus grenade
 				//play the explosion sound
 				std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
 				thread_snd->detach();
+			}
+
+			//add to UI statistics
+			usesUI_nalltanks();
+
+			if (_indexTank == 100) { //who owns the bullet
+				number_killed_tanks_PL1 = number_killed_tanks_PL1 + 1;
+				usesUI_ntanksforplayer1();
+			}
+			else if (_indexTank == 200) { //who owns the bullet
+				number_killed_tanks_PL2 = number_killed_tanks_PL2 + 1;
+				usesUI_ntanksforplayer2();
 			}
 
 			break;
@@ -239,7 +259,7 @@ void GameField::KillAllTanks()
 	});
 
 	for (int index = 0; index < iT.size(); index = index + 1)
-		CheckTankBang(iT[index], true); //kill all tanks
+		CheckTankBang(iT[index], 0, true); //kill all tanks
 
 	bool allDead = true;
 	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) {
