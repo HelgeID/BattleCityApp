@@ -105,7 +105,7 @@ TileDynamic::TileDynamic(sf::Texture& texture) : texture(&texture)
 {
 	//resize the vertex array to fit the level size
 	this->vertices.setPrimitiveType(sf::Quads);
-	this->vertices.resize(60 * 4); //here change, when add elements
+	this->vertices.resize(79 * 4); //here change, when add elements
 }
 
 TileDynamic::~TileDynamic()

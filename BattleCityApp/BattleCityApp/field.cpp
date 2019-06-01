@@ -70,7 +70,7 @@ void GameField::UpdateField()
 	//--------------------------------------
 	DrawDynamicElements(); //ok
 
-	DrawUI(); //ok
+	//DrawUI(); //uses alternative: tDynamic
 	DrawCurtain(); //ok
 	//--------------------------------------
 	READDATAOBJ(this); //get data for tDynamic

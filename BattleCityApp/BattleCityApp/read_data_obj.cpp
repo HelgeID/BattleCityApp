@@ -5,11 +5,12 @@
 //2) texture coordinates
 
 
-/* SUMM = 60 elem. : TileDynamic::TileDynamic
+/* SUMM = 79 elem. : TileDynamic::TileDynamic
 Obj: (6) tanks, (2) players
 Anim: (6) BirthTank, (6) SkinTank, (2) BirthPl, (2) SkinPl
 BoomAnim: (8) tankBoom, (8) bulletBoom
 UITank: (20)
+UINumber, UIFlag, UIPlayer, UImPlayer, UITank: (19)
 */
 
 #include "field.h"
@@ -22,19 +23,6 @@ void TakeDataObj(T& obj, TileCoords& data, int& index)
 	{
 		obj.takeObj().getTextureRect().left,
 		obj.takeObj().getTextureRect().top
-	};
-	index++;
-	return;
-}
-
-template <typename T>
-void TakeDataUIObj(StorageTanks& obj, TileCoords& data, int& index, const int uiIndexTank)
-{
-	data.mapCoords = obj.TakeArrUITank()[uiIndexTank].getPosObj();
-	data.texCoords =
-	{
-		obj.TakeArrUITank()[uiIndexTank].takeObj().getTextureRect().left,
-		obj.TakeArrUITank()[uiIndexTank].takeObj().getTextureRect().top,
 	};
 	index++;
 	return;
@@ -135,10 +123,38 @@ void READDATAOBJ(GameField* gFieldPtr)
 		const size_t uiTankSize(gFieldPtr->storage_tanks.TakeArrUITankSize());
 		for (int uiIndexTank(0); uiIndexTank < uiTankSize; ++uiIndexTank) {
 			if (gFieldPtr->curtain == nullptr) {
-				TakeDataUIObj<StorageTanks>(gFieldPtr->storage_tanks, data, index, uiIndexTank); SetSprite(9.f);
+				TakeDataObj<UITank>(gFieldPtr->storage_tanks.TakeArrUITank()[uiIndexTank], data, index); SetSprite(9.f);
 			}
 			else
 				index++;
 		}
+
+		if (gFieldPtr->curtain == nullptr) {
+			TakeDataObj<UIPlayer>(*gFieldPtr->number_lifes_first.uiPlayer, data, index); SetSprite();
+			TakeDataObj<UINumber>(*gFieldPtr->number_lifes_first.uiNumber, data, index); SetSprite(8.f);
+			TakeDataObj<UIPlayer>(*gFieldPtr->number_lifes_second.uiPlayer, data, index); SetSprite();
+			TakeDataObj<UINumber>(*gFieldPtr->number_lifes_second.uiNumber, data, index); SetSprite(8.f);
+
+			TakeDataObj<UIFlag>(*gFieldPtr->number_flags.uiFlag, data, index); SetSprite();
+			TakeDataObj<UINumber>(*gFieldPtr->number_flags.uiNumber1, data, index); SetSprite(8.f);
+			TakeDataObj<UINumber>(*gFieldPtr->number_flags.uiNumber2, data, index); SetSprite(8.f);
+
+			TakeDataObj<UITank>(*gFieldPtr->numberAllTanks.uitank, data, index); SetSprite(9.f);
+			TakeDataObj<UINumber>(*gFieldPtr->numberAllTanks.uiNumber1, data, index); SetSprite(8.f);
+			TakeDataObj<UINumber>(*gFieldPtr->numberAllTanks.uiNumber2, data, index); SetSprite(8.f);
+			TakeDataObj<UINumber>(*gFieldPtr->numberAllTanks.uiNumber3, data, index); SetSprite(8.f);
+			
+			TakeDataObj<UImPlayer>(*gFieldPtr->numberTanksForFirstPlayer.uimPlayer, data, index); SetSprite(9.f);
+			TakeDataObj<UINumber>(*gFieldPtr->numberTanksForFirstPlayer.uiNumber1, data, index); SetSprite(8.f);
+			TakeDataObj<UINumber>(*gFieldPtr->numberTanksForFirstPlayer.uiNumber2, data, index); SetSprite(8.f);
+			TakeDataObj<UINumber>(*gFieldPtr->numberTanksForFirstPlayer.uiNumber3, data, index); SetSprite(8.f);
+
+			TakeDataObj<UImPlayer>(*gFieldPtr->numberTanksForSecondPlayer.uimPlayer, data, index); SetSprite(9.f);
+			TakeDataObj<UINumber>(*gFieldPtr->numberTanksForSecondPlayer.uiNumber1, data, index); SetSprite(8.f);
+			TakeDataObj<UINumber>(*gFieldPtr->numberTanksForSecondPlayer.uiNumber2, data, index); SetSprite(8.f);
+			TakeDataObj<UINumber>(*gFieldPtr->numberTanksForSecondPlayer.uiNumber3, data, index); SetSprite(8.f);
+		}
+		else
+			index+=19;
 	}
 }

@@ -200,6 +200,7 @@ void GameField::DrawUI()
 {
 	if (curtain == nullptr)
 	{
+		window.draw(storage_tanks);
 		window.draw(number_lifes_first);
 		window.draw(number_lifes_second);
 		window.draw(number_flags);
