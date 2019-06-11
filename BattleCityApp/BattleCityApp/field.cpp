@@ -21,6 +21,7 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	CreateBlocks();
 	CreateMoore();
 	CreateActors();
+	CreateEmblem();
 	CreateTanks();
 
 	std::unique_ptr<std::thread> thread_ControlSpawnEnemies(new std::thread(&ControlSpawnEnemies, this));
@@ -60,12 +61,13 @@ void GameField::UpdateField()
 	//DrawBlocks(); //uses alternative: tMap
 	DrawMoore(); //ok
 	DrawBrickDamage(); //ok
+	DrawEmblem(); //ok
 	//DrawActors(); //uses alternative: tDynamic
 	//DrawTanks(); //uses alternative: tDynamic
 	DrawBullets(); //ok
 	//DrawAnimBirth(); //uses alternative: tDynamic
 	//DrawAnimSkin(); //uses alternative: tDynamic
-	//DrawAnimBoom(); //uses alternative: tDynamic
+	DrawAnimBoom(); //uses alternative: tDynamic
 	DrawBonus(); //ok
 	//--------------------------------------
 	DrawDynamicElements(); //ok
@@ -87,6 +89,7 @@ void GameField::UpdateField()
 	objBulletCollision.MonitoringCollision(*this);
 	objPlayerCollision.MonitoringCollision(*this);
 	CheckOnMoore();
+	CheckOnEmblem();
 	CheckOnBonus();
 	//--------------------------------------
 	MonitoringKeys();

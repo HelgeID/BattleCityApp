@@ -954,6 +954,42 @@ void GameField::CheckOnMoore()
 }
 
 /////////////////////////////////////////////////////////////////////////////
+//Emblem
+/////////////////////////////////////////////////////////////////////////////
+void GameField::CheckOnEmblem()
+{
+	if (!emblem.isPresence())
+		return;
+	const size_t bulletArrSize = bulletArr.size();
+	for (int indxBullet(0); indxBullet < bulletArrSize; ++indxBullet) {
+		if (bulletArr[indxBullet] != nullptr) {
+			bool crossing = (bulletArr[indxBullet]->frame.getGlobalBounds().intersects(emblem.frame.getGlobalBounds()));
+			if (crossing) {
+				CreateAnimBigBoom();
+
+				std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
+				thread_snd->detach();
+
+				//say the tank that the bullet hit the target
+				*bulletArr[indxBullet]->bulletActivFlag = false;
+				//remove the bullet
+				delete bulletArr[indxBullet];
+				bulletArr[indxBullet] = nullptr;
+
+				emblem.CrushEmblem();
+				gameover = true;
+				break;
+			}
+		}
+	}
+
+	//todo collision
+	//...
+
+	return;
+}
+
+/////////////////////////////////////////////////////////////////////////////
 //Bonus
 /////////////////////////////////////////////////////////////////////////////
 void GameField::CheckOnBonus()

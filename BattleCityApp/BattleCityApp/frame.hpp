@@ -53,6 +53,10 @@ public:
 			frame.setOutlineColor(sf::Color(127, 0, 0, 64));
 			frame.setFillColor(sf::Color(0, 0, 0, 64));
 		}
+		else if (name == "emblem") {
+			frame.setOutlineColor(sf::Color(0, 0, 0, 48));
+			frame.setFillColor(sf::Color(127, 64, 0, 48));
+		}
 	}
 
 	~Frame()

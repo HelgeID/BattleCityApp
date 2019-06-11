@@ -80,6 +80,12 @@ void GameField::DrawMoore()
 	return;
 }
 
+void GameField::DrawEmblem()
+{
+	(p_showframe) ? window.draw(emblem.frame) : window.draw(emblem.takeObj());
+	return;
+}
+
 //drawing players
 void GameField::DrawActors()
 {
@@ -183,6 +189,10 @@ void GameField::DrawAnimBoom()
 		if (tankBoom[indexTankBoom] != nullptr)
 			window.draw(tankBoom[indexTankBoom]->TakeAnim());
 	}
+
+	const size_t emblemBoomSize(sizeof(this->emblemBoom) / sizeof(*this->emblemBoom));
+	if (*emblemBoom != nullptr)
+		window.draw((*emblemBoom)->TakeAnim());
 	return;
 }
 

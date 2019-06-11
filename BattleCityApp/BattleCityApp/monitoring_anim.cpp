@@ -30,6 +30,22 @@ void GameField::CreateAnimBoom(const sf::Vector2f point, const char* name = "")
 		const size_t tankBoomSize = sizeof(this->tankBoom) / sizeof(*this->tankBoom);
 		Create(tankBoom, tankBoomSize, 1.5f, true); //1.5 - max time of Animation, loop == true
 	}
+	return;
+}
+
+void GameField::CreateAnimBigBoom()
+{
+	//position correction
+	sf::Vector2f point(emblem.takeObj().getPosition());
+	point.x -= SizeCell/2;
+	point.y -= SizeCell/2;
+
+	//create
+	const bool loop = true;
+	const float maxTime = 2.0f; //max time of Animation
+	std::unique_ptr<AnimBoom> anim(new AnimBoom(texture, point, AnimBoom::AnimChose::Bigger, maxTime, loop));
+	*emblemBoom = std::move(anim);
+	return;
 }
 
 void GameField::MonitoringAnim(const AnimBirth* ptr)
@@ -101,6 +117,20 @@ void GameField::MonitoringAnim(const AnimBoom* ptr)
 	//ptr - not used !!!
 	auto Monitoring = [&](std::shared_ptr<AnimBoom>* boom, const size_t boomSize, const char* name = "")
 	{
+		if (name == "emblemObj") {
+			//boomSize == 1 //not used
+			if (*boom != nullptr) {
+				if ((*boom)->FinishTime()) {
+					(*emblemBoom).reset();
+					(*boom).reset();
+					*boom = nullptr;
+				}
+				else
+					(*boom)->Update();
+			}
+			return;
+		}
+
 		for (int i(0); i < boomSize; ++i) {
 			if (boom[i] != nullptr) {
 				if (boom[i]->FinishTime()) {
@@ -115,11 +145,15 @@ void GameField::MonitoringAnim(const AnimBoom* ptr)
 		}
 	};
 
+	/////////////////////////////////////////////////////////////////////////////////////
 	const size_t bulletBoomSize(sizeof(this->bulletBoom) / sizeof(*this->bulletBoom));
 	Monitoring(bulletBoom, bulletBoomSize, "bulletObj");
-
+	/////////////////////////////////////////////////////////////////////////////////////
 	const size_t tankBoomSize(sizeof(this->tankBoom) / sizeof(*this->tankBoom));
 	Monitoring(tankBoom, tankBoomSize, "tankObj");
+	/////////////////////////////////////////////////////////////////////////////////////
+	const size_t emblemBoomSize(sizeof(this->emblemBoom) / sizeof(*this->emblemBoom));
+	Monitoring(emblemBoom, emblemBoomSize, "emblemObj");
 
 	return;
 }

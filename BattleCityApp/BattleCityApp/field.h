@@ -12,6 +12,7 @@
 #include "block_spawn.hpp"
 #include "bullet.hpp"
 #include "bonus.hpp"
+#include "emblem.hpp"
 #include "map.h"
 #include "tile_map_dynamic.h"
 #include "part_bricks_map.h"
@@ -161,7 +162,9 @@ class GameField
 	std::array<Bullet*, 8> bulletArr = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 	std::shared_ptr<AnimBoom> bulletBoom[8] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
 	std::shared_ptr<AnimBoom> tankBoom[8] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr };
+	std::shared_ptr<AnimBoom> emblemBoom[1] = { nullptr };
 	void CreateAnimBoom(const sf::Vector2f, const char*);
+	void CreateAnimBigBoom();
 
 	template <typename T>
 	void CreateBullet(T&, sf::Vector2f);
@@ -194,7 +197,13 @@ class GameField
 	void CheckOnCollisionPlayers(Player&, Player&); //for the players
 
 	void CheckOnMoore();
+	void CheckOnEmblem();
 	void CheckOnBonus();
+
+	//emblem
+	Emblem emblem{ texture };
+	void CreateEmblem();
+	void DrawEmblem();
 
 	//actors
 	Player *firstPlayer;

@@ -126,6 +126,7 @@
     <ClCompile Include="field_actor_funcs.cpp" />
     <ClCompile Include="field_bullet_funcs.cpp" />
     <ClCompile Include="collision.cpp" />
+    <ClCompile Include="field_emblem_funcs.cpp" />
     <ClCompile Include="monitoring_anim.cpp" />
     <ClCompile Include="monitoring_collision.cpp" />
     <ClCompile Include="field_draw.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="bonus.hpp" />
     <ClInclude Include="bullet.hpp" />
     <ClInclude Include="curtain.h" />
+    <ClInclude Include="emblem.hpp" />
     <ClInclude Include="events.h" />
     <ClInclude Include="fps.h" />
     <ClInclude Include="frame.hpp" />
