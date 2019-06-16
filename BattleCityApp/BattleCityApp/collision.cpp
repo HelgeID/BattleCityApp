@@ -966,10 +966,11 @@ void GameField::CheckOnEmblem()
 			bool crossing = (bulletArr[indxBullet]->frame.getGlobalBounds().intersects(emblem.frame.getGlobalBounds()));
 			if (crossing) {
 				CreateAnimBigBoom();
+				sound.Absent();
 
 				std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
 				thread_snd->detach();
-
+				
 				//say the tank that the bullet hit the target
 				*bulletArr[indxBullet]->bulletActivFlag = false;
 				//remove the bullet
@@ -978,13 +979,30 @@ void GameField::CheckOnEmblem()
 
 				emblem.CrushEmblem();
 				gameover = true;
+				StartGameOverMSG();
 				break;
 			}
 		}
 	}
 
-	//todo collision
-	//...
+	auto collisionEmblemRotation = [&](Tank& tank) { RotationTank(tank, "collision_e", "rotation_r", 2.f); return; };
+	for (size_t iTank(0); iTank < tank.size(); ++iTank) {
+		if (tank[iTank].isTank()) {
+			if (tank[iTank].frame.getGlobalBounds().intersects(emblem.frame.getGlobalBounds())) {
+				CreateAnimBigBoom();
+				sound.Absent();
+
+				std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
+				thread_snd->detach();
+				
+				collisionEmblemRotation(tank[iTank]);
+				emblem.CrushEmblem();
+				gameover = true;
+				StartGameOverMSG();
+				break;
+			}
+		}
+	}
 
 	return;
 }

@@ -36,6 +36,13 @@ public:
 		return;
 	}
 
+	sf::Vector2i getSpriteObj() const
+	{
+		return sf::Vector2i(
+			sprite.getTextureRect().left, sprite.getTextureRect().top
+		);
+	}
+
 	void clearSpriteObj()
 	{
 		sf::Vector2u sizeTexture = this->texture.getSize();

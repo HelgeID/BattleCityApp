@@ -105,6 +105,9 @@
     <ClCompile Include="field_emblem_funcs.cpp">
       <Filter>Файлы исходного кода\field</Filter>
     </ClCompile>
+    <ClCompile Include="processing_msg.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -186,6 +189,9 @@
       <Filter>Заголовочные файлы\objects</Filter>
     </ClInclude>
     <ClInclude Include="emblem.hpp">
+      <Filter>Заголовочные файлы\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="ui_msg.hpp">
       <Filter>Заголовочные файлы\objects</Filter>
     </ClInclude>
   </ItemGroup>

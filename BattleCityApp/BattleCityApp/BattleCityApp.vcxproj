@@ -142,6 +142,7 @@
     <ClCompile Include="point_spawn.cpp" />
     <ClCompile Include="read_data_obj.cpp" />
     <ClCompile Include="source.cpp" />
+    <ClCompile Include="processing_msg.cpp" />
     <ClCompile Include="tile_map_dynamic.cpp" />
     <ClCompile Include="ui_funcs.cpp" />
   </ItemGroup>
@@ -159,6 +160,7 @@
     <ClInclude Include="fps.h" />
     <ClInclude Include="frame.hpp" />
     <ClInclude Include="game.h" />
+    <ClInclude Include="ui_msg.hpp" />
     <ClInclude Include="general.hpp" />
     <ClInclude Include="map.h" />
     <ClInclude Include="ui_number_flags.hpp" />

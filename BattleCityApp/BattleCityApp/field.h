@@ -28,6 +28,7 @@
 #include "ui_number_lifes.hpp"
 #include "ui_number_flags.hpp"
 #include "ui_number_tanks.hpp"
+#include "ui_msg.hpp"
 
 #include "curtain.h"
 
@@ -329,6 +330,12 @@ class GameField
 	Curtain *curtain{ nullptr };
 	void DrawCurtain();
 	friend void ControlCurtain(GameField*);
+
+	UIGameOverMSG uiGameOverMSG{ texture };
+	UIPauseMSG uiPauseMSG{ texture };
+	void StartGameOverMSG();
+	void StartPauseMSG();
+	void StopPauseMSG();
 public:
 	explicit GameField(sf::RenderWindow&, sf::Texture&);
 	~GameField();

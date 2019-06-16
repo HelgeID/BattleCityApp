@@ -469,6 +469,7 @@ void GameField::RotationTank(Tank& tank, const char* choice_name_collision, cons
 	choice_name_collision param:
 	"collision_f" // frame (tank <=> frame)
 	"collision_bs"  // blocks_spawn (tank <=> blocks_spawn)
+	"collision_e" // emblem
 	"collision_b" // blocks (tank <=> blocks)
 	"collision_t" // tanks (tank <=> tank)
 	"collision_p" // player (tank <=> player)
@@ -504,7 +505,7 @@ void GameField::RotationTank(Tank& tank, const char* choice_name_collision, cons
 	if (choice_name_collision == "collision_f" || choice_name_collision == "collision_p" || choice_name_collision == "no_collision")
 		; //move == 0.f
 	else
-		if (choice_name_collision == "collision_bs" || choice_name_collision == "collision_t") {
+		if (choice_name_collision == "collision_bs" || choice_name_collision == "collision_t" || choice_name_collision == "collision_e") {
 			MoveTank(tank, move, false);
 		}
 		else

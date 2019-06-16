@@ -85,6 +85,9 @@ void GameField::UpdateField()
 	//window.draw(outsideLEFT); //for test
 	//window.draw(outsideRIGHT); //for test
 	//--------------------------------------
+	window.draw(uiGameOverMSG.takeObj());
+	window.draw(uiPauseMSG.takeObj());
+	//--------------------------------------
 	objTankCollision.MonitoringCollision(*this);
 	objBulletCollision.MonitoringCollision(*this);
 	objPlayerCollision.MonitoringCollision(*this);
@@ -109,6 +112,7 @@ void GameField::UpdateField()
 	//--------------------------------------
 	f_f = !f_f; //for optimality
 	//--------------------------------------
+
 	return;
 }
 
