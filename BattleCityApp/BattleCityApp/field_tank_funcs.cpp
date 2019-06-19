@@ -558,15 +558,14 @@ void GameField::updTanks()
 		tank.setPosFrame(tank.takeObj().getPosition().x, tank.takeObj().getPosition().y);
 	};
 
-	//--------------------------------------
+	//start func\\
+	creates the effect of movement for tanks
 	if (tank.size() == 0)
 		return;
 
 	std::for_each(tank.begin(), tank.end(), [&](Tank &tank) {
 		tank.isTank() ? fun(tank) : NULL;
 	});
-
-	//--------------------------------------
 
 	return;
 }

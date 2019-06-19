@@ -28,12 +28,12 @@ void ControlSound(GameField* gField)
 
 	while (true)
 	{
-		if (KEY_MOVE())
+		if (KEY_MOVE() && !pause)
 			gField->sound.Moving();
 		else
 			gField->sound.Stopping();
 
-		if (!PRESENCE_PLAYER())
+		if (!PRESENCE_PLAYER() || pause)
 			gField->sound.Absent();
 
 		sf::sleep(sf::milliseconds(100));

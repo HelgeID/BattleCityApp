@@ -54,55 +54,59 @@ void GameField::UpdateField()
 	//--------------------------------------
 	window.clear(sf::Color(99, 99, 99));
 	//--------------------------------------
-	updPlayers(); updTanks(); updBullets();
+	!pause ? updPlayers(), updTanks(), updBullets() : NULL;
 	//--------------------------------------
-	DrawField(); //ok
-	DrawMap(); //ok
-	//DrawBlocks(); //uses alternative: tMap
-	DrawMoore(); //ok
-	DrawBrickDamage(); //ok
-	DrawEmblem(); //ok
-	//DrawActors(); //uses alternative: tDynamic
-	//DrawTanks(); //uses alternative: tDynamic
-	DrawBullets(); //ok
-	//DrawAnimBirth(); //uses alternative: tDynamic
-	//DrawAnimSkin(); //uses alternative: tDynamic
-	DrawAnimBoom(); //uses alternative: tDynamic
-	DrawBonus(); //ok
-	//--------------------------------------
-	DrawDynamicElements(); //ok
+	{
+		//Draw game elements
+		DrawField(); //ok
+		DrawMap(); //ok
+		DrawMoore(); //ok
+		DrawBrickDamage(); //ok
+		DrawEmblem(); //ok
+		DrawBullets(); //ok
+		DrawBonus(); //ok
 
-	//DrawUI(); //uses alternative: tDynamic
-	DrawCurtain(); //ok
+		//--------------------------------------
+		/*
+		uses alternative: tMap for
+		DrawBlocks, DrawActors, DrawTanks,
+		DrawAnimBirth, DrawAnimSkin, DrawAnimBoom,
+		DrawUI
+		*/
+		//--------------------------------------
+		DrawDynamicElements(); //tDynamic
+		DrawCurtain(); //ok
+
+		window.draw(uiGameOverMSG.takeObj());
+		window.draw(uiPauseMSG.takeObj());
+	}
+
 	//--------------------------------------
 	READDATAOBJ(this); //get data for tDynamic
 	//--------------------------------------
-	UpdateCoefReload();
-	UpdateDirectionTanks();
+	!pause ? UpdateCoefReload(), UpdateDirectionTanks() : NULL;
 	//--------------------------------------
 	//window.draw(outsideUP); //for test
 	//window.draw(outsideDOWN); //for test
 	//window.draw(outsideLEFT); //for test
 	//window.draw(outsideRIGHT); //for test
 	//--------------------------------------
-	window.draw(uiGameOverMSG.takeObj());
-	window.draw(uiPauseMSG.takeObj());
-	//--------------------------------------
-	objTankCollision.MonitoringCollision(*this);
-	objBulletCollision.MonitoringCollision(*this);
-	objPlayerCollision.MonitoringCollision(*this);
-	CheckOnMoore();
-	CheckOnEmblem();
-	CheckOnBonus();
+	!pause ?
+		objTankCollision.MonitoringCollision(*this),
+		objBulletCollision.MonitoringCollision(*this),
+		objPlayerCollision.MonitoringCollision(*this),
+		CheckOnMoore(), CheckOnEmblem(), CheckOnBonus()
+		: NULL;
 	//--------------------------------------
 	MonitoringKeys();
-	objChecking.CheckingShootingBullets(*this);
-	objChecking.CheckingSkin(*this);
+	!pause ? objChecking.CheckingShootingBullets(*this), objChecking.CheckingSkin(*this) : NULL;
 	//--------------------------------------
-	ControlHangPoint();
-	ControlBonusTank();
-	ControlHeavyTank();
-	ControlFrontMode();
+	!pause ?
+		ControlHangPoint(),
+		ControlBonusTank(),
+		ControlHeavyTank(),
+		ControlFrontMode()
+		: NULL;
 	//--------------------------------------
 	MonitoringAnim		(animBirth);
 	MonitoringAnim		(animSkin);

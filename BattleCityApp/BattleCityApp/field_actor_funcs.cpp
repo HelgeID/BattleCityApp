@@ -218,7 +218,7 @@ void GameField::MonitoringKeys()
 	if (!KeyActive)
 		return;
 
-	if (firstPlayer->Presence()) {
+	if (firstPlayer->Presence() && !pause) {
 		//A-D-W-S
 		if (Key_A == true && (!Key_D && !Key_W && !Key_S)) {
 			MoveFirstPlayer(*this, LEFT);
@@ -248,7 +248,7 @@ void GameField::MonitoringKeys()
 		}
 	}
 
-	if (secondPlayer->Presence()) {
+	if (secondPlayer->Presence() && !pause) {
 		//LEFT-RIGHT-UP-DOWN
 		if (Key_Left == true && (!Key_Right && !Key_Up && !Key_Down)) {
 			MoveSecondPlayer(*this, LEFT);
@@ -275,6 +275,19 @@ void GameField::MonitoringKeys()
 
 			std::unique_ptr<std::thread> thread_snd(new std::thread(&ShootSnd, &sound));
 			thread_snd->detach();
+		}
+	}
+
+	{
+		if (Key_Return == false && Key_Space == true && pause == false)
+		{
+			StartPauseMSG();
+			pause = true;
+		}
+		else if (Key_Space == false && Key_Return == true && pause == true)
+		{
+			StopPauseMSG();
+			pause = false;
 		}
 	}
 
@@ -361,6 +374,9 @@ void GameField::updPlayers()
 		delete[] keyArray;
 		keyArray = nullptr;
 	};
+
+	//start func\\
+	when you press a keys: A, D, W, S, Left, Right, Up, Down ->> players reload (creates the effect of movement)
 
 	if (firstPlayer->Presence()) {
 		keyArray = new bool[4]{ Key_A, Key_D, Key_W, Key_S };

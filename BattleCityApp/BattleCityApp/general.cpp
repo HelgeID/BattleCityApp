@@ -23,6 +23,8 @@ bool Key_Down = false;
 
 bool Key_F = false;
 bool Key_Ctrl = false;
+bool Key_Space = false;
+bool Key_Return = false;
 
 bool undying_enemy = false;
 bool undying_players = false;
@@ -34,3 +36,4 @@ bool blocking_hit_for_enemy = true;
 bool f_f = false;
 
 bool gameover = false;
+bool pause = false;

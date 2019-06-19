@@ -55,7 +55,7 @@ void UpdMSGBlink(T* obj)
 		}
 	}
 	obj->clearSpriteObj();
-	//std::cerr << "finish MSG Blink" << std::endl;
+	std::cerr << "finish MSG Blink" << std::endl;
 	return;
 }
 

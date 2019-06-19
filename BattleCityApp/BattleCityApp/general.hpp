@@ -25,6 +25,8 @@ extern bool Key_Down;
 
 extern bool Key_F;
 extern bool Key_Ctrl; //RControl
+extern bool Key_Space;
+extern bool Key_Return;
 
 //parameters of the game
 extern bool undying_enemy;
@@ -37,3 +39,4 @@ extern bool blocking_hit_for_enemy;
 extern bool f_f;//for optimality
 
 extern bool gameover;
+extern bool pause;

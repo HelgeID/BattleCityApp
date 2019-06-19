@@ -89,6 +89,8 @@ public:
 
 	void moveObj(const float x, const float y)
 	{
+		if (pause)
+			return;
 		sprite.move(sf::Vector2f(x, y));
 		return;
 	}
