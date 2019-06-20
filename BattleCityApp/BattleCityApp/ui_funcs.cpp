@@ -55,8 +55,8 @@ void GameField::usesUI_tank()
 
 void GameField::usesUI_nlifes()
 {
-	number_lifes_first.uiNumber->UPD_UINumber(firstPlayer->takelife());
-	number_lifes_second.uiNumber->UPD_UINumber(secondPlayer->takelife());
+	number_lifes_first.uiNumber->UPD_UINumber(firstPlayer->takelife() - 1);
+	number_lifes_second.uiNumber->UPD_UINumber(secondPlayer->takelife() - 1);
 
 	if (!TwoPlayer()) {
 		number_lifes_second.uiPlayer->offUIPlayer();

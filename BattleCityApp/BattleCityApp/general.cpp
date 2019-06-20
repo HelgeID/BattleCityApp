@@ -32,6 +32,10 @@ bool undying_hit_on_player = false;
 bool blocking_firing = false;
 bool blocking_hit_for_enemy = true;
 
+bool undying_emblem_hit_by_tank = false;
+bool undying_emblem_boom_by_tank = false;
+bool undying_emblem_absence_players = false;
+
 
 bool f_f = false;
 

@@ -215,6 +215,7 @@ class GameField
 	bool TwoPlayer() const { return p_player > 1; }
 
 	void CreateActors();
+	friend void CreateActorsWait(GameField*);
 	friend void RestartPlayer(GameField*, const std::string);
 	void RestartFirstPlayer(const bool flag = false);
 	void RestartSecondPlayer(const bool flag = false);

@@ -31,11 +31,16 @@ void Game::GameLaunch()
 	// show fps
 	p_showfps = true;
 
-	// parameters
+	// parameters \\
+	----------------
 	//undying_enemy = true;
-	undying_players = true;
+	//undying_players = true;
 	//undying_hit_on_player = true;
 	//blocking_firing = true;
+
+	//undying_emblem_hit_by_tank = true;
+	//undying_emblem_boom_by_tank = true;
+	//undying_emblem_absence_players = true;
 
 	// initialization of objects
 	GameEvent gEvent(window);

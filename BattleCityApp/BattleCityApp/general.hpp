@@ -35,6 +35,9 @@ extern bool undying_hit_on_player;
 extern bool blocking_firing;
 extern bool blocking_hit_for_enemy;
 
+extern bool undying_emblem_hit_by_tank;
+extern bool undying_emblem_boom_by_tank;
+extern bool undying_emblem_absence_players;
 
 extern bool f_f;//for optimality
 

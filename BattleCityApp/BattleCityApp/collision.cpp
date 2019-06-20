@@ -843,7 +843,6 @@ void GameField::CheckOnMoore()
 		return;
 
 	//Check the players, enemies
-
 	bool fPL(false);
 	auto crossing = [&](Block& block, Tank& tank) {
 		if (!fPL)
@@ -964,7 +963,7 @@ void GameField::CheckOnEmblem()
 	for (int indxBullet(0); indxBullet < bulletArrSize; ++indxBullet) {
 		if (bulletArr[indxBullet] != nullptr) {
 			bool crossing = (bulletArr[indxBullet]->frame.getGlobalBounds().intersects(emblem.frame.getGlobalBounds()));
-			if (crossing) {
+			if (crossing && !undying_emblem_hit_by_tank) {
 				CreateAnimBigBoom();
 				sound.Absent();
 
@@ -989,17 +988,19 @@ void GameField::CheckOnEmblem()
 	for (size_t iTank(0); iTank < tank.size(); ++iTank) {
 		if (tank[iTank].isTank()) {
 			if (tank[iTank].frame.getGlobalBounds().intersects(emblem.frame.getGlobalBounds())) {
-				CreateAnimBigBoom();
-				sound.Absent();
+				if (!undying_emblem_boom_by_tank) {
+					CreateAnimBigBoom();
+					sound.Absent();
 
-				std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
-				thread_snd->detach();
-				
-				collisionEmblemRotation(tank[iTank]);
-				emblem.CrushEmblem();
-				gameover = true;
-				StartGameOverMSG();
-				break;
+					std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
+					thread_snd->detach();
+
+					collisionEmblemRotation(tank[iTank]);
+					emblem.CrushEmblem();
+					gameover = true;
+					StartGameOverMSG();
+					break;
+				}
 			}
 		}
 	}

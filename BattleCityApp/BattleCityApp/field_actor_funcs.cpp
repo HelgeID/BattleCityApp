@@ -20,6 +20,13 @@ void AnimBirthPlayer(AnimArgPtr argPtr)
 	return;
 }
 
+void CreateActorsWait(GameField* gField)
+{
+	sf::sleep(sf::milliseconds(3000));
+	gField->TwoPlayer() ? gField->RestartFirstPlayer(), gField->RestartSecondPlayer() : gField->RestartFirstPlayer();
+	return;
+}
+
 void RestartPlayer(GameField* gField, const std::string player_name)
 {
 	//player_name - player, who must restart
@@ -64,7 +71,9 @@ void GameField::CreateActors()
 {
 	firstPlayer = new Player(texture, "first player", false);
 	secondPlayer = new Player(texture, "second player", false);
-	TwoPlayer() ? RestartFirstPlayer(), RestartSecondPlayer() : RestartFirstPlayer();
+
+	std::unique_ptr<std::thread> createActorsWait(new std::thread(&CreateActorsWait, this));
+	createActorsWait->detach();
 	return;
 }
 
@@ -89,6 +98,7 @@ void GameField::RestartFirstPlayer(const bool flag)
 	std::unique_ptr<std::thread> threadPlayerL(new std::thread(&AnimBirthPlayer, argPtr));
 	threadPlayerL->detach();
 	lPlayer_BS->Spawn() = true;
+	usesUI_nlifes();
 	return;
 }
 
@@ -113,6 +123,7 @@ void GameField::RestartSecondPlayer(const bool flag)
 	std::unique_ptr<std::thread> threadPlayerR(new std::thread(&AnimBirthPlayer, argPtr));
 	threadPlayerR->detach();
 	rPlayer_BS->Spawn() = true;
+	usesUI_nlifes();
 	return;
 }
 
@@ -388,5 +399,14 @@ void GameField::updPlayers()
 		fun(*secondPlayer, keyArray);
 	}
 
+	//--------------------------------------
+	if (!gameover && !undying_emblem_absence_players)
+		if (firstPlayer->takelife() == 0 && secondPlayer->takelife() == 0)
+		{
+			emblem.CrushEmblem();
+			gameover = true;
+			StartGameOverMSG();
+		}
+	//--------------------------------------
 	return;
 }
