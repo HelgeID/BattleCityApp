@@ -333,7 +333,7 @@ void GameField::CheckPlayerBang(Player& player, const bool off)
 			player.SkinOff();
 		}
 
-		if (player.takelife() != 0) {
+		if (player.takelife() != 0 && !gameover) {
 			std::unique_ptr<std::thread> threadPlayer(new std::thread(&RestartPlayer, this, player.name));
 			threadPlayer->detach();
 		}

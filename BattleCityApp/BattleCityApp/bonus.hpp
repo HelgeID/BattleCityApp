@@ -8,12 +8,12 @@
 #include <chrono>
 
 //rnd, modification paq8n.cpp
-class random
+class MyRandom
 {
 	std::array<unsigned long, 64> table;
 	int mI{ 0 };
 public:
-	random()
+	MyRandom()
 	{
 		//since epoch, nanoseconds
 		unsigned long SE =
@@ -30,21 +30,41 @@ public:
 	}
 };
 
+inline sf::Vector2f SearchCoord(sf::Texture texture, const sf::Vector2f pos1, const sf::Vector2f pos2)
+{
+	MyRandom rnd;
+	bool flg1 = false;
+	bool flg2 = false;
+	//int count(0);
+	sf::Vector2f pos;
+	do
+	{
+		//std::cerr << "SearchCoord count:" << count++ << std::endl;
+		pos.x = ((rnd() % int(SizeField - SizeCell)) + 32); // 32 ->> field shift relative to 0X
+		pos.y = ((rnd() % int(SizeField - SizeCell)) + 16); // 16 ->> field shift relative to 0Y
+		Object objPL1(texture); objPL1.setPosObj(pos1.x, pos1.y);
+		Object objPL2(texture); objPL2.setPosObj(pos2.x, pos2.y);
+		Object objBonus(texture); objBonus.setPosObj(pos.x, pos.y);
+		flg1 = (objPL1.takeObj().getGlobalBounds().intersects(objBonus.takeObj().getGlobalBounds()));
+		flg2 = (objPL2.takeObj().getGlobalBounds().intersects(objBonus.takeObj().getGlobalBounds()));
+	} while (flg1 || flg2);
+	return pos;
+}
+
 class Bonus : public Object
 {
 	std::chrono::time_point<std::chrono::steady_clock> startClock, endClock;
-	random rnd;
 protected:
 	char* type;
 
-	Bonus(sf::Texture &texture) : Object(texture)
+	Bonus(sf::Texture &texture, const sf::Vector2f pos1, const sf::Vector2f pos2) : Object(texture)
 	{
 		startClock = std::chrono::steady_clock::now();
 
-		//set rnd position
-		const float positionX((rnd() % int (SizeField - SizeCell)) + 32); // 32 ->> field shift relative to 0X
-		const float positionY((rnd() % int (SizeField - SizeCell)) + 16); // 16 ->> field shift relative to 0Y
-		this->setPosObj(positionX, positionY); //todo rnd Bonus
+		sf::Vector2f pos(SearchCoord(texture, pos1, pos2));
+		this->setPosObj(pos.x, pos.y);
+
+		//todo rnd Bonus ...
 	}
 
 public:
@@ -66,7 +86,7 @@ public:
 class BonusTank : public Bonus
 {
 public:
-	BonusTank(sf::Texture &texture) : Bonus(texture)
+	BonusTank(sf::Texture &texture, const sf::Vector2f pos1, const sf::Vector2f pos2) : Bonus(texture, pos1, pos2)
 	{
 		this->setSpriteObj(336, 112);
 		this->type = "BonusTank";
@@ -76,7 +96,7 @@ public:
 class BonusSkin : public Bonus
 {
 public:
-	BonusSkin(sf::Texture &texture) : Bonus(texture)
+	BonusSkin(sf::Texture &texture, const sf::Vector2f pos1, const sf::Vector2f pos2) : Bonus(texture, pos1, pos2)
 	{
 		this->setSpriteObj(256, 112);
 		this->type = "BonusSkin";
@@ -86,7 +106,7 @@ public:
 class BonusStar : public Bonus
 {
 public:
-	BonusStar(sf::Texture &texture) : Bonus(texture)
+	BonusStar(sf::Texture &texture, const sf::Vector2f pos1, const sf::Vector2f pos2) : Bonus(texture, pos1, pos2)
 	{
 		this->setSpriteObj(304, 112);
 		this->type = "BonusStar";
@@ -96,7 +116,7 @@ public:
 class BonusShovel : public Bonus
 {
 public:
-	BonusShovel(sf::Texture &texture) : Bonus(texture)
+	BonusShovel(sf::Texture &texture, const sf::Vector2f pos1, const sf::Vector2f pos2) : Bonus(texture, pos1, pos2)
 	{
 		this->setSpriteObj(288, 112);
 		this->type = "BonusShovel";
@@ -106,7 +126,7 @@ public:
 class BonusClock : public Bonus
 {
 public:
-	BonusClock(sf::Texture &texture) : Bonus(texture)
+	BonusClock(sf::Texture &texture, const sf::Vector2f pos1, const sf::Vector2f pos2) : Bonus(texture, pos1, pos2)
 	{
 		this->setSpriteObj(272, 112);
 		this->type = "BonusClock";
@@ -116,7 +136,7 @@ public:
 class BonusGrenade : public Bonus
 {
 public:
-	BonusGrenade(sf::Texture &texture) : Bonus(texture)
+	BonusGrenade(sf::Texture &texture, const sf::Vector2f pos1, const sf::Vector2f pos2) : Bonus(texture, pos1, pos2)
 	{
 		this->setSpriteObj(320, 112);
 		this->type = "BonusGrenade";
@@ -126,7 +146,7 @@ public:
 class BonusPistol : public Bonus
 {
 public:
-	BonusPistol(sf::Texture &texture) : Bonus(texture)
+	BonusPistol(sf::Texture &texture, const sf::Vector2f pos1, const sf::Vector2f pos2) : Bonus(texture, pos1, pos2)
 	{
 		this->setSpriteObj(352, 112);
 		this->type = "BonusPistol";

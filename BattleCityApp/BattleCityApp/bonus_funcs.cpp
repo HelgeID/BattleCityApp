@@ -14,12 +14,12 @@ void GameField::CreateBonus()
 
 	switch (dist(generator))
 	{
-	case 1: bonus = new BonusTank(texture); break;
-	case 2: bonus = new BonusSkin(texture); break;
-	case 3: bonus = new BonusStar(texture); break;
-	case 4: bonus = new BonusShovel(texture); break;
-	case 5: bonus = new BonusClock(texture); break;
-	case 6: bonus = new BonusGrenade(texture); break;
+	case 1: bonus = new BonusTank(texture, firstPlayer->getPosObj(), secondPlayer->getPosObj()); break;
+	case 2: bonus = new BonusSkin(texture, firstPlayer->getPosObj(), secondPlayer->getPosObj()); break;
+	case 3: bonus = new BonusStar(texture, firstPlayer->getPosObj(), secondPlayer->getPosObj()); break;
+	case 4: bonus = new BonusShovel(texture, firstPlayer->getPosObj(), secondPlayer->getPosObj()); break;
+	case 5: bonus = new BonusClock(texture, firstPlayer->getPosObj(), secondPlayer->getPosObj()); break;
+	case 6: bonus = new BonusGrenade(texture, firstPlayer->getPosObj(), secondPlayer->getPosObj()); break;
 	}
 }
 
