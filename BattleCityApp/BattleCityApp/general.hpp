@@ -43,3 +43,4 @@ extern bool f_f;//for optimality
 
 extern bool gameover;
 extern bool pause;
+extern bool no_close;

@@ -115,10 +115,10 @@ public:
 
 	friend void ShootSnd(Sound* obj)
 	{
-		if (p_no_sound || gameover)
+		if (p_no_sound || gameover || !no_close)
 			return;
 
-		while (obj->sound_shoot->getStatus() != sf::SoundSource::Status::Stopped)
+		while (obj->sound_shoot->getStatus() != sf::SoundSource::Status::Stopped && no_close)
 			;
 		{
 			std::lock_guard<std::mutex> lg(mtx_snd);
@@ -131,10 +131,10 @@ public:
 
 	friend void BonusSnd(Sound* obj)
 	{
-		if (p_no_sound || gameover)
+		if (p_no_sound || gameover || !no_close)
 			return;
 
-		while (obj->sound_bonus->getStatus() != sf::SoundSource::Status::Stopped)
+		while (obj->sound_bonus->getStatus() != sf::SoundSource::Status::Stopped && no_close)
 			;
 		{
 			std::lock_guard<std::mutex> lg(mtx_snd);
@@ -147,10 +147,10 @@ public:
 
 	friend void TakeBonusSnd(Sound* obj)
 	{
-		if (p_no_sound || gameover)
+		if (p_no_sound || gameover || !no_close)
 			return;
 
-		while (obj->sound_takebonus->getStatus() != sf::SoundSource::Status::Stopped)
+		while (obj->sound_takebonus->getStatus() != sf::SoundSource::Status::Stopped && no_close)
 			;
 		{
 			std::lock_guard<std::mutex> lg(mtx_snd);
@@ -163,10 +163,10 @@ public:
 
 	friend void Explosion_fSnd(Sound* obj)
 	{
-		if (p_no_sound || gameover)
+		if (p_no_sound || gameover || !no_close)
 			return;
 
-		while (obj->sound_explosion_f->getStatus() != sf::SoundSource::Status::Stopped)
+		while (obj->sound_explosion_f->getStatus() != sf::SoundSource::Status::Stopped && no_close)
 			;
 		{
 			std::lock_guard<std::mutex> lg(mtx_snd);
@@ -179,10 +179,10 @@ public:
 
 	friend void Explosion_tSnd(Sound* obj)
 	{
-		if (p_no_sound || gameover)
+		if (p_no_sound || gameover || !no_close)
 			return;
 
-		while (obj->sound_explosion_t->getStatus() != sf::SoundSource::Status::Stopped)
+		while (obj->sound_explosion_t->getStatus() != sf::SoundSource::Status::Stopped && no_close)
 			;
 		{
 			std::lock_guard<std::mutex> lg(mtx_snd);

@@ -69,7 +69,6 @@ bool CONTROL_OffAllAnim(GameField* gField)
 
 void LAUNCHING_TANKS(GameField* gField)
 {
-	gField->LAUNCHING_TANKS_ON_OFF = true;
 	srand(time(NULL)); //for rand()
 
 	int indexTank(-1);
@@ -128,6 +127,11 @@ void LAUNCHING_TANKS(GameField* gField)
 	//********************************************************
 	//                      ** start **
 	//********************************************************
+	if (!no_close)
+		return;
+
+	gField->LAUNCHING_TANKS_ON_OFF = true;
+
 	//search variant
 	int variant = (rand() % 3 + 1);
 	///random ->> 1     *   
@@ -137,6 +141,9 @@ void LAUNCHING_TANKS(GameField* gField)
 	//part 1, (add 1) or (add 2) or (add 3)
 	sf::sleep(sf::milliseconds(2000));
 
+	if (!no_close)
+		return;
+
 	switch (variant)
 	{
 		case 1: random1(0, false); gField->number_loaded_tanks += 1; break;
@@ -145,24 +152,26 @@ void LAUNCHING_TANKS(GameField* gField)
 	}
 
 	if (variant == 1) {
-		while (!CONTROL_CheckFinishTimeAnim(gField, 0))
+		while ((!CONTROL_CheckFinishTimeAnim(gField, 0)) && no_close)
 			;
 	}
 	else
 		if (variant == 2) {
-			while (!CONTROL_CheckFinishTimeAnim(gField, 0) || !CONTROL_CheckFinishTimeAnim(gField, 1))
+			while ((!CONTROL_CheckFinishTimeAnim(gField, 0) || !CONTROL_CheckFinishTimeAnim(gField, 1)) && no_close)
 				;
 		}
 		else
 			if (variant == 3) {
-				while (!CONTROL_CheckFinishTimeAnim(gField, 0) || !CONTROL_CheckFinishTimeAnim(gField, 1) || !CONTROL_CheckFinishTimeAnim(gField, 2))
+				while ((!CONTROL_CheckFinishTimeAnim(gField, 0) || !CONTROL_CheckFinishTimeAnim(gField, 1) || !CONTROL_CheckFinishTimeAnim(gField, 2)) && no_close)
 					;
 			}
 	
 	//part 2, (add 3) or (add 2) or (add 1)
 	sf::sleep(sf::milliseconds(2000));
+	if (!no_close)
+		return;
 	
-	while (CONTROL_CollisionTanksBS(gField))
+	while (CONTROL_CollisionTanksBS(gField) && no_close)
 		sf::sleep(sf::milliseconds(300));
 
 	switch (variant)
@@ -173,6 +182,9 @@ void LAUNCHING_TANKS(GameField* gField)
 	}
 
 	while (true) {
+		if (!no_close)
+			return;
+
 		if (CONTROL_OffAllAnim(gField))
 		{
 			std::lock_guard<std::mutex> lg(mtx);
@@ -183,6 +195,9 @@ void LAUNCHING_TANKS(GameField* gField)
 		}
 		sf::sleep(sf::milliseconds(300));
 	}
+
+	if (!no_close)
+		return;
 
 	{
 		std::lock_guard<std::mutex> lg(mtx);
@@ -202,8 +217,14 @@ void LAUNCHING_TANKS(GameField* gField)
 	}
 	
 	if (p_player && p_player == 2) {
+		if (!no_close)
+			return;
 		LOAD_TANK(gField); //(add 5)
+
 		sf::sleep(sf::milliseconds(1500));
+
+		if (!no_close)
+			return;
 		LOAD_TANK(gField); //(add 6)
 	}
 
@@ -214,13 +235,17 @@ void LAUNCHING_TANKS(GameField* gField)
 
 void LAUNCHING_TANKS_NUM(GameField* gField, const int numTanks)
 {
+	if (!no_close)
+		return;
 	gField->LAUNCHING_TANKS_ON_OFF = true;
 	sf::sleep(sf::milliseconds(3500));
+	if (!no_close)
+		return;
 	int index(numTanks);
 	do {
 		LOAD_TANK(gField);
 		sf::sleep(sf::milliseconds(750));
-	} while (--index);
+	} while (--index && no_close);
 	//std::cerr << "\a";
 	gField->LAUNCHING_TANKS_ON_OFF = false;
 	return;
@@ -374,6 +399,8 @@ void LOAD_TANK(GameField* gField)
 
 void ControlSpawnEnemies(GameField* gField)
 {
+	if (!no_close)
+		return;
 	int max_number_tanks{ 0 };
 	p_player == 1 ? max_number_tanks = 4 : 0;
 	p_player == 2 ? max_number_tanks = 6 : 0;
@@ -382,10 +409,12 @@ void ControlSpawnEnemies(GameField* gField)
 	thread_launching_tanks_start->detach();
 
 	sf::sleep(sf::milliseconds(3000));
+	if (!no_close)
+		return;
 
-	while (gField->number_dead_tanks < gField->number_all_tanks)
+	while (gField->number_dead_tanks < gField->number_all_tanks && no_close)
 	{
-		while (gField->LAUNCHING_TANKS_ON_OFF)
+		while (gField->LAUNCHING_TANKS_ON_OFF && no_close)
 			sf::sleep(sf::milliseconds(300));
 		
 		int numTanks(0); //number of tanks that have to go into the field
@@ -404,6 +433,9 @@ void ControlSpawnEnemies(GameField* gField)
 		}
 
 		sf::sleep(sf::milliseconds(3000));
+		if (!no_close)
+			return;
+
 		if (gField->completion_generation_tanks)
 			return; 
 	}

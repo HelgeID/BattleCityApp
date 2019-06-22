@@ -21,13 +21,23 @@ void ControlSound(GameField* gField)
 	};
 
 	//start
+	if (!no_close)
+		return;
+
 	sf::sleep(sf::milliseconds(1000));
+
+	if (!no_close)
+		return;
+
 	gField->sound.StartMusic();
-	while (gField->sound.getMusic())
+	while (gField->sound.getMusic() && no_close)
 		;
 
 	while (true)
 	{
+		if (!no_close)
+			return;
+
 		if (KEY_MOVE() && !pause)
 			gField->sound.Moving();
 		else

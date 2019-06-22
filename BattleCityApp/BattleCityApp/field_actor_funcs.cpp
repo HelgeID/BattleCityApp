@@ -22,7 +22,14 @@ void AnimBirthPlayer(AnimArgPtr argPtr)
 
 void CreateActorsWait(GameField* gField)
 {
+	if (!no_close)
+		return;
+
 	sf::sleep(sf::milliseconds(3000));
+
+	if (!no_close)
+		return;
+
 	gField->TwoPlayer() ? gField->RestartFirstPlayer(), gField->RestartSecondPlayer() : gField->RestartFirstPlayer();
 	return;
 }
@@ -403,9 +410,8 @@ void GameField::updPlayers()
 	if (!gameover && !undying_emblem_absence_players)
 		if (firstPlayer->takelife() == 0 && secondPlayer->takelife() == 0)
 		{
-			emblem.CrushEmblem();
-			gameover = true;
-			StartGameOverMSG();
+			//GameOver
+			GameOver();
 		}
 	//--------------------------------------
 	return;

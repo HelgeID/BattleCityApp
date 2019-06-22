@@ -337,6 +337,8 @@ class GameField
 	void StartGameOverMSG();
 	void StartPauseMSG();
 	void StopPauseMSG();
+
+	void GameOver();
 public:
 	explicit GameField(sf::RenderWindow&, sf::Texture&);
 	~GameField();

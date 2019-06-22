@@ -609,8 +609,12 @@ void GameField::CheckOnCollisionTanks(Bullet& bullet)
 					it->damage_heavy_tank--;
 					if (it->damage_heavy_tank == 1) {
 						std::unique_ptr<std::thread> DHT(new std::thread( //dht - damage heavy tank
-							[](Tank* tank) {
+							[](Tank* tank) -> void {
+								if (!no_close)
+									return;
 								sf::sleep(sf::milliseconds(2000));
+								if (!no_close)
+									return;
 								tank->damage_heavy_tank ? tank->damage_heavy_tank-- : tank->damage_heavy_tank;
 						}, it->GetThisObj()));
 						DHT->detach();
@@ -976,9 +980,8 @@ void GameField::CheckOnEmblem()
 				delete bulletArr[indxBullet];
 				bulletArr[indxBullet] = nullptr;
 
-				emblem.CrushEmblem();
-				gameover = true;
-				StartGameOverMSG();
+				//GameOver
+				GameOver();
 				break;
 			}
 		}
@@ -996,9 +999,9 @@ void GameField::CheckOnEmblem()
 					thread_snd->detach();
 
 					collisionEmblemRotation(tank[iTank]);
-					emblem.CrushEmblem();
-					gameover = true;
-					StartGameOverMSG();
+
+					//GameOver
+					GameOver();
 					break;
 				}
 			}

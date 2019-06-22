@@ -38,10 +38,20 @@ public:
 template <typename T>
 void UpdMSGBlink(T* obj)
 {
+	if (!no_close)
+		return;
+
 	sf::sleep(sf::milliseconds(1000));
+
+	if (!no_close)
+		return;
+
 	const sf::Vector2i coordUIMsg(obj->getSpriteObj());
 	while (true)
 	{
+		if (!no_close)
+			return;
+
 		if (obj->PresenceMSG() != true)
 			break;
 
@@ -55,15 +65,18 @@ void UpdMSGBlink(T* obj)
 		}
 	}
 	obj->clearSpriteObj();
-	std::cerr << "finish MSG Blink" << std::endl;
+	//std::cerr << "finish MSG Blink" << std::endl;
 	return;
 }
 
 template <typename T>
 void UpdMSGMove(T* obj, sf::Vector2i point, const Direction dir)
 {
+	if (!no_close)
+		return;
+
 	while (!(point.x == obj->getPosObj().x &&
-				point.y == obj->getPosObj().y))
+				point.y == obj->getPosObj().y) && no_close)
 	{
 		switch (dir) {
 			case UP: obj->moveObj(0.f, -1.f); break;

@@ -23,13 +23,19 @@ void GameField::CreateBonus()
 	}
 }
 
-void WaitingShovel(GameField* obj)
+void WaitingShovel(GameField* obj) //func to thread
 {
+	if (!no_close)
+		return;
+
 	mtx.lock(); obj->CreateMoore("steel"); mtx.unlock();
 	sf::sleep(sf::milliseconds(20000));
 
+	if (!no_close)
+		return;
+
 	int count(10);
-	while (count)
+	while (count && no_close)
 	{
 		mtx.lock(); obj->CreateMoore("steel"); mtx.unlock();
 		sf::sleep(sf::milliseconds(200));
@@ -40,7 +46,7 @@ void WaitingShovel(GameField* obj)
 	return;
 }
 
-void WaitingClock(GameField* obj)
+void WaitingClock(GameField* obj) //func to thread
 {
 	auto sleep = [&](bool f) {
 		obj->sleeptanks = f;
@@ -49,8 +55,15 @@ void WaitingClock(GameField* obj)
 		});
 	};
 
+	if (!no_close)
+		return;
+
 	mtx.lock(); sleep(true); mtx.unlock(); //on sleep
-	sf::sleep(sf::milliseconds(5000));
+	sf::sleep(sf::milliseconds(8000));
+
+	if (!no_close)
+		return;
+
 	mtx.lock(); sleep(false); mtx.unlock(); //off sleep
 	return;
 }

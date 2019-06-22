@@ -189,3 +189,22 @@ void GameField::UpdateDirectionTanks()
 
 	return;
 }
+
+
+//GameOver
+void GameField::GameOver()
+{
+	emblem.CrushEmblem();
+	gameover = true;
+	StartGameOverMSG();
+
+	std::unique_ptr<std::thread> CLOSE_THREAD(new std::thread(
+		[]() -> void {
+		sf::sleep(sf::milliseconds(8000));
+		if (no_close)
+			no_close = false;
+		return;
+	}));
+	CLOSE_THREAD->detach();
+	return;
+}

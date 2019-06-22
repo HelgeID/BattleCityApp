@@ -49,7 +49,7 @@ void Game::GameLaunch()
 	GameFPS gFPS;
 
 	// update
-	while (window.isOpen())
+	while (window.isOpen() && no_close)
 	{
 		//Update Event
 		gEvent.UpdateEvent();
@@ -78,5 +78,9 @@ void Game::GameLaunch()
 		window.display();
 	}
 
+	window.clear(sf::Color(99, 99, 99));
+	window.display();
+	sf::sleep(sf::milliseconds(10000));
+	std::cerr << "\a";
 	return;
 }
