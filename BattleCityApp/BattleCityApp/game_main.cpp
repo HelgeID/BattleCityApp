@@ -19,7 +19,44 @@ Game::~Game()
 	delete texture;
 }
 
-//main loader game
+void Game::InitParams()
+{
+	gameover = false; //default =>FALSE
+	pause = false; //default =>FALSE
+	no_close = true; //default =>TRUE
+	return;
+}
+
+//loader "menu"
+void Game::GameMenu()
+{
+
+	return;
+}
+
+//loader "stage screen"
+void Game::GameStage()
+{
+	bool exit(false);
+	while (window.isOpen() && !exit)
+	{
+		sf::Event event;
+
+		while (window.pollEvent(event)) {
+			if (event.type == sf::Event::Closed)
+				window.close();
+
+			if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
+				exit = true;
+		}
+
+		window.clear(sf::Color(99, 99, 99));
+		window.display();
+	}
+	return;
+}
+
+//loader "game"
 void Game::GameLaunch()
 {
 	// initialization zoom
@@ -78,9 +115,13 @@ void Game::GameLaunch()
 		window.display();
 	}
 
-	window.clear(sf::Color(99, 99, 99));
-	window.display();
-	sf::sleep(sf::milliseconds(10000));
-	std::cerr << "\a";
+	{
+		//exit
+		window.clear(sf::Color(0, 0, 0));
+		window.display();
+		sf::sleep(sf::milliseconds(10000));
+		std::cerr << "\a";
+	}
+
 	return;
 }

@@ -12,6 +12,10 @@ public:
 	explicit Game(sf::RenderWindow &);
 	~Game();
 
+	void InitParams();
+
+	void GameMenu();
+	void GameStage();
 	void GameLaunch();
 
 private:

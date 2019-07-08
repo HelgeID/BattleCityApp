@@ -10,8 +10,18 @@ int main()
 	// Create a new object of the game
 	Game game(window);
 
-	// Launch of the game
-	game.GameLaunch();
+	// Start menu
+	game.GameMenu();
+
+	while (true) {
+		// Level screensavers
+		game.GameStage();
+
+		game.InitParams();
+
+		// Launch of the game
+		game.GameLaunch();
+	}
 
 	return 0;
 }

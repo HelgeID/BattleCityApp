@@ -200,7 +200,7 @@ void GameField::GameOver()
 
 	std::unique_ptr<std::thread> CLOSE_THREAD(new std::thread(
 		[]() -> void {
-		sf::sleep(sf::milliseconds(8000));
+		sf::sleep(sf::milliseconds(15000));
 		if (no_close)
 			no_close = false;
 		return;
