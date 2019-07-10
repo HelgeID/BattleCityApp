@@ -108,6 +108,12 @@
     <ClCompile Include="processing_msg.cpp">
       <Filter>Файлы исходного кода</Filter>
     </ClCompile>
+    <ClCompile Include="check_threads_funcs.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="sound_funcs.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="game.h">
@@ -193,6 +199,9 @@
     </ClInclude>
     <ClInclude Include="ui_msg.hpp">
       <Filter>Заголовочные файлы\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="check_threads.h">
+      <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

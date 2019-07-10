@@ -190,7 +190,6 @@ void GameField::UpdateDirectionTanks()
 	return;
 }
 
-
 //GameOver
 void GameField::GameOver()
 {

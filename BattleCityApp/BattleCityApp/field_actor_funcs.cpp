@@ -261,8 +261,8 @@ void GameField::MonitoringKeys()
 			//	std::cerr << std::endl;
 			//}
 
-			std::unique_ptr<std::thread> thread_snd(new std::thread(&ShootSnd, &sound));
-			thread_snd->detach();
+			//std::unique_ptr<std::thread> thread_snd(new std::thread(&ShootSnd, &sound));
+			//thread_snd->detach();
 		}
 	}
 
@@ -291,8 +291,8 @@ void GameField::MonitoringKeys()
 			//	std::cerr << std::endl;
 			//}
 
-			std::unique_ptr<std::thread> thread_snd(new std::thread(&ShootSnd, &sound));
-			thread_snd->detach();
+			//std::unique_ptr<std::thread> thread_snd(new std::thread(&ShootSnd, &sound));
+			//thread_snd->detach();
 		}
 	}
 
@@ -323,8 +323,8 @@ void GameField::CheckPlayerBang(Player& player, const bool off)
 		const sf::Vector2f point = player.getPosObj();
 		CreateAnimBoom(point, "tankObj");
 		player.declife();
-		std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_tSnd, &sound));
-		thread_snd->detach();
+		//std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_tSnd, &sound));
+		//thread_snd->detach();
 
 		if (player.name == "first player" && firstPlayerAnim.playerSkin != nullptr)
 		{

@@ -2,6 +2,7 @@
 #define SOUND_H
 
 #include <SFML\Audio.hpp>
+#include "general.hpp"
 #include <mutex>
 
 static std::mutex mtx_snd;
@@ -113,85 +114,11 @@ public:
 		return;
 	}
 
-	friend void ShootSnd(Sound* obj)
-	{
-		if (p_no_sound || gameover || !no_close)
-			return;
-
-		while (obj->sound_shoot->getStatus() != sf::SoundSource::Status::Stopped && no_close)
-			;
-		{
-			std::lock_guard<std::mutex> lg(mtx_snd);
-			obj->sound_shoot->setBuffer(obj->getBufferSnd("shootBuff"));
-			obj->sound_shoot->setLoop(false);
-			obj->sound_shoot->play();
-		}
-		return;
-	}
-
-	friend void BonusSnd(Sound* obj)
-	{
-		if (p_no_sound || gameover || !no_close)
-			return;
-
-		while (obj->sound_bonus->getStatus() != sf::SoundSource::Status::Stopped && no_close)
-			;
-		{
-			std::lock_guard<std::mutex> lg(mtx_snd);
-			obj->sound_bonus->setBuffer(obj->getBufferSnd("bonusBuff"));
-			obj->sound_bonus->setLoop(false);
-			obj->sound_bonus->play();
-		}
-		return;
-	}
-
-	friend void TakeBonusSnd(Sound* obj)
-	{
-		if (p_no_sound || gameover || !no_close)
-			return;
-
-		while (obj->sound_takebonus->getStatus() != sf::SoundSource::Status::Stopped && no_close)
-			;
-		{
-			std::lock_guard<std::mutex> lg(mtx_snd);
-			obj->sound_takebonus->setBuffer(obj->getBufferSnd("takebonusBuff"));
-			obj->sound_takebonus->setLoop(false);
-			obj->sound_takebonus->play();
-		}
-		return;
-	}
-
-	friend void Explosion_fSnd(Sound* obj)
-	{
-		if (p_no_sound || gameover || !no_close)
-			return;
-
-		while (obj->sound_explosion_f->getStatus() != sf::SoundSource::Status::Stopped && no_close)
-			;
-		{
-			std::lock_guard<std::mutex> lg(mtx_snd);
-			obj->sound_explosion_f->setBuffer(obj->getBufferSnd("explosion_fBuff"));
-			obj->sound_explosion_f->setLoop(false);
-			obj->sound_explosion_f->play();
-		}
-		return;
-	}
-
-	friend void Explosion_tSnd(Sound* obj)
-	{
-		if (p_no_sound || gameover || !no_close)
-			return;
-
-		while (obj->sound_explosion_t->getStatus() != sf::SoundSource::Status::Stopped && no_close)
-			;
-		{
-			std::lock_guard<std::mutex> lg(mtx_snd);
-			obj->sound_explosion_t->setBuffer(obj->getBufferSnd("explosion_tBuff"));
-			obj->sound_explosion_t->setLoop(false);
-			obj->sound_explosion_t->play();
-		}
-		return;
-	}
+	friend void ShootSnd(Sound*, const int);
+	friend void BonusSnd(Sound*, const int);
+	friend void TakeBonusSnd(Sound*, const int);
+	friend void Explosion_fSnd(Sound*, const int);
+	friend void Explosion_tSnd(Sound*, const int);
 };
 
 inline Sound::Sound()

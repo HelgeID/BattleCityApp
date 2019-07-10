@@ -203,8 +203,8 @@ void GameField::CheckTankBang(const int indexTank, const int _indexTank, const b
 				if (!killall) { //if did not take a bonus grenade
 					CreateBonus();
 					//play the bonus sound
-					std::unique_ptr<std::thread> thread_snd(new std::thread(&TakeBonusSnd, &sound));
-					thread_snd->detach();
+					//std::unique_ptr<std::thread> thread_snd(new std::thread(&TakeBonusSnd, &sound));
+					//thread_snd->detach();
 				}
 				break;
 			}
@@ -223,8 +223,8 @@ void GameField::CheckTankBang(const int indexTank, const int _indexTank, const b
 
 			if (!killall) { //if did not take a bonus grenade
 				//play the explosion sound
-				std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
-				thread_snd->detach();
+				//std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
+				//thread_snd->detach();
 			}
 
 			//add to UI statistics

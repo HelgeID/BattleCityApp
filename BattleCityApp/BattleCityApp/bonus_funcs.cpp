@@ -10,7 +10,7 @@ void GameField::CreateBonus()
 
 	std::random_device dev;
 	std::mt19937 generator(dev());
-	std::uniform_int_distribution<std::mt19937::result_type> dist(6, 6);//1-6
+	std::uniform_int_distribution<std::mt19937::result_type> dist(5, 5);//1-6
 
 	switch (dist(generator))
 	{
@@ -23,7 +23,7 @@ void GameField::CreateBonus()
 	}
 }
 
-void WaitingShovel(GameField* obj) //func to thread
+void WaitingShovel(GameField* obj, const int value) //func to thread
 {
 	if (!no_close)
 		return;
@@ -46,7 +46,7 @@ void WaitingShovel(GameField* obj) //func to thread
 	return;
 }
 
-void WaitingClock(GameField* obj) //func to thread
+void WaitingClock(GameField* obj, const int value) //func to thread
 {
 	auto sleep = [&](bool f) {
 		obj->sleeptanks = f;
@@ -100,14 +100,21 @@ void GameField::onBonusStarFun(Player& player)
 
 void GameField::onBonusShovelFun(Player& player)
 {
-	std::unique_ptr<std::thread> waitingshovel(new std::thread(&WaitingShovel, this));
-	waitingshovel->detach();
+	//call new thread and waiting shovel
+//	std::unique_ptr<std::thread> thread(new std::thread([&] {
+//		mThreads.callFuncInNewThread<GameField*>(&WaitingShovel, this);
+//	}));
+//	thread->detach();
+	return;
 }
 
 void GameField::onBonusClockFun(Player& player)
 {
-	std::unique_ptr<std::thread> waitingclock(new std::thread(&WaitingClock, this));
-	waitingclock->detach();
+	//call new thread and waiting clock
+	std::unique_ptr<std::thread> thread(new std::thread([&] {
+		mThreads.callFuncInNewThread<GameField*>(&WaitingClock, this);
+	}));
+	thread->detach();
 	return;
 }
 

@@ -17,6 +17,7 @@
 #include "tile_map_dynamic.h"
 #include "part_bricks_map.h"
 #include "animation_game.h"
+#include "check_threads.h"
 
 #include "msg.h"
 #include "fps.h"
@@ -315,8 +316,8 @@ class GameField
 	void onBonusGrenadeFun(Player&);
 	void onBonusPistolFun(Player&);
 
-	friend void WaitingShovel(GameField*);
-	friend void WaitingClock(GameField*);
+	friend void WaitingShovel(GameField*, const int);
+	friend void WaitingClock(GameField*, const int);
 
 
 	//UI FUNCS
@@ -339,6 +340,9 @@ class GameField
 	void StopPauseMSG();
 
 	void GameOver();
+
+	ManagerThreads mThreads;
+
 public:
 	explicit GameField(sf::RenderWindow&, sf::Texture&);
 	~GameField();

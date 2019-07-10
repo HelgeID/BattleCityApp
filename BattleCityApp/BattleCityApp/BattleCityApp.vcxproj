@@ -119,6 +119,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bonus_funcs.cpp" />
+    <ClCompile Include="check_threads_funcs.cpp" />
     <ClCompile Include="control_curtain.cpp" />
     <ClCompile Include="control_sound.cpp" />
     <ClCompile Include="control_tanks.cpp" />
@@ -141,6 +142,7 @@
     <ClCompile Include="field.cpp" />
     <ClCompile Include="point_spawn.cpp" />
     <ClCompile Include="read_data_obj.cpp" />
+    <ClCompile Include="sound_funcs.cpp" />
     <ClCompile Include="source.cpp" />
     <ClCompile Include="processing_msg.cpp" />
     <ClCompile Include="tile_map_dynamic.cpp" />
@@ -154,6 +156,7 @@
     <ClInclude Include="block_spawn.hpp" />
     <ClInclude Include="bonus.hpp" />
     <ClInclude Include="bullet.hpp" />
+    <ClInclude Include="check_threads.h" />
     <ClInclude Include="curtain.h" />
     <ClInclude Include="emblem.hpp" />
     <ClInclude Include="events.h" />
