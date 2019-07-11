@@ -24,21 +24,15 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	CreateEmblem();
 	CreateTanks();
 
-	std::unique_ptr<std::thread> thread_ControlSpawnEnemies(new std::thread(&ControlSpawnEnemies, this));
-	thread_ControlSpawnEnemies->detach();
-
-	std::unique_ptr<std::thread> thread_ControlSound(new std::thread(&ControlSound, this));
-	thread_ControlSound->detach();
-
-	curtain = new Curtain(field);
-	std::unique_ptr<std::thread> thread_ControlCurtain(new std::thread(&ControlCurtain, this));
-	thread_ControlCurtain->detach();
+	MonitoringElements();
 
 	usesUI_nlifes();
 	usesUI_nflags();
 	usesUI_nalltanks();
 	usesUI_ntanksforplayer1();
 	usesUI_ntanksforplayer2();
+
+	mThreads.startControlThreads();
 }
 
 GameField::~GameField()
@@ -197,13 +191,39 @@ void GameField::GameOver()
 	gameover = true;
 	StartGameOverMSG();
 
+	//After the signal "gameover", we wait for some time and give a signal to close the open threads
 	std::unique_ptr<std::thread> CLOSE_THREAD(new std::thread(
 		[]() -> void {
-		sf::sleep(sf::milliseconds(15000));
+		sf::sleep(sf::milliseconds(18000)); //18s
 		if (no_close)
 			no_close = false;
 		return;
 	}));
 	CLOSE_THREAD->detach();
+	return;
+}
+
+//MonitoringElements
+void GameField::MonitoringElements()
+{
+	//call new thread for ControlSpawnEnemies
+	std::unique_ptr<std::thread> thread_control_spawn_enemies_start(new std::thread([&] {
+		mThreads.callFuncInNewThread<GameField*>(&ControlSpawnEnemies, this);
+	}));
+	thread_control_spawn_enemies_start->detach();
+
+	//call new thread for ControlSound
+	std::unique_ptr<std::thread> thread_control_sound_start(new std::thread([&] {
+		mThreads.callFuncInNewThread<GameField*>(&ControlSound, this);
+	}));
+	thread_control_sound_start->detach();
+
+	//call new thread for ControlCurtain
+	curtain = new Curtain(field);
+	std::unique_ptr<std::thread> thread_control_curtain_start(new std::thread([&] {
+		mThreads.callFuncInNewThread<GameField*>(&ControlCurtain, this);
+	}));
+	thread_control_curtain_start->detach();
+
 	return;
 }

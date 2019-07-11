@@ -67,7 +67,7 @@ bool CONTROL_OffAllAnim(GameField* gField)
 		);
 }
 
-void LAUNCHING_TANKS(GameField* gField)
+void LAUNCHING_TANKS(GameField* gField, const int value)
 {
 	srand(time(NULL)); //for rand()
 
@@ -397,7 +397,7 @@ void LOAD_TANK(GameField* gField)
 // main spawn enemies
 //////////////////////////////////////////////////////////////////////////
 
-void ControlSpawnEnemies(GameField* gField)
+void ControlSpawnEnemies(GameField* gField, const int value)
 {
 	if (!no_close)
 		return;
@@ -405,7 +405,10 @@ void ControlSpawnEnemies(GameField* gField)
 	p_player == 1 ? max_number_tanks = 4 : 0;
 	p_player == 2 ? max_number_tanks = 6 : 0;
 
-	std::unique_ptr<std::thread> thread_launching_tanks_start(new std::thread(&LAUNCHING_TANKS, gField));
+	//call new thread for LAUNCHING_TANKS
+	std::unique_ptr<std::thread> thread_launching_tanks_start(new std::thread([&] {
+		gField->mThreads.callFuncInNewThread<GameField*>(&LAUNCHING_TANKS, gField);
+	}));
 	thread_launching_tanks_start->detach();
 
 	sf::sleep(sf::milliseconds(3000));
@@ -428,8 +431,11 @@ void ControlSpawnEnemies(GameField* gField)
 
 		if (numTanks)
 		{
-			std::unique_ptr<std::thread> thread_launching_tanks_num(new std::thread(&LAUNCHING_TANKS_NUM, gField, numTanks));
-			thread_launching_tanks_num->detach();
+			//call new thread for LAUNCHING_TANKS_NUM
+			std::unique_ptr<std::thread> thread_launching_tanks_num_start(new std::thread([&] {
+				gField->mThreads.callFuncInNewThread<GameField*>(&LAUNCHING_TANKS_NUM, gField, numTanks);
+			}));
+			thread_launching_tanks_num_start->detach();
 		}
 
 		sf::sleep(sf::milliseconds(3000));

@@ -51,7 +51,7 @@ class GameField
 	sf::Texture &texture;
 
 	Sound sound;
-	friend void ControlSound(GameField*);
+	friend void ControlSound(GameField*, const int);
 
 	StorageTanks storage_tanks{ texture };
 	NumberLifes number_lifes_first{ texture, "first player" };
@@ -143,9 +143,9 @@ class GameField
 	void ControlFrontMode();
 	void RotationTank(Tank&, const char*, const char*, const float);
 
-	friend void ControlSpawnEnemies(GameField*);
+	friend void ControlSpawnEnemies(GameField*, const int);
 	bool LAUNCHING_TANKS_ON_OFF{ false };
-	friend void LAUNCHING_TANKS(GameField*);
+	friend void LAUNCHING_TANKS(GameField*, const int);
 	friend void LAUNCHING_TANKS_NUM(GameField*, const int);
 	friend void LOAD_TANK(GameField*);
 	friend int CONTROL_NUMBER_CURRENT_TANKS(GameField*);
@@ -216,8 +216,8 @@ class GameField
 	bool TwoPlayer() const { return p_player > 1; }
 
 	void CreateActors();
-	friend void CreateActorsWait(GameField*);
-	friend void RestartPlayer(GameField*, const std::string);
+	friend void CreateActorsWait(GameField*, const int);
+	friend void RestartPlayer(GameField*, const int);
 	void RestartFirstPlayer(const bool flag = false);
 	void RestartSecondPlayer(const bool flag = false);
 	void updPlayers();
@@ -331,7 +331,7 @@ class GameField
 
 	Curtain *curtain{ nullptr };
 	void DrawCurtain();
-	friend void ControlCurtain(GameField*);
+	friend void ControlCurtain(GameField*, const int);
 
 	UIGameOverMSG uiGameOverMSG{ texture };
 	UIPauseMSG uiPauseMSG{ texture };
@@ -340,6 +340,7 @@ class GameField
 	void StopPauseMSG();
 
 	void GameOver();
+	void MonitoringElements();
 
 	ManagerThreads mThreads;
 

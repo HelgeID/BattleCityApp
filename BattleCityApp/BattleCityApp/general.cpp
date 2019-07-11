@@ -40,5 +40,6 @@ bool undying_emblem_absence_players = false;
 bool f_f = false;
 
 bool gameover = false; //default =>FALSE
+bool level_finish = false; //default =>FALSE
 bool pause = false; //default =>FALSE
 bool no_close = true; //default =>TRUE

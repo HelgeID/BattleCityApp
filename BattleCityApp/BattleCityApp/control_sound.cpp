@@ -1,7 +1,7 @@
 ﻿#include "field.h"
 #include "general.hpp"
 
-void ControlSound(GameField* gField)
+void ControlSound(GameField* gField, const int value)
 {
 	auto PRESENCE_PLAYER = [&]()
 	{

@@ -100,21 +100,21 @@ void GameField::onBonusStarFun(Player& player)
 
 void GameField::onBonusShovelFun(Player& player)
 {
-	//call new thread and waiting shovel
-//	std::unique_ptr<std::thread> thread(new std::thread([&] {
-//		mThreads.callFuncInNewThread<GameField*>(&WaitingShovel, this);
-//	}));
-//	thread->detach();
+	//call new thread for waiting shovel
+	std::unique_ptr<std::thread> thread_waiting_shovel_start(new std::thread([&] {
+		mThreads.callFuncInNewThread<GameField*>(&WaitingShovel, this);
+	}));
+	thread_waiting_shovel_start->detach();
 	return;
 }
 
 void GameField::onBonusClockFun(Player& player)
 {
-	//call new thread and waiting clock
-	std::unique_ptr<std::thread> thread(new std::thread([&] {
+	//call new thread for waiting clock
+	std::unique_ptr<std::thread> thread_waiting_clock_start(new std::thread([&] {
 		mThreads.callFuncInNewThread<GameField*>(&WaitingClock, this);
 	}));
-	thread->detach();
+	thread_waiting_clock_start->detach();
 	return;
 }
 

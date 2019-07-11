@@ -3,7 +3,7 @@
 #include "general.hpp"
 
 struct AnimArgPtr { Player* player; AnimBirth* animBirth; };
-void AnimBirthPlayer(AnimArgPtr argPtr)
+void AnimBirthPlayer(AnimArgPtr argPtr, const int value)
 {
 	if (argPtr.animBirth == nullptr)
 		return;
@@ -20,7 +20,7 @@ void AnimBirthPlayer(AnimArgPtr argPtr)
 	return;
 }
 
-void CreateActorsWait(GameField* gField)
+void CreateActorsWait(GameField* gField, const int value)
 {
 	if (!no_close)
 		return;
@@ -34,10 +34,14 @@ void CreateActorsWait(GameField* gField)
 	return;
 }
 
-void RestartPlayer(GameField* gField, const std::string player_name)
+void RestartPlayer(GameField* gField, const int playerID)
 {
-	//player_name - player, who must restart
+	if (!playerID)
+		return;
+
+	//playerID - player, who must restart
 	sf::sleep(sf::milliseconds(1000));
+
 	while (true)
 	{
 		sf::sleep(sf::milliseconds(1000));
@@ -49,15 +53,15 @@ void RestartPlayer(GameField* gField, const std::string player_name)
 		std::for_each(gField->tank.begin(), gField->tank.end(), [&](Tank &tank)
 		{
 			//is the tank on the spawnpoint of the player
-			u1 = ((tank.isTank() && player_name == "first player") && (tank.takeObj().getGlobalBounds().intersects(gField->lPlayer_BS->takeObj().getGlobalBounds())));
-			u2 = ((tank.isTank() && player_name == "second player") && (tank.takeObj().getGlobalBounds().intersects(gField->rPlayer_BS->takeObj().getGlobalBounds())));
+			u1 = ((tank.isTank() && playerID == 1) && (tank.takeObj().getGlobalBounds().intersects(gField->lPlayer_BS->takeObj().getGlobalBounds())));
+			u2 = ((tank.isTank() && playerID == 2) && (tank.takeObj().getGlobalBounds().intersects(gField->rPlayer_BS->takeObj().getGlobalBounds())));
 			if (u1 || u2)
 				collisionF = true; //YES
 		});
 
 		//is the player on the spawnpoint of the other player
-		(gField->firstPlayer->takeObj().getGlobalBounds().intersects(gField->rPlayer_BS->takeObj().getGlobalBounds()) && player_name == "second player") ||
-			(gField->secondPlayer->takeObj().getGlobalBounds().intersects(gField->lPlayer_BS->takeObj().getGlobalBounds()) && player_name == "first player") ?
+		(gField->firstPlayer->takeObj().getGlobalBounds().intersects(gField->rPlayer_BS->takeObj().getGlobalBounds()) && playerID == 1) ||
+			(gField->secondPlayer->takeObj().getGlobalBounds().intersects(gField->lPlayer_BS->takeObj().getGlobalBounds()) && playerID == 2) ?
 				collisionF = true : 0;
 
 		if (!collisionF) //NO ->> exit of checks
@@ -65,9 +69,9 @@ void RestartPlayer(GameField* gField, const std::string player_name)
 	}
 
 	mtx.lock();
-	player_name == "first player" ? gField->RestartFirstPlayer() 
+	playerID == 1 ? gField->RestartFirstPlayer()
 		: 0;
-	player_name == "second player" ? gField->RestartSecondPlayer() 
+	playerID == 2 ? gField->RestartSecondPlayer()
 		: 0;
 	mtx.unlock();
 
@@ -79,8 +83,12 @@ void GameField::CreateActors()
 	firstPlayer = new Player(texture, "first player", false);
 	secondPlayer = new Player(texture, "second player", false);
 
-	std::unique_ptr<std::thread> createActorsWait(new std::thread(&CreateActorsWait, this));
-	createActorsWait->detach();
+	//call new thread for CreateActorsWait
+	std::unique_ptr<std::thread> thread_create_actors_wait(new std::thread([&] {
+		mThreads.callFuncInNewThread<GameField*>(&CreateActorsWait, this);
+	}));
+	thread_create_actors_wait->detach();
+
 	return;
 }
 
@@ -100,10 +108,14 @@ void GameField::RestartFirstPlayer(const bool flag)
 
 	std::unique_ptr<AnimBirth> anim(new AnimBirth(texture, posFirstPlayer));
 	firstPlayerAnim.playerBirth = std::move(anim);
-	AnimArgPtr argPtr{ firstPlayer, firstPlayerAnim.playerBirth.get() };
+	AnimArgPtr argPtrFirst{ firstPlayer, firstPlayerAnim.playerBirth.get() };
 
-	std::unique_ptr<std::thread> threadPlayerL(new std::thread(&AnimBirthPlayer, argPtr));
+	//call new thread for AnimBirthPlayer
+	std::unique_ptr<std::thread> threadPlayerL(new std::thread([&] {
+		mThreads.callFuncInNewThread<AnimArgPtr>(&AnimBirthPlayer, argPtrFirst);
+	}));
 	threadPlayerL->detach();
+
 	lPlayer_BS->Spawn() = true;
 	usesUI_nlifes();
 	return;
@@ -125,10 +137,14 @@ void GameField::RestartSecondPlayer(const bool flag)
 
 	std::unique_ptr<AnimBirth> anim(new AnimBirth(texture, posSecondPlayer));
 	secondPlayerAnim.playerBirth = std::move(anim);
-	AnimArgPtr argPtr{ secondPlayer, secondPlayerAnim.playerBirth.get() };
+	AnimArgPtr argPtrSecond{ secondPlayer, secondPlayerAnim.playerBirth.get() };
 
-	std::unique_ptr<std::thread> threadPlayerR(new std::thread(&AnimBirthPlayer, argPtr));
+	//call new thread for AnimBirthPlayer
+	std::unique_ptr<std::thread> threadPlayerR(new std::thread([&] {
+		mThreads.callFuncInNewThread<AnimArgPtr>(&AnimBirthPlayer, argPtrSecond);
+	}));
 	threadPlayerR->detach();
+
 	rPlayer_BS->Spawn() = true;
 	usesUI_nlifes();
 	return;
@@ -261,8 +277,11 @@ void GameField::MonitoringKeys()
 			//	std::cerr << std::endl;
 			//}
 
-			//std::unique_ptr<std::thread> thread_snd(new std::thread(&ShootSnd, &sound));
-			//thread_snd->detach();
+			//call new thread for play sound
+			std::unique_ptr<std::thread> thread_sound_start(new std::thread([&] {
+				mThreads.callFuncInNewThread<Sound*>(&ShootSnd, &sound);
+			}));
+			thread_sound_start->detach();
 		}
 	}
 
@@ -291,8 +310,11 @@ void GameField::MonitoringKeys()
 			//	std::cerr << std::endl;
 			//}
 
-			//std::unique_ptr<std::thread> thread_snd(new std::thread(&ShootSnd, &sound));
-			//thread_snd->detach();
+			//call new thread for play sound
+			std::unique_ptr<std::thread> thread_sound_start(new std::thread([&] {
+				mThreads.callFuncInNewThread<Sound*>(&ShootSnd, &sound);
+			}));
+			thread_sound_start->detach();
 		}
 	}
 
@@ -323,25 +345,37 @@ void GameField::CheckPlayerBang(Player& player, const bool off)
 		const sf::Vector2f point = player.getPosObj();
 		CreateAnimBoom(point, "tankObj");
 		player.declife();
-		//std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_tSnd, &sound));
-		//thread_snd->detach();
+		
+		int playerID(0);
 
-		if (player.name == "first player" && firstPlayerAnim.playerSkin != nullptr)
-		{
+		if (player.name == "first player")
+			playerID = 1;
+		else if (player.name == "second player")
+			playerID = 2;
+		
+		//call new thread for play sound
+		std::unique_ptr<std::thread> thread_sound_start(new std::thread([&] {
+			mThreads.callFuncInNewThread<Sound*>(&Explosion_tSnd, &sound);
+		}));
+		thread_sound_start->detach();
+
+		if (playerID == 1 && firstPlayerAnim.playerSkin != nullptr) {
 			firstPlayerAnim.playerSkin.reset();
 			firstPlayerAnim.playerSkin = nullptr;
 			player.SkinOff();
 		}
 
-		if (player.name == "second player" && secondPlayerAnim.playerSkin != nullptr)
-		{
+		if (playerID == 2 && secondPlayerAnim.playerSkin != nullptr) {
 			secondPlayerAnim.playerSkin.reset();
 			secondPlayerAnim.playerSkin = nullptr;
 			player.SkinOff();
 		}
 
 		if (player.takelife() != 0 && !gameover) {
-			std::unique_ptr<std::thread> threadPlayer(new std::thread(&RestartPlayer, this, player.name));
+			//call new thread for RestartPlayer
+			std::unique_ptr<std::thread> threadPlayer(new std::thread([&] {
+				mThreads.callFuncInNewThread<GameField*>(&RestartPlayer, this, playerID);
+			}));
 			threadPlayer->detach();
 		}
 	}

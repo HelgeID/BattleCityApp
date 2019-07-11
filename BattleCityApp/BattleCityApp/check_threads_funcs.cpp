@@ -46,12 +46,17 @@ void ManagerThreads::indicateTread(std::vector<ThreadsCheck*>& vecThsCheck, std:
 
 void ManagerThreads::startControlThreads()
 {
+	//running the Manager to control open threads
 	std::packaged_task<void()> task([&] {
+		sf::sleep(sf::milliseconds(1500));
 		bool isThreadsFlag(false);
-		while (true) {
-			isThreadsFlag = isThreads(vecThsCheck);
+		while (!level_finish || isThreadsFlag) {
 			std::this_thread::sleep_for(std::chrono::seconds(1));
+			isThreadsFlag = isThreads(vecThsCheck);
+			if (!no_close)
+				level_finish = true;
 		}
+		std::cerr << "exit control threads" << std::endl;
 	});
 	auto future = task.get_future();
 

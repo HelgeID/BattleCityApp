@@ -36,7 +36,7 @@ public:
 	template <typename T>
 	void callFuncInNewThread(Func<void, T> func, T obj, const int value = 0)
 	{
-		std::cerr << "start: " << std::this_thread::get_id() << " " << typeid(obj).name() << std::endl;
+		//std::cerr << "start: " << std::this_thread::get_id() << " " << typeid(obj).name() << std::endl;
 		bool condition(false);
 
 		mtx.lock();
@@ -49,7 +49,7 @@ public:
 			auto lastElementThsCheck = vecThsCheck.end() - 1; //take last element of arr
 			(*lastElementThsCheck)->id = std::this_thread::get_id(); //get the current ID of this thread
 
-			condition = (strname == "class GameField *" || strname == "class Sound *");
+			condition = (strname == "class GameField *" || strname == "class Sound *" || strname == "struct AnimArgPtr");
 		}
 		mtx.unlock();
 		
@@ -57,7 +57,7 @@ public:
 
 		indicateTread(vecThsCheck, std::this_thread::get_id()); //indicate threads to delete (label - true)
 
-		std::cerr << "end: " << std::this_thread::get_id() << std::endl;
+		//std::cerr << "end: " << std::this_thread::get_id() << std::endl;
 		return;
 	}
 

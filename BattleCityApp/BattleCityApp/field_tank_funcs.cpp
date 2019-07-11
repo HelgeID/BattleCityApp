@@ -202,9 +202,11 @@ void GameField::CheckTankBang(const int indexTank, const int _indexTank, const b
 				tank[index].mapPos = { 0, 0 };
 				if (!killall) { //if did not take a bonus grenade
 					CreateBonus();
-					//play the bonus sound
-					//std::unique_ptr<std::thread> thread_snd(new std::thread(&TakeBonusSnd, &sound));
-					//thread_snd->detach();
+					//call new thread for play sound
+					std::unique_ptr<std::thread> thread_sound_start(new std::thread([&] {
+						mThreads.callFuncInNewThread<Sound*>(&TakeBonusSnd, &sound);
+					}));
+					thread_sound_start->detach();
 				}
 				break;
 			}
@@ -222,9 +224,11 @@ void GameField::CheckTankBang(const int indexTank, const int _indexTank, const b
 			std::cerr << "Dead tanks:" << number_dead_tanks << std::endl;
 
 			if (!killall) { //if did not take a bonus grenade
-				//play the explosion sound
-				//std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
-				//thread_snd->detach();
+				//call new thread for play sound
+				std::unique_ptr<std::thread> thread_sound_start(new std::thread([&] {
+					mThreads.callFuncInNewThread<Sound*>(&Explosion_fSnd, &sound);
+				}));
+				thread_sound_start->detach();
 			}
 
 			//add to UI statistics

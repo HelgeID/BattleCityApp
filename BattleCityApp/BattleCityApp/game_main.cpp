@@ -22,8 +22,11 @@ Game::~Game()
 void Game::InitParams()
 {
 	gameover = false; //default =>FALSE
+	level_finish = false; //default =>FALSE
 	pause = false; //default =>FALSE
 	no_close = true; //default =>TRUE
+
+	f_f = false;
 	return;
 }
 
@@ -79,48 +82,60 @@ void Game::GameLaunch()
 	//undying_emblem_boom_by_tank = true;
 	//undying_emblem_absence_players = true;
 
-	// initialization of objects
-	GameEvent gEvent(window);
-	GameField gField(window, *texture);
+	// Game PTRS
+	GameEvent *gEvent(nullptr);
+	GameField *gField(nullptr);
+	GameFPS *gFPS(nullptr);
 
-	GameFPS gFPS;
+
+	// initialization objects
+	{
+		gEvent = new GameEvent(window);
+		gField = new GameField(window, *texture);
+		gFPS = new GameFPS();
+	}
 
 	// update
 	while (window.isOpen() && no_close)
 	{
 		//Update Event
-		gEvent.UpdateEvent();
+		gEvent->UpdateEvent();
 
 		///////////////////////////////////////////////
-		gFPS.StartFrame(); //for FPS
+		gFPS->StartFrame(); //for FPS
 		///////////////////////////////////////////////
 
 		//Update Field
 		{
 			std::lock_guard<std::mutex> lg(mtx);
-			gField.UpdateField();
+			gField->UpdateField();
 		}
 
 		///////////////////////////////////////////////
-		gFPS.FinishFrame(); //for FPS
+		gFPS->FinishFrame(); //for FPS
 		///////////////////////////////////////////////
 
 		///////////////////////////////////////////////
-		gFPS.ProcessingFPS(window); //for FPS
+		gFPS->ProcessingFPS(window); //for FPS
 		///////////////////////////////////////////////
 		
-		//std::cerr << "FPS: "<< gFPS.fps.getFPS() << std::endl;
-
 		//show
 		window.display();
 	}
 
+	//clear display
 	{
-		//exit
 		window.clear(sf::Color(0, 0, 0));
 		window.display();
-		sf::sleep(sf::milliseconds(10000));
+		sf::sleep(sf::milliseconds(3000));
 		std::cerr << "\a";
+	}
+
+	// dell objects
+	{
+		delete gEvent;
+		delete gField;
+		delete gFPS;
 	}
 
 	return;

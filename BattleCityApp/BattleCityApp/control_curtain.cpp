@@ -1,7 +1,7 @@
 #include "field.h"
 #include "general.hpp"
 
-void ControlCurtain(GameField* gField)
+void ControlCurtain(GameField* gField, const int value)
 {
 	sf::sleep(sf::milliseconds(1500));
 	while (!gField->curtain->FinishCurtain())

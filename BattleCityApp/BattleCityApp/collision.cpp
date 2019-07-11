@@ -971,11 +971,11 @@ void GameField::CheckOnEmblem()
 				CreateAnimBigBoom();
 				sound.Absent();
 
-				//call new thread and play sound
-				std::unique_ptr<std::thread> thread(new std::thread([&] {
+				//call new thread for play sound
+				std::unique_ptr<std::thread> thread_sound_start(new std::thread([&] {
 					mThreads.callFuncInNewThread<Sound*>(&Explosion_fSnd, &sound);
 				}));
-				thread->detach();
+				thread_sound_start->detach();
 
 				//say the tank that the bullet hit the target
 				*bulletArr[indxBullet]->bulletActivFlag = false;
@@ -999,8 +999,11 @@ void GameField::CheckOnEmblem()
 					CreateAnimBigBoom();
 					sound.Absent();
 
-					//std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
-					//thread_snd->detach();
+					//call new thread for play sound
+					std::unique_ptr<std::thread> thread_sound_start(new std::thread([&] {
+						mThreads.callFuncInNewThread<Sound*>(&Explosion_fSnd, &sound);
+					}));
+					thread_sound_start->detach();
 
 					collisionEmblemRotation(tank[iTank]);
 
@@ -1023,16 +1026,25 @@ void GameField::CheckOnBonus()
 	auto BonusSND = [&](const char* type)
 	{
 		if (type == "BonusGrenade") {
-			//std::unique_ptr<std::thread> thread_snd(new std::thread(&Explosion_fSnd, &sound));
-			//thread_snd->detach();
+			//call new thread for play sound
+			std::unique_ptr<std::thread> thread_sound_start(new std::thread([&] {
+				mThreads.callFuncInNewThread<Sound*>(&Explosion_fSnd, &sound);
+			}));
+			thread_sound_start->detach();
 		}
 		else if (type == "BonusTank") {
-			//std::unique_ptr<std::thread> thread_snd(new std::thread(&BonusSnd, &sound));
-			//thread_snd->detach();
+			//call new thread for play sound
+			std::unique_ptr<std::thread> thread_sound_start(new std::thread([&] {
+				mThreads.callFuncInNewThread<Sound*>(&BonusSnd, &sound);
+			}));
+			thread_sound_start->detach();
 		}
 		else {
-			//std::unique_ptr<std::thread> thread_snd(new std::thread(&BonusSnd, &sound));
-			//thread_snd->detach();
+			//call new thread for play sound
+			std::unique_ptr<std::thread> thread_sound_start(new std::thread([&] {
+				mThreads.callFuncInNewThread<Sound*>(&BonusSnd, &sound);
+			}));
+			thread_sound_start->detach();
 		}
 	};
 
