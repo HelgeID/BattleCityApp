@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <chrono>
+#include <stack>
 
 #include "general.hpp"
 #include "object.hpp"
@@ -119,5 +120,84 @@ inline void UIPauseMSG::PauseMSG(const bool pause)
 		std::unique_ptr<std::thread> updMSGBlink(new std::thread(&UpdMSGBlink<UIPauseMSG>, this));
 		updMSGBlink->detach();
 	}
+	return;
+}
+
+//Stage MSG
+class UIStageMSG : public sf::Drawable
+{
+	Object* msgStage{ nullptr };
+	Object* msgNum1{ nullptr };
+	Object* msgNum2{ nullptr };
+
+	void InitUIStageMSG();
+public:
+	UIStageMSG(sf::Texture &texture) : 
+		msgStage(new Object(texture, sf::Vector2f(40.f, 8.f))), 
+		msgNum1(new Object(texture, sf::Vector2f(8.f, 8.f))),
+		msgNum2(new Object(texture, sf::Vector2f(8.f, 8.f)))
+	{
+		InitUIStageMSG();
+	}
+
+	~UIStageMSG()
+	{
+		delete msgStage;
+		delete msgNum1;
+		delete msgNum2;
+	}
+
+private:
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override
+	{
+		msgStage != nullptr ? target.draw(msgStage->takeObj(), states) : NULL;
+		msgNum1 != nullptr ? target.draw(msgNum1->takeObj(), states) : NULL;
+		msgNum2 != nullptr ? target.draw(msgNum2->takeObj(), states) : NULL;
+	}
+};
+
+inline void UIStageMSG::InitUIStageMSG()
+{
+	auto SET_STAGE = [](Object& msgStage) {
+		msgStage.setSpriteObj(328, 176);
+	};
+
+	auto SET_NUM = [](Object& msgNum, const int value) {
+		switch (value) {
+		case 0: 
+			msgNum.setSpriteObj(329, 184); break;
+		case 1: 
+			msgNum.setSpriteObj(337, 184); break;
+		case 2: 
+			msgNum.setSpriteObj(345, 184); break;
+		case 3: 
+			msgNum.setSpriteObj(353, 184); break;
+		case 4: 
+			msgNum.setSpriteObj(361, 184); break;
+		case 5: 
+			msgNum.setSpriteObj(329, 192); break;
+		case 6: 
+			msgNum.setSpriteObj(337, 192); break;
+		case 7: 
+			msgNum.setSpriteObj(345, 192); break;
+		case 8: 
+			msgNum.setSpriteObj(353, 192); break;
+		case 9: 
+			msgNum.setSpriteObj(361, 192); break;
+		}
+	};
+
+	const float stagePosX = SizeField / 2;
+	const float stagePosY = SizeField / 2;
+	const sf::Vector2f sizeStage(msgStage->getSizeObj());
+
+	//set position on display
+	msgStage->setPosObj(stagePosX, stagePosY);
+	msgNum1->setPosObj(stagePosX + sizeStage.x + 4, stagePosY);//todo
+	msgNum2->setPosObj(stagePosX + sizeStage.x + 12, stagePosY);//todo
+
+	SET_STAGE(*msgStage);
+	SET_NUM(*msgNum1, 9);
+	SET_NUM(*msgNum2, 8);
 	return;
 }

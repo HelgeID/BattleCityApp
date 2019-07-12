@@ -43,5 +43,6 @@ extern bool f_f;//for optimality
 
 extern bool gameover;
 extern bool level_finish;
+extern bool level_exit;
 extern bool pause;
 extern bool no_close;

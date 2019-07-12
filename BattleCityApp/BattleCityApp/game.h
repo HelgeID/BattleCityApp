@@ -1,6 +1,8 @@
 ﻿#ifndef GAME_H
 #define GAME_H
 
+#define TITLE "BattleCity"
+
 #include <SFML\Graphics.hpp>
 
 class Game
@@ -18,6 +20,9 @@ public:
 	void GameStage();
 	void GameLaunch();
 
+
+	void winStyle(sf::Window&, sf::Uint32);
+
 private:
 	bool loadTexture();
 	bool loadIcon();
@@ -25,6 +30,9 @@ private:
 	void zoomOn();
 	void zoomOff();
 
+	void HideConsole();
+	void ShowConsole();
+	bool IsConsoleVisible();
 };
 
 #endif

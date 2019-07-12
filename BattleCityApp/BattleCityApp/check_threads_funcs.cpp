@@ -56,7 +56,8 @@ void ManagerThreads::startControlThreads()
 			if (!no_close)
 				level_finish = true;
 		}
-		std::cerr << "exit control threads" << std::endl;
+		//std::cerr << "exit control threads" << std::endl;
+		level_exit = true;
 	});
 	auto future = task.get_future();
 

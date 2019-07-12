@@ -1,6 +1,5 @@
 ﻿#include <SFML\Graphics.hpp>
 #include "game.h"
-#define TITLE "BattleCity"
 
 int main()
 {
@@ -11,12 +10,21 @@ int main()
 	Game game(window);
 
 	// Start menu
-	game.GameMenu();
-
+	{
+		window.setVisible(false);
+		game.GameMenu();
+		window.setVisible(true);
+	}
+	
 	while (true) {
 		// Level screensavers
 		game.GameStage();
 
+		// Check window close
+		if (!window.isOpen())
+			break;
+
+		// Init Params
 		game.InitParams();
 
 		// Launch of the game

@@ -5,6 +5,9 @@
 
 std::mutex mtx;
 
+#include "ui_msg.hpp" //for Stage MSG
+#include <conio.h> //for Console Menu
+
 Game::Game(sf::RenderWindow &window)
 	: window(window), texture(new sf::Texture())
 {
@@ -23,6 +26,7 @@ void Game::InitParams()
 {
 	gameover = false; //default =>FALSE
 	level_finish = false; //default =>FALSE
+	level_exit = false; //default =>FALSE
 	pause = false; //default =>FALSE
 	no_close = true; //default =>TRUE
 
@@ -30,16 +34,69 @@ void Game::InitParams()
 	return;
 }
 
-//loader "menu"
+//loader "console menu"
 void Game::GameMenu()
 {
+	system("mode con cols=80 lines=40");
+	system("color F4");
+	system("title BattleCity");
 
+	std::cerr << " ___ ___ ___        ___ _    _ ___ ___ _  _ ___ ___ _  _ _          _ ___ ___ _ " << std::endl;
+	std::cerr << "|___|___|___|_    _|___|_|_ |_|___|___|_||_|___|___|_||_|_|        |_|___|___|_|" << std::endl;
+	std::cerr << "|_|_|     |___| _|___| |_|_|_   |___|        |___|    |___|        |___|        " << std::endl;
+	std::cerr << "|___|_ ___|_|_||___|     |_|_|  |_|_|        |_|_|    |_|_|        |_|_|___ _   " << std::endl;
+	std::cerr << "|_|___|___|_|_ |_|_|___ _|___|  |___|        |___|    |___|        |___|___|_|  " << std::endl;
+	std::cerr << "|___|     |_|_||___|___|___|_|  |_|_|        |_|_|    |_|_|        |_|_|        " << std::endl;
+	std::cerr << "|_|_|___ _|___||_|_|     |___|  |___|        |___|    |___|_ ___ _ |___|_ ___ _ " << std::endl;
+	std::cerr << "|___|___|___|  |___|     |_|_|  |_|_|        |_|_|    |_|___|___|_||_|___|___|_|" << std::endl;
+	std::cerr << "                                                                                " << std::endl;
+	std::cerr << "                 _ ___ _     ___ ___ ___   ___ ___ ___   ___     ___            " << std::endl;
+	std::cerr << "               _|_|___|_|_  |___|___|___| |___|___|___| |___|   |___|           " << std::endl;
+	std::cerr << "             _|_|_|   |_|_|     |_|_|         |_|_|     |_|_|   |_|_|           " << std::endl;
+	std::cerr << "            |_|_|               |___|         |___|     |___|_ _|___|           " << std::endl;
+	std::cerr << "            |___|               |_|_|         |_|_|       |___|___|             " << std::endl;
+	std::cerr << "            |_|_|_     _ _      |___|         |___|         |___|               " << std::endl;
+	std::cerr << "              |_|_|___|_|_|  ___|_|_|___      |_|_|         |_|_|               " << std::endl;
+	std::cerr << "                |_|___|_|   |___|___|___|     |___|         |___|               " << std::endl;
+
+	std::cerr << "Please press keys: 1 or 2" << std::endl;
+	std::cerr << "1 - for one player" << std::endl;
+	std::cerr << "2 - for two players" << std::endl;
+	std::cerr << std::endl << ">>";
+
+	bool repeat_flag(true);
+	while (repeat_flag) {
+		sf::sleep(sf::milliseconds(200));
+		if (_kbhit()) {
+			switch (_getch())
+			{
+			case '1': std::cerr << '1' << std::endl; repeat_flag = false; break;
+			case '2': std::cerr << '2' << std::endl; repeat_flag = false; break;
+			}
+		}
+	}
+	if (IsConsoleVisible())
+		HideConsole();
 	return;
 }
 
 //loader "stage screen"
 void Game::GameStage()
 {
+	//initialization zoom
+	zoomOn();
+
+	//show frame
+	//p_showframe = true;
+
+	//show fps
+	p_showfps = true;
+
+	UIStageMSG uiStageMSG(*texture);
+
+	winStyle(window, sf::Style::Close);//Call WinStyle
+	window.setTitle(TITLE);
+
 	bool exit(false);
 	while (window.isOpen() && !exit)
 	{
@@ -54,6 +111,8 @@ void Game::GameStage()
 		}
 
 		window.clear(sf::Color(99, 99, 99));
+
+		window.draw(uiStageMSG);
 		window.display();
 	}
 	return;
@@ -62,15 +121,6 @@ void Game::GameStage()
 //loader "game"
 void Game::GameLaunch()
 {
-	// initialization zoom
-	zoomOn();
-
-	// show frame
-	//p_showframe = true;
-
-	// show fps
-	p_showfps = true;
-
 	// parameters \\
 	----------------
 	//undying_enemy = true;
@@ -95,11 +145,14 @@ void Game::GameLaunch()
 		gFPS = new GameFPS();
 	}
 
+	//winStyle(window, sf::Style::Close); //Call WinStyle
+	//window.setTitle(TITLE);
+
 	// update
-	while (window.isOpen() && no_close)
+	while (window.isOpen() && !level_exit)
 	{
 		//Update Event
-		gEvent->UpdateEvent();
+		gEvent->UpdateEvent<Game>(this);
 
 		///////////////////////////////////////////////
 		gFPS->StartFrame(); //for FPS
@@ -124,12 +177,12 @@ void Game::GameLaunch()
 	}
 
 	//clear display
-	{
-		window.clear(sf::Color(0, 0, 0));
-		window.display();
-		sf::sleep(sf::milliseconds(3000));
-		std::cerr << "\a";
-	}
+	//{
+		//window.clear(sf::Color(0, 0, 0));
+		//window.display();
+		//sf::sleep(sf::milliseconds(3000));
+		//std::cerr << "\a";
+	//}
 
 	// dell objects
 	{
@@ -137,6 +190,5 @@ void Game::GameLaunch()
 		delete gField;
 		delete gFPS;
 	}
-
 	return;
 }

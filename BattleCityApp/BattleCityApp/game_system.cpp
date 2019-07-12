@@ -51,3 +51,42 @@ void Game::zoomOff()
 	}
 	return;
 }
+
+#include <Windows.h>
+void Game::winStyle(sf::Window& window, sf::Uint32 style)
+{
+	HWND handle = window.getSystemHandle();
+	DWORD win32Style = WS_VISIBLE;
+
+	if (style == sf::Style::None) {
+		win32Style |= WS_POPUP;
+	}
+	else {
+		if (style & sf::Style::Titlebar) win32Style |= WS_CAPTION | WS_MINIMIZEBOX;
+		if (style & sf::Style::Resize)   win32Style |= WS_THICKFRAME | WS_MAXIMIZEBOX;
+		if (style & sf::Style::Close)    win32Style |= WS_CAPTION | WS_SYSMENU;
+	}
+
+	SetWindowLongPtr(handle, GWL_STYLE, win32Style);
+
+	// force changes to take effect
+	SetWindowPos(handle, NULL, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_DRAWFRAME);
+	return;
+}
+
+void Game::HideConsole()
+{
+	ShowWindow(GetConsoleWindow(), SW_HIDE);
+	return;
+}
+
+void Game::ShowConsole()
+{
+	ShowWindow(GetConsoleWindow(), SW_SHOW);
+	return;
+}
+
+bool Game::IsConsoleVisible()
+{
+	return (IsWindowVisible(GetConsoleWindow()) != FALSE);
+}
