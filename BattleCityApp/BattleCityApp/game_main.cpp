@@ -22,7 +22,7 @@ Game::~Game()
 	delete texture;
 }
 
-void Game::InitParams()
+void Game::InitParamsGame()
 {
 	gameover = false; //default =>FALSE
 	level_finish = false; //default =>FALSE
@@ -31,6 +31,31 @@ void Game::InitParams()
 	no_close = true; //default =>TRUE
 
 	f_f = false;
+
+	//show frame
+	//p_showframe = true;
+
+	//show fps
+	p_showfps = true;
+
+	return;
+}
+
+void Game::InitParamsWin(bool restart)
+{
+	winStyle(window, sf::Style::Close);//Call WinStyle
+	window.setTitle(TITLE);
+
+	if (restart == false)
+	{
+		sf::Vector2i pos{ 0, 0 };
+		TakeConsolePos(&pos.x, &pos.y);
+		window.setPosition(pos);
+
+		//initialization zoom
+		zoomOn();
+	}
+
 	return;
 }
 
@@ -70,32 +95,20 @@ void Game::GameMenu()
 		if (_kbhit()) {
 			switch (_getch())
 			{
-			case '1': std::cerr << '1' << std::endl; repeat_flag = false; break;
-			case '2': std::cerr << '2' << std::endl; repeat_flag = false; break;
+			case '1': std::cerr << '1' << std::endl; repeat_flag = false; p_player = 1; break;
+			case '2': std::cerr << '2' << std::endl; repeat_flag = false; p_player = 2; break;
 			}
 		}
 	}
-	if (IsConsoleVisible())
-		HideConsole();
+	//if (IsConsoleVisible()) //todo
+	//	HideConsole();
 	return;
 }
 
 //loader "stage screen"
 void Game::GameStage()
 {
-	//initialization zoom
-	zoomOn();
-
-	//show frame
-	//p_showframe = true;
-
-	//show fps
-	p_showfps = true;
-
 	UIStageMSG uiStageMSG(*texture);
-
-	winStyle(window, sf::Style::Close);//Call WinStyle
-	window.setTitle(TITLE);
 
 	bool exit(false);
 	while (window.isOpen() && !exit)
@@ -124,13 +137,13 @@ void Game::GameLaunch()
 	// parameters \\
 	----------------
 	//undying_enemy = true;
-	//undying_players = true;
+	undying_players = true;
 	//undying_hit_on_player = true;
 	//blocking_firing = true;
 
-	//undying_emblem_hit_by_tank = true;
-	//undying_emblem_boom_by_tank = true;
-	//undying_emblem_absence_players = true;
+	undying_emblem_hit_by_tank = true;
+	undying_emblem_boom_by_tank = true;
+	undying_emblem_absence_players = true;
 
 	// Game PTRS
 	GameEvent *gEvent(nullptr);

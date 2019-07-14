@@ -36,6 +36,7 @@
 //test
 #include <iostream>
 
+
 class GameField;
 
 extern std::mutex mtx;
@@ -123,6 +124,7 @@ class GameField
 	unsigned int number_loaded_tanks{ 0 };
 	unsigned int number_killed_tanks_PL1{ 0 };
 	unsigned int number_killed_tanks_PL2{ 0 };
+	unsigned int number_read_tanks{ 0 };
 	void CreateTanks();
 	void CreateTanks(const int);
 	void CreateTank(const sf::Vector2f);

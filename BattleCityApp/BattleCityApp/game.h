@@ -14,7 +14,8 @@ public:
 	explicit Game(sf::RenderWindow &);
 	~Game();
 
-	void InitParams();
+	void InitParamsGame();
+	void InitParamsWin(bool restart = false);
 
 	void GameMenu();
 	void GameStage();
@@ -33,6 +34,8 @@ private:
 	void HideConsole();
 	void ShowConsole();
 	bool IsConsoleVisible();
+
+	void TakeConsolePos(int*, int*);
 };
 
 #endif

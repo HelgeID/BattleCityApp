@@ -1,5 +1,6 @@
 ﻿#include "field.h"
 #include "general.hpp"
+#include "baza_enemy.h"
 #include <map>
 #include <thread>
 
@@ -13,19 +14,73 @@ auto random = [](const int a, const int b)
 	return dist(gen); //random generation
 };
 
-std::map<int, Model> mapOfEnemy
+//-------------------------------------------\\
+array of enemies(download from baza_enemy.h)
+std::map<int, Model> mapOfEnemy;
+
+void GetMapOfEnemy()
 {
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
-	{ 10, enemyModA },{ 11, enemyModB },{ 12, enemyModC },{ 13, enemyModB },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModC },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModC },
-	{ 20, enemyModC },{ 21, enemyModC },{ 22, enemyModA },{ 23, enemyModC },{ 24, enemyModA },{ 25, enemyModB },{ 26, enemyModD },{ 27, enemyModB },{ 28, enemyModC },{ 29, enemyModA },
-	{ 30, enemyModD },{ 31, enemyModC },{ 32, enemyModA },{ 33, enemyModA },{ 34, enemyModC },{ 35, enemyModA },{ 36, enemyModC },{ 37, enemyModD },{ 38, enemyModB },{ 39, enemyModC },
-	{ 40, enemyModB },{ 41, enemyModD },{ 42, enemyModA },{ 43, enemyModB },{ 44, enemyModC },{ 45, enemyModD },{ 46, enemyModA },{ 47, enemyModA },{ 48, enemyModD },{ 49, enemyModA },
-	{ 50, enemyModD },{ 51, enemyModB },{ 52, enemyModD },{ 53, enemyModC },{ 54, enemyModD },{ 55, enemyModA },{ 56, enemyModA },{ 57, enemyModD },{ 58, enemyModA },{ 59, enemyModA },
-	{ 60, enemyModA },{ 61, enemyModD },{ 62, enemyModA },{ 63, enemyModB },{ 64, enemyModD },{ 65, enemyModD },{ 66, enemyModB },{ 67, enemyModB },{ 68, enemyModD },{ 69, enemyModD },
-	{ 70, enemyModD },{ 71, enemyModD },{ 72, enemyModD },{ 73, enemyModB },{ 74, enemyModA },{ 75, enemyModD },{ 76, enemyModC },{ 77, enemyModA },{ 78, enemyModC },{ 79, enemyModD },
-	{ 80, enemyModD },{ 81, enemyModC },{ 82, enemyModD },{ 83, enemyModC },{ 84, enemyModD },{ 85, enemyModC },{ 86, enemyModC },{ 87, enemyModD },{ 88, enemyModC },{ 89, enemyModA },
-	{ 90, enemyModB },{ 91, enemyModD },{ 92, enemyModD },{ 93, enemyModD },{ 94, enemyModC },{ 95, enemyModC },{ 96, enemyModD },{ 97, enemyModD },{ 98, enemyModD },{ 99, enemyModD }
-};
+	switch (p_level)
+	{
+	case 1: mapOfEnemy = mapOfEnemy1; break;
+	case 2: mapOfEnemy = mapOfEnemy2; break;
+	case 3: mapOfEnemy = mapOfEnemy3; break;
+	case 4: mapOfEnemy = mapOfEnemy4; break;
+	case 5: mapOfEnemy = mapOfEnemy5; break;
+	case 6: mapOfEnemy = mapOfEnemy6; break;
+	case 7: mapOfEnemy = mapOfEnemy7; break;
+	case 8: mapOfEnemy = mapOfEnemy8; break;
+	case 9: mapOfEnemy = mapOfEnemy9; break;
+	case 10: mapOfEnemy = mapOfEnemy10; break;
+
+	case 11: mapOfEnemy = mapOfEnemy11; break;
+	case 12: mapOfEnemy = mapOfEnemy12; break;
+	case 13: mapOfEnemy = mapOfEnemy13; break;
+	case 14: mapOfEnemy = mapOfEnemy14; break;
+	case 15: mapOfEnemy = mapOfEnemy15; break;
+	case 16: mapOfEnemy = mapOfEnemy16; break;
+	case 17: mapOfEnemy = mapOfEnemy17; break;
+	case 18: mapOfEnemy = mapOfEnemy18; break;
+	case 19: mapOfEnemy = mapOfEnemy19; break;
+	case 20: mapOfEnemy = mapOfEnemy20; break;
+
+	case 21: mapOfEnemy = mapOfEnemy21; break;
+	case 22: mapOfEnemy = mapOfEnemy22; break;
+	case 23: mapOfEnemy = mapOfEnemy23; break;
+	case 24: mapOfEnemy = mapOfEnemy24; break;
+	case 25: mapOfEnemy = mapOfEnemy25; break;
+	case 26: mapOfEnemy = mapOfEnemy26; break;
+	case 27: mapOfEnemy = mapOfEnemy27; break;
+	case 28: mapOfEnemy = mapOfEnemy28; break;
+	case 29: mapOfEnemy = mapOfEnemy29; break;
+	case 30: mapOfEnemy = mapOfEnemy30; break;
+
+	case 31: mapOfEnemy = mapOfEnemy31; break;
+	case 32: mapOfEnemy = mapOfEnemy32; break;
+	case 33: mapOfEnemy = mapOfEnemy33; break;
+	case 34: mapOfEnemy = mapOfEnemy34; break;
+	case 35: mapOfEnemy = mapOfEnemy35; break;
+	case 36: mapOfEnemy = mapOfEnemy36; break;
+	case 37: mapOfEnemy = mapOfEnemy37; break;
+	case 38: mapOfEnemy = mapOfEnemy38; break;
+	case 39: mapOfEnemy = mapOfEnemy39; break;
+	case 40: mapOfEnemy = mapOfEnemy40; break;
+
+	case 41: mapOfEnemy = mapOfEnemy41; break;
+	case 42: mapOfEnemy = mapOfEnemy42; break;
+	case 43: mapOfEnemy = mapOfEnemy43; break;
+	case 44: mapOfEnemy = mapOfEnemy44; break;
+	case 45: mapOfEnemy = mapOfEnemy45; break;
+	case 46: mapOfEnemy = mapOfEnemy46; break;
+	case 47: mapOfEnemy = mapOfEnemy47; break;
+	case 48: mapOfEnemy = mapOfEnemy48; break;
+	case 49: mapOfEnemy = mapOfEnemy49; break;
+	case 50: mapOfEnemy = mapOfEnemy50; break;
+	}
+
+	return;
+}
+//---------------------------------------------
 
 void GameField::CreateTanks()
 {
@@ -35,6 +90,8 @@ void GameField::CreateTanks()
 	if (p_player == 2)
 		for (int i = 0; i < 6; i++) //max tank == 6, when two players
 			CreateTank(sf::Vector2f(0.f, 0.f));
+	
+	GetMapOfEnemy();
 
 	number_all_tanks = mapOfEnemy.size();
 	return;
@@ -44,6 +101,8 @@ void GameField::CreateTanks(const int numTanks)
 {
 	for (int i = 0; i < numTanks; i++) //max tank == numTanks, when one player or when two players
 		CreateTank(sf::Vector2f(0.f, 0.f));
+
+	GetMapOfEnemy();
 
 	number_all_tanks = mapOfEnemy.size();
 	return;
@@ -65,7 +124,12 @@ void GameField::CreateTank(const sf::Vector2f pos)
 
 void GameField::ReloadTank(Tank& tank, const sf::Vector2f pos)
 {
-	static std::map<int, Model>::iterator itMod = mapOfEnemy.begin();//todo restart
+	std::map<int, Model>::iterator itMod = mapOfEnemy.begin();
+
+	unsigned int number_read_tanks(number_read_tanks);
+	while (number_read_tanks--)
+		itMod++;
+	
 	bool bonus(false);
 	const unsigned int bonusPosArr[]{ 4, 11, 18, 25, 32, 39, 46, 53, 60, 67, 74, 81, 88, 95 };
 	size_t sizebonusPosArr(sizeof(bonusPosArr) / sizeof(unsigned int));
@@ -88,17 +152,10 @@ void GameField::ReloadTank(Tank& tank, const sf::Vector2f pos)
 		tank.init_heavy_tank_damage();
 	}
 
-//	{
-//		//Loaded tanks:
-//		static int counter_loading(0);
-//		std::cerr << "loading tank... " << ++counter_loading << std::endl;
-//	}
+	this->number_read_tanks++;
 
-	itMod++;
-	if (itMod == mapOfEnemy.end())
-	{
-		//completion of generation of tanks
-		itMod = mapOfEnemy.begin();
+	if (this->number_read_tanks == mapOfEnemy.size()) {
+		this->number_read_tanks = 0;
 		completion_generation_tanks = true;
 		std::cerr << "The END, completion of generation of tanks!!!" << std::endl;
 	}

@@ -152,6 +152,7 @@
     <ClInclude Include="actor.hpp" />
     <ClInclude Include="animation.h" />
     <ClInclude Include="animation_game.h" />
+    <ClInclude Include="baza_enemy.h" />
     <ClInclude Include="block.hpp" />
     <ClInclude Include="block_spawn.hpp" />
     <ClInclude Include="bonus.hpp" />

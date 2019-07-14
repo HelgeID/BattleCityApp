@@ -16,7 +16,13 @@ int main()
 		window.setVisible(true);
 	}
 	
+	// Init Params Win
+	game.InitParamsWin(); //load all
+
 	while (true) {
+		// Init Params Win
+		game.InitParamsWin(true); //load not all
+
 		// Level screensavers
 		game.GameStage();
 
@@ -24,8 +30,8 @@ int main()
 		if (!window.isOpen())
 			break;
 
-		// Init Params
-		game.InitParams();
+		// Init Params Game
+		game.InitParamsGame();
 
 		// Launch of the game
 		game.GameLaunch();

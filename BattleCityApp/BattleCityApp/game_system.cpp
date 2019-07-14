@@ -90,3 +90,15 @@ bool Game::IsConsoleVisible()
 {
 	return (IsWindowVisible(GetConsoleWindow()) != FALSE);
 }
+
+
+void Game::TakeConsolePos(int* x, int* y)
+{
+	HWND consoleWindow = GetConsoleWindow();
+	HWND hWndParent = GetParent(consoleWindow);
+	POINT point = { 0 };
+	MapWindowPoints(consoleWindow, hWndParent, &point, 1);
+	(*x) = point.x;
+	(*y) = point.y;
+	return;
+}
