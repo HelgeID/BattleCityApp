@@ -76,6 +76,8 @@ void GetMapOfEnemy()
 	case 48: mapOfEnemy = mapOfEnemy48; break;
 	case 49: mapOfEnemy = mapOfEnemy49; break;
 	case 50: mapOfEnemy = mapOfEnemy50; break;
+
+	default: break;//todo add 0
 	}
 
 	return;
@@ -303,6 +305,10 @@ void GameField::CheckTankBang(const int indexTank, const int _indexTank, const b
 			break;
 		}
 	}
+
+	if (number_dead_tanks == number_all_tanks)
+		GameWinning();
+
 	return;
 }
 

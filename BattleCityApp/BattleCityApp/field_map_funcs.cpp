@@ -81,8 +81,12 @@ void GameField::FillMap()
 {
 	std::string FILENAME("");
 
+	//todo
 	switch (p_level) {
 		case 1: FILENAME = "data/levels/level1"; break;
+		case 2: FILENAME = "data/levels/level1"; break;
+
+		default: break; //todo add 0
 	}
 
 	std::ifstream infile(FILENAME.c_str());

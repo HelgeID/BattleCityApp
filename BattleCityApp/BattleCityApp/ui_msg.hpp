@@ -8,6 +8,27 @@
 #include "general.hpp"
 #include "object.hpp"
 
+inline void form_the_stack(std::stack<int>& stack, const int number) {
+	int num(number);
+	while (num > 0) {
+		int digit = num % 10;
+		num /= 10;
+		stack.push(digit);
+	}
+
+	if (number < 10)
+		stack.push(0);
+	return;
+}
+
+inline int top_of_stack(std::stack<int>& stack) {
+	if (stack.empty())
+		return 0;
+	int digit = stack.top();
+	stack.pop();
+	return digit;
+}
+
 class UIMsg : public Object
 {
 	bool presenceflag = { false };
@@ -196,8 +217,11 @@ inline void UIStageMSG::InitUIStageMSG()
 	msgNum1->setPosObj(stagePosX + sizeStage.x + 4, stagePosY);//todo
 	msgNum2->setPosObj(stagePosX + sizeStage.x + 12, stagePosY);//todo
 
+	std::stack<int> stack;
+	p_level <= 99 ? form_the_stack(stack, p_level) : 0;
+
 	SET_STAGE(*msgStage);
-	SET_NUM(*msgNum1, 9);
-	SET_NUM(*msgNum2, 8);
+	SET_NUM(*msgNum1, top_of_stack(stack));
+	SET_NUM(*msgNum2, top_of_stack(stack));
 	return;
 }

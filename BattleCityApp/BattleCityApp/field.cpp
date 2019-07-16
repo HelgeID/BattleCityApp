@@ -187,6 +187,7 @@ void GameField::UpdateDirectionTanks()
 //GameOver
 void GameField::GameOver()
 {
+	std::cerr << "Game Over" << std::endl;
 	emblem.CrushEmblem();
 	gameover = true;
 	StartGameOverMSG();
@@ -195,8 +196,28 @@ void GameField::GameOver()
 	std::unique_ptr<std::thread> CLOSE_THREAD(new std::thread(
 		[]() -> void {
 		sf::sleep(sf::milliseconds(18000)); //18s
-		if (no_close)
+		if (no_close) {
 			no_close = false;
+			p_level = 1;
+		}
+		return;
+	}));
+	CLOSE_THREAD->detach();
+	return;
+}
+
+//GameWinning
+void GameField::GameWinning()
+{
+	std::cerr << "Game Winning" << std::endl;
+	//After the signal "gamewinning", we wait for some time and give a signal to close the open threads
+	std::unique_ptr<std::thread> CLOSE_THREAD(new std::thread(
+		[]() -> void {
+		sf::sleep(sf::milliseconds(8000)); //8s
+		if (no_close && !gameover) {
+			no_close = false;
+			p_level++;
+		}
 		return;
 	}));
 	CLOSE_THREAD->detach();

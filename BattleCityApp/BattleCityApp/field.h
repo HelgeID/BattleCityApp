@@ -342,6 +342,7 @@ class GameField
 	void StopPauseMSG();
 
 	void GameOver();
+	void GameWinning();
 	void MonitoringElements();
 
 	ManagerThreads mThreads;
