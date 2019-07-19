@@ -13,6 +13,9 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 		sf::sleep(sf::milliseconds(1500));
 	}
 
+	window.setTitle("Loading..."); //Title
+
+	LoadLevelfromPNG();
 	FillField();
 	FillMap();
 	LoadMap();
@@ -33,6 +36,8 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	usesUI_ntanksforplayer2();
 
 	mThreads.startControlThreads();
+
+	window.setTitle(TITLE); //Title
 }
 
 GameField::~GameField()
@@ -187,7 +192,8 @@ void GameField::UpdateDirectionTanks()
 //GameOver
 void GameField::GameOver()
 {
-	std::cerr << "Game Over" << std::endl;
+	//std::cerr << "Game Over" << std::endl;
+	window.setTitle("Game Over, please wait..."); //Title
 	emblem.CrushEmblem();
 	gameover = true;
 	StartGameOverMSG();
@@ -209,7 +215,8 @@ void GameField::GameOver()
 //GameWinning
 void GameField::GameWinning()
 {
-	std::cerr << "Game Winning" << std::endl;
+	//std::cerr << "Game Winning" << std::endl;
+	window.setTitle("Game Winning, please wait..."); //Title
 	//After the signal "gamewinning", we wait for some time and give a signal to close the open threads
 	std::unique_ptr<std::thread> CLOSE_THREAD(new std::thread(
 		[]() -> void {

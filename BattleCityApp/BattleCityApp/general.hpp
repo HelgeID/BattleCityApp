@@ -1,4 +1,6 @@
 ﻿#pragma once
+#define TITLE "BattleCity"
+
 extern bool p_zoom;
 extern bool p_no_sound;
 extern int p_level; // 1, 2, 3 , ...

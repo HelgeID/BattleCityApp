@@ -3,6 +3,11 @@
 #include "field.h"
 #include <map>
 
+std::map<int, Model> mapOfEnemy0{
+	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
+	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
+};
+
 std::map<int, Model> mapOfEnemy1{
 	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
 	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
@@ -174,81 +179,6 @@ std::map<int, Model> mapOfEnemy34{
 };
 
 std::map<int, Model> mapOfEnemy35{
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
-	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
-};
-
-std::map<int, Model> mapOfEnemy36{
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
-	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
-};
-
-std::map<int, Model> mapOfEnemy37{
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
-	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
-};
-
-std::map<int, Model> mapOfEnemy38{
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
-	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
-};
-
-std::map<int, Model> mapOfEnemy39{
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
-	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
-};
-
-std::map<int, Model> mapOfEnemy40{
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
-	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
-};
-
-std::map<int, Model> mapOfEnemy41{
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
-	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
-};
-
-std::map<int, Model> mapOfEnemy42{
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
-	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
-};
-
-std::map<int, Model> mapOfEnemy43{
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
-	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
-};
-
-std::map<int, Model> mapOfEnemy44{
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
-	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
-};
-
-std::map<int, Model> mapOfEnemy45{
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
-	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
-};
-
-std::map<int, Model> mapOfEnemy46{
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
-	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
-};
-
-std::map<int, Model> mapOfEnemy47{
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
-	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
-};
-
-std::map<int, Model> mapOfEnemy48{
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
-	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
-};
-
-std::map<int, Model> mapOfEnemy49{
-	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
-	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
-};
-
-std::map<int, Model> mapOfEnemy50{
 	{ 0, enemyModA },{ 1, enemyModA },{ 2, enemyModA },{ 3, enemyModA },{ 4, enemyModA },{ 5, enemyModA },{ 6, enemyModA },{ 7, enemyModA },{ 8, enemyModA },{ 9, enemyModA },
 	{ 10, enemyModA },{ 11, enemyModA },{ 12, enemyModA },{ 13, enemyModA },{ 14, enemyModA },{ 15, enemyModA },{ 16, enemyModA },{ 17, enemyModA },{ 18, enemyModA },{ 19, enemyModA }
 };

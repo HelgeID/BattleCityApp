@@ -22,10 +22,11 @@ void GameEvent::UpdateEvent(T* game)
 	while (window.pollEvent(event))
 	{
 		if (event.type == sf::Event::Closed) {
-			window.setTitle("closing, please wait...");
+			window.setTitle("Closing, please wait..."); //Title
 			if (no_close)
 				no_close = false;
 			game->winStyle(window, sf::Style::Titlebar);
+			p_level = 1;
 		}
 		//!p_showframe ? p_showframe = true : p_showframe = false;
 		if (event.type == sf::Event::KeyPressed)

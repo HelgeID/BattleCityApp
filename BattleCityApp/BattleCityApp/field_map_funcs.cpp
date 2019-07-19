@@ -6,6 +6,8 @@
 #include <sstream>
 #include <string>
 
+#include "tape_blocks_level.h" //load levels from png-flle
+
 void FixedValue(int& value, const int i, const int j)
 {
 	(i == 12 && j == 5) || (i == 11 && j == 5) || (i == 11 && j == 6) || (i == 12 && j == 7) || (i == 11 && j == 7) ? value = 0 : 0;
@@ -67,6 +69,59 @@ auto TakeTape = [&](std::string tape)
 	return 0;
 };
 
+//load level
+std::unique_ptr<LoadLevel> ptrll;
+void GameField::LoadLevelfromPNG()
+{
+	if (!p_level)
+		return;
+
+	std::string  level_name;
+	switch (p_level){
+	case 1: level_name = "data/levels/level01.png"; goto label_exit;
+	case 2: level_name = "data/levels/level02.png"; goto label_exit;
+	case 3: level_name = "data/levels/level03.png"; goto label_exit;
+	case 4: level_name = "data/levels/level04.png"; goto label_exit;
+	case 5: level_name = "data/levels/level05.png"; goto label_exit;
+	case 6: level_name = "data/levels/level06.png"; goto label_exit;
+	case 7: level_name = "data/levels/level07.png"; goto label_exit;
+	case 8: level_name = "data/levels/level08.png"; goto label_exit;
+	case 9: level_name = "data/levels/level09.png"; goto label_exit;
+	case 10: level_name = "data/levels/level10.png"; goto label_exit;
+	case 11: level_name = "data/levels/level11.png"; goto label_exit;
+	case 12: level_name = "data/levels/level12.png"; goto label_exit;
+	case 13: level_name = "data/levels/level13.png"; goto label_exit;
+	case 14: level_name = "data/levels/level14.png"; goto label_exit;
+	case 15: level_name = "data/levels/level15.png"; goto label_exit;
+	case 16: level_name = "data/levels/level16.png"; goto label_exit;
+	case 17: level_name = "data/levels/level17.png"; goto label_exit;
+	case 18: level_name = "data/levels/level18.png"; goto label_exit;
+	case 19: level_name = "data/levels/level19.png"; goto label_exit;
+	case 20: level_name = "data/levels/level20.png"; goto label_exit;
+	case 21: level_name = "data/levels/level21.png"; goto label_exit;
+	case 22: level_name = "data/levels/level22.png"; goto label_exit;
+	case 23: level_name = "data/levels/level23.png"; goto label_exit;
+	case 24: level_name = "data/levels/level24.png"; goto label_exit;
+	case 25: level_name = "data/levels/level25.png"; goto label_exit;
+	case 26: level_name = "data/levels/level26.png"; goto label_exit;
+	case 27: level_name = "data/levels/level27.png"; goto label_exit;
+	case 28: level_name = "data/levels/level28.png"; goto label_exit;
+	case 29: level_name = "data/levels/level29.png"; goto label_exit;
+	case 30: level_name = "data/levels/level30.png"; goto label_exit;
+	case 31: level_name = "data/levels/level31.png"; goto label_exit;
+	case 32: level_name = "data/levels/level32.png"; goto label_exit;
+	case 33: level_name = "data/levels/level33.png"; goto label_exit;
+	case 34: level_name = "data/levels/level34.png"; goto label_exit;
+	case 35: level_name = "data/levels/level35.png"; goto label_exit;
+	default: break;
+	}
+
+label_exit:
+	std::unique_ptr<LoadLevel> ptrll(new LoadLevel(level_name));
+	::ptrll = std::move(ptrll);
+	return;
+}
+
 //init field (parameters: start position, size, color)
 void GameField::FillField()
 {
@@ -80,17 +135,10 @@ void GameField::FillField()
 void GameField::FillMap()
 {
 	std::string FILENAME("");
-
-	//todo
-	switch (p_level) {
-		case 1: FILENAME = "data/levels/level1"; break;
-		case 2: FILENAME = "data/levels/level1"; break;
-
-		default: break; //todo add 0
-	}
-
+	FILENAME = "data/levels/general_level";
 	std::ifstream infile(FILENAME.c_str());
-	char s_level_name[16];
+
+	char s_level_name[20];
 	char s_index[8]; char s_tape[16];
 	int h_value, indI, indJ;
 	infile >> s_level_name;
@@ -110,10 +158,19 @@ void GameField::FillMap()
 
 		std::istringstream issI(s_indI); issI >> indI;
 		std::istringstream issJ(s_indJ); issJ >> indJ;
-		h_value = TakeTape(std::string(s_tape));
+		h_value = TakeTape(std::string(s_tape));//General Level
+
+		if (p_level)
+			TakeTapeBlocksSpeciallyForLevel(ptrll.get(), h_value, indI, indJ);
+
+		/*
+		h_value : 0,
+		10, 11, 12, 13, 14
+		20, 21, 22, 23, 24
+		30, 40, 50
+		*/
 
 		FixedValue(h_value, indI, indJ);
-
 		map.SetValueMap(h_value, indI, indJ);
 	}
 

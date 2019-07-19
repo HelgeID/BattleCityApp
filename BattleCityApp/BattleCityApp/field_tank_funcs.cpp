@@ -60,24 +60,8 @@ void GetMapOfEnemy()
 	case 33: mapOfEnemy = mapOfEnemy33; break;
 	case 34: mapOfEnemy = mapOfEnemy34; break;
 	case 35: mapOfEnemy = mapOfEnemy35; break;
-	case 36: mapOfEnemy = mapOfEnemy36; break;
-	case 37: mapOfEnemy = mapOfEnemy37; break;
-	case 38: mapOfEnemy = mapOfEnemy38; break;
-	case 39: mapOfEnemy = mapOfEnemy39; break;
-	case 40: mapOfEnemy = mapOfEnemy40; break;
 
-	case 41: mapOfEnemy = mapOfEnemy41; break;
-	case 42: mapOfEnemy = mapOfEnemy42; break;
-	case 43: mapOfEnemy = mapOfEnemy43; break;
-	case 44: mapOfEnemy = mapOfEnemy44; break;
-	case 45: mapOfEnemy = mapOfEnemy45; break;
-	case 46: mapOfEnemy = mapOfEnemy46; break;
-	case 47: mapOfEnemy = mapOfEnemy47; break;
-	case 48: mapOfEnemy = mapOfEnemy48; break;
-	case 49: mapOfEnemy = mapOfEnemy49; break;
-	case 50: mapOfEnemy = mapOfEnemy50; break;
-
-	default: break;//todo add 0
+	default: mapOfEnemy = mapOfEnemy0; break;
 	}
 
 	return;
@@ -159,7 +143,7 @@ void GameField::ReloadTank(Tank& tank, const sf::Vector2f pos)
 	if (this->number_read_tanks == mapOfEnemy.size()) {
 		this->number_read_tanks = 0;
 		completion_generation_tanks = true;
-		std::cerr << "The END, completion of generation of tanks!!!" << std::endl;
+		//std::cerr << "The END, completion of generation of tanks!!!" << std::endl;
 	}
 	else
 		storage_tanks.EnableStorageTanks();
@@ -280,7 +264,7 @@ void GameField::CheckTankBang(const int indexTank, const int _indexTank, const b
 
 			//number of dead tanks:
 			number_dead_tanks++;
-			std::cerr << "Dead tanks:" << number_dead_tanks << std::endl;
+			//std::cerr << "Dead tanks:" << number_dead_tanks << std::endl;
 
 			if (!killall) { //if did not take a bonus grenade
 				//call new thread for play sound

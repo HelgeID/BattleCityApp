@@ -1,8 +1,6 @@
 ﻿#ifndef GAME_H
 #define GAME_H
 
-#define TITLE "BattleCity"
-
 #include <SFML\Graphics.hpp>
 
 class Game

@@ -93,6 +93,7 @@ class GameField
 	Map map;
 	TileMap tMap;
 	Part_Bricks_Map pbmap;
+	void LoadLevelfromPNG();
 	void FillField();
 	void FillMap();
 	void LoadMap();

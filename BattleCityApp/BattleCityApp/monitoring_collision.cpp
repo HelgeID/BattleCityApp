@@ -7,18 +7,21 @@ void EnumerationTanks(GameField& gField)
 	if (gField.tank.size() == 0)
 		return;
 
-	if (f_f) {
-		for (auto it = gField.tank.begin(); it != gField.tank.end(); ++it) {
-			if (((it - gField.tank.begin()) % 2)) //unpaired values
-				it->isTank() ? (gField.*CheckOnCollision)(*it) : NULL;
-		}
-	}
-	else {
-		for (auto it = gField.tank.begin(); it != gField.tank.end(); ++it) {
-			if (!((it - gField.tank.begin()) % 2)) //paired values
-				it->isTank() ? (gField.*CheckOnCollision)(*it) : NULL;
-		}
-	}
+	//if (f_f) {
+	//	for (auto it = gField.tank.begin(); it != gField.tank.end(); ++it) {
+	//		if (((it - gField.tank.begin()) % 2)) //unpaired values
+	//			it->isTank() ? (gField.*CheckOnCollision)(*it) : NULL;
+	//	}
+	//}
+	//else {
+	//	for (auto it = gField.tank.begin(); it != gField.tank.end(); ++it) {
+	//		if (!((it - gField.tank.begin()) % 2)) //paired values
+	//			it->isTank() ? (gField.*CheckOnCollision)(*it) : NULL;
+	//	}
+	//}
+
+	for (auto it = gField.tank.begin(); it != gField.tank.end(); ++it)
+		it->isTank() ? (gField.*CheckOnCollision)(*it) : NULL;
 
 	return;
 }
@@ -184,10 +187,13 @@ void GameField::PlayerCollision::CollisionBlocksSpawn(GameField& gField)
 
 void GameField::PlayerCollision::CollisionBlocks(GameField& gField)
 {
-	if (gField.firstPlayer->Presence() && f_f)
-		gField.CheckOnCollisionBlocks(*gField.firstPlayer);
-	if (gField.secondPlayer->Presence() && !f_f)
-		gField.CheckOnCollisionBlocks(*gField.secondPlayer);
+	//if (gField.firstPlayer->Presence() && f_f)
+	//	gField.CheckOnCollisionBlocks(*gField.firstPlayer);
+	//if (gField.secondPlayer->Presence() && !f_f)
+	//	gField.CheckOnCollisionBlocks(*gField.secondPlayer);
+
+	gField.CheckOnCollisionBlocks(*gField.firstPlayer);
+	gField.CheckOnCollisionBlocks(*gField.secondPlayer);
 	return;
 }
 

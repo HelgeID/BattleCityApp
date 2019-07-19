@@ -64,7 +64,7 @@ void Game::InitParamsGame()
 void Game::InitParamsWin(bool restart)
 {
 	winStyle(window, sf::Style::Close);//Call WinStyle
-	window.setTitle(TITLE);
+	window.setTitle(TITLE); //Title
 
 	if (restart == false)
 	{
@@ -118,7 +118,7 @@ void Game::GameMenu()
 		while (repeat_flag) {
 			system("cls");//screen cleaning
 			Console_Note();//BattleCity
-			fputs("Please Enter Level: 1 - 50\n\n>>", stdout);
+			fputs("Please Enter Level: 1 - 35\n\n>>", stdout);
 			fflush(stdout);
 			bool input_control_flag(false);
 
@@ -143,7 +143,7 @@ void Game::GameMenu()
 					input_control_flag = true;
 			}
 
-			if (sscanf_s(buff, "%d %c\n", &number, &temp) != 1 || input_control_flag || number > 50) {
+			if (sscanf_s(buff, "%d %c\n", &number, &temp) != 1 || input_control_flag || number > 35) {
 				//fputs("Incorrect input\n", stderr);
 				continue;
 			}
@@ -160,8 +160,8 @@ void Game::GameMenu()
 	//-------
 	BattleCity_Console_Choice_Number_Players();
 	BattleCity_Console_Choice_Level();
-	if (IsConsoleVisible())
-		HideConsole();
+	//if (IsConsoleVisible())
+	//	HideConsole();
 	return;
 }
 

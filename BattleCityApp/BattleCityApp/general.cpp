@@ -2,7 +2,7 @@
 
 bool p_zoom = false;
 bool p_no_sound = false;
-int p_level = 1; //todo < 99
+int p_level = 1;
 int p_player = 1;
 
 bool p_showframe = false;
