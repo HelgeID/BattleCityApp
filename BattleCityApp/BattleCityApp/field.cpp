@@ -223,7 +223,9 @@ void GameField::GameWinning()
 		sf::sleep(sf::milliseconds(8000)); //8s
 		if (no_close && !gameover) {
 			no_close = false;
-			p_level++;
+			p_level = p_level + 1;
+			if (p_level > 35)
+				p_level = 1;
 		}
 		return;
 	}));

@@ -36,8 +36,10 @@ void CreateActorsWait(GameField* gField, const int value)
 
 void RestartPlayer(GameField* gField, const int playerID)
 {
-	if (!playerID)
+	if (!playerID) {
+		//std::cerr << "return - ID: " << playerID << std::endl;
 		return;
+	}
 
 	//playerID - player, who must restart
 	sf::sleep(sf::milliseconds(1000));
@@ -67,6 +69,8 @@ void RestartPlayer(GameField* gField, const int playerID)
 		if (!collisionF) //NO ->> exit of checks
 			break;
 	}
+	
+	//std::cerr << "out - ID: " << playerID << std::endl;
 
 	mtx.lock();
 	playerID == 1 ? gField->RestartFirstPlayer()
@@ -353,6 +357,10 @@ void GameField::CheckPlayerBang(Player& player, const bool off)
 		else if (player.name == "second player")
 			playerID = 2;
 		
+		//init pos to NULL
+		player.setPosObj(0.f, 0.f);
+		player.setPosFrame(player.getPosObj().x, player.getPosObj().y);
+
 		//call new thread for play sound
 		std::unique_ptr<std::thread> thread_sound_start(new std::thread([&] {
 			mThreads.callFuncInNewThread<Sound*>(&Explosion_tSnd, &sound);
@@ -372,10 +380,15 @@ void GameField::CheckPlayerBang(Player& player, const bool off)
 		}
 
 		if (player.takelife() != 0 && !gameover) {
+			//(has bugs !!!!!)
 			//call new thread for RestartPlayer
-			std::unique_ptr<std::thread> threadPlayer(new std::thread([&] {
-				mThreads.callFuncInNewThread<GameField*>(&RestartPlayer, this, playerID);
-			}));
+			//std::unique_ptr<std::thread> threadPlayer(new std::thread([&] {
+			//	mThreads.callFuncInNewThread<GameField*>(&RestartPlayer, this, playerID);
+			//}));
+			//threadPlayer->detach();
+
+			//std::cerr << "in - ID: "<< playerID << std::endl;
+			std::unique_ptr<std::thread> threadPlayer(new std::thread(&RestartPlayer, this, playerID));
 			threadPlayer->detach();
 		}
 	}
@@ -441,12 +454,14 @@ void GameField::updPlayers()
 	}
 
 	//--------------------------------------
-	if (!gameover && !undying_emblem_absence_players)
-		if (firstPlayer->takelife() == 0 && secondPlayer->takelife() == 0)
-		{
-			//GameOver
+	//Game Over
+	if (!gameover && !undying_emblem_absence_players) {
+		bool conditions1 = (p_player == 1 && (firstPlayer->takelife() == 0));
+		bool conditions2 = (p_player == 2 && (firstPlayer->takelife() == 0 && secondPlayer->takelife() == 0));
+		if (conditions1 || conditions2)
 			GameOver();
-		}
+	}
+
 	//--------------------------------------
 	return;
 }
