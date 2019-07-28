@@ -219,13 +219,22 @@ void GameField::GameWinning()
 	window.setTitle("Game Winning, please wait..."); //Title
 	//After the signal "gamewinning", we wait for some time and give a signal to close the open threads
 	std::unique_ptr<std::thread> CLOSE_THREAD(new std::thread(
-		[]() -> void {
+		[&]() -> void {
 		sf::sleep(sf::milliseconds(8000)); //8s
 		if (no_close && !gameover) {
 			no_close = false;
 			p_level = p_level + 1;
 			if (p_level > 35)
 				p_level = 1;
+
+			{ //save life and star for next level
+				life_counter1 = firstPlayer->numLife();
+				star_counter1 = firstPlayer->numStar();
+				life_counter2 = secondPlayer->numLife();
+				star_counter2 = secondPlayer->numStar();
+				save_counter1 = true;
+				save_counter2 = true;
+			}
 		}
 		return;
 	}));

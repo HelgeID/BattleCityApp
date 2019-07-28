@@ -10,7 +10,7 @@ void GameField::CreateBonus()
 
 	std::random_device dev;
 	std::mt19937 generator(dev());
-	std::uniform_int_distribution<std::mt19937::result_type> dist(5, 5);//1-6
+	std::uniform_int_distribution<std::mt19937::result_type> dist(1, 6);//1-6
 
 	switch (dist(generator))
 	{
@@ -27,6 +27,33 @@ void WaitingShovel(GameField* obj, const int value) //func to thread
 {
 	if (!no_close)
 		return;
+
+	{
+		std::vector<int> iT; //index tank
+		Object maskMoore(obj->texture, sf::Vector2f(32.f, 24.f));
+		maskMoore.setPosObj(120.f, 200.f);
+		for (size_t iTank(0); iTank < obj->tank.size(); ++iTank) {
+			if (obj->tank[iTank].isTank()) {
+				bool crossing = (maskMoore.takeObj().getGlobalBounds().intersects(obj->tank[iTank].frame.getGlobalBounds()));
+				if (crossing)
+					iT.push_back(obj->tank[iTank].takeIndex());
+			}
+		}
+
+		for (int index = 0; index < iT.size(); index = index + 1)
+			obj->CheckTankBang(iT[index], 0, true); //kill all tanks
+
+		if (obj->firstPlayer->Presence()) {
+			bool crossing = (maskMoore.takeObj().getGlobalBounds().intersects(obj->firstPlayer->frame.getGlobalBounds()));
+			crossing ? obj->CheckPlayerBang(*obj->firstPlayer, true) : 0; //kill first player
+		}
+
+		if (obj->secondPlayer->Presence()) {
+			bool crossing = (maskMoore.takeObj().getGlobalBounds().intersects(obj->secondPlayer->frame.getGlobalBounds()));
+			crossing ? obj->CheckPlayerBang(*obj->secondPlayer, true) : 0; //kill first player
+		}
+
+	}
 
 	mtx.lock(); obj->CreateMoore("steel"); mtx.unlock();
 	sf::sleep(sf::milliseconds(20000));
@@ -71,6 +98,7 @@ void WaitingClock(GameField* obj, const int value) //func to thread
 void GameField::onBonusTankFun(Player& player)
 {
 	player.inclife();
+	usesUI_nlifes();
 	return;
 }
 

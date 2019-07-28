@@ -19,8 +19,8 @@ public:
 	Player(sf::Texture &texture, const char* actorName, const bool presenceflag) : Tank(texture, actorName), presenceflag(false)
 	{
 		this->presenceflag = presenceflag;
-		life_counter = 3;
-		star_counter = 0;
+		life_counter = 3;//default
+		star_counter = 0;//default
 	}
 
 	bool& Presence() { return presenceflag; }
@@ -38,7 +38,7 @@ public:
 		return;
 	}
 
-	unsigned int takelife() const { return life_counter; }
+	unsigned int& numLife() { return life_counter; }
 
 	unsigned int& numStar() { return star_counter; }
 };

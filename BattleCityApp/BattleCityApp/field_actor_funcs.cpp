@@ -104,6 +104,14 @@ void GameField::RestartFirstPlayer(const bool flag)
 	firstPlayer->setPosObj(posFirstPlayer.x, posFirstPlayer.y);
 	firstPlayer->loadIndex(100); // One hundred - just a constant variable for firstPlayer
 
+	//load from last level
+	if (save_counter1) {
+		firstPlayer->numLife() = life_counter1;
+		firstPlayer->numStar() = star_counter1;
+		save_counter1 = false;
+		PerfectionPlayer(*firstPlayer);
+	}
+
 	if (flag == true)
 	{
 		!firstPlayer->Presence() ? firstPlayer->Presence() = true : NULL;
@@ -132,6 +140,14 @@ void GameField::RestartSecondPlayer(const bool flag)
 	secondPlayer->loadTank(GREEN, playerModA, UP, false);
 	secondPlayer->setPosObj(posSecondPlayer.x, posSecondPlayer.y);
 	secondPlayer->loadIndex(200); // Two hundred - just a constant variable for secondPlayer
+
+	//load from last level
+	if (save_counter2) {
+		secondPlayer->numLife() = life_counter2;
+		secondPlayer->numStar() = star_counter2;
+		save_counter2 = false;
+		PerfectionPlayer(*secondPlayer);
+	}
 
 	if (flag == true)
 	{
@@ -379,7 +395,7 @@ void GameField::CheckPlayerBang(Player& player, const bool off)
 			player.SkinOff();
 		}
 
-		if (player.takelife() != 0 && !gameover) {
+		if (player.numLife() != 0 && !gameover) {
 			//(has bugs !!!!!)
 			//call new thread for RestartPlayer
 			//std::unique_ptr<std::thread> threadPlayer(new std::thread([&] {
@@ -456,8 +472,8 @@ void GameField::updPlayers()
 	//--------------------------------------
 	//Game Over
 	if (!gameover && !undying_emblem_absence_players) {
-		bool conditions1 = (p_player == 1 && (firstPlayer->takelife() == 0));
-		bool conditions2 = (p_player == 2 && (firstPlayer->takelife() == 0 && secondPlayer->takelife() == 0));
+		bool conditions1 = (p_player == 1 && (firstPlayer->numLife() == 0));
+		bool conditions2 = (p_player == 2 && (firstPlayer->numLife() == 0 && secondPlayer->numLife() == 0));
 		if (conditions1 || conditions2)
 			GameOver();
 	}

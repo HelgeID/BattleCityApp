@@ -5,6 +5,13 @@ bool p_no_sound = false;
 int p_level = 1;
 int p_player = 1;
 
+unsigned int life_counter1 = 3;
+unsigned int star_counter1 = 0;
+unsigned int life_counter2 = 3;
+unsigned int star_counter2 = 0;
+bool save_counter1 = false;
+bool save_counter2 = false;
+
 bool p_showframe = false;
 bool p_showfps = false;
 

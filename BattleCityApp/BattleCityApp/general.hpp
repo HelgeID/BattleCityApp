@@ -6,6 +6,13 @@ extern bool p_no_sound;
 extern int p_level; // 1, 2, 3 , ...
 extern int p_player; //1 or 2
 
+extern unsigned int life_counter1;
+extern unsigned int star_counter1;
+extern unsigned int life_counter2;
+extern unsigned int star_counter2;
+extern bool save_counter1;
+extern bool save_counter2;
+
 //test
 extern bool p_showframe;
 extern bool p_showfps;
