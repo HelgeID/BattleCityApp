@@ -607,7 +607,7 @@ void GameField::CheckOnCollisionTanks(Bullet& bullet)
 				// hitting a heavy tank (ModD)
 				if (it->optTank.mod == enemyModD && it->damage_heavy_tank) {
 					it->damage_heavy_tank--;
-					if (it->damage_heavy_tank == 1) {
+					if (it->damage_heavy_tank) {
 						std::unique_ptr<std::thread> DHT(new std::thread( //dht - damage heavy tank
 							[](Tank* tank) -> void {
 								if (!no_close)

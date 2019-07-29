@@ -57,11 +57,21 @@ void GameField::usesUI_nlifes()
 {
 	number_lifes_first.uiNumber->UPD_UINumber(firstPlayer->numLife() - 1);
 	number_lifes_second.uiNumber->UPD_UINumber(secondPlayer->numLife() - 1);
+	return;
+}
 
-	if (!TwoPlayer()) {
+void GameField::usesUI_nlifes_off()
+{
+	if (!life_counter1) {
+		number_lifes_first.uiPlayer->offUIPlayer();
+		number_lifes_first.uiNumber->offUINumber();
+	}
+
+	if (!life_counter2 || !TwoPlayer()) {
 		number_lifes_second.uiPlayer->offUIPlayer();
 		number_lifes_second.uiNumber->offUINumber();
 	}
+
 	return;
 }
 

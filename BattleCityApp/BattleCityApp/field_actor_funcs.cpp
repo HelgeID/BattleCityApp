@@ -30,7 +30,13 @@ void CreateActorsWait(GameField* gField, const int value)
 	if (!no_close)
 		return;
 
-	gField->TwoPlayer() ? gField->RestartFirstPlayer(), gField->RestartSecondPlayer() : gField->RestartFirstPlayer();
+	life_counter1 ? gField->RestartFirstPlayer() : 0;
+
+	if (gField->TwoPlayer())
+		life_counter2 ? gField->RestartSecondPlayer() : 0;
+
+	gField->Load_Lifes_and_Stars();
+	gField->usesUI_nlifes(); //when start
 	return;
 }
 
@@ -73,9 +79,9 @@ void RestartPlayer(GameField* gField, const int playerID)
 	//std::cerr << "out - ID: " << playerID << std::endl;
 
 	mtx.lock();
-	playerID == 1 ? gField->RestartFirstPlayer()
+	playerID == 1 ? gField->RestartFirstPlayer(), gField->usesUI_nlifes() //when restart
 		: 0;
-	playerID == 2 ? gField->RestartSecondPlayer()
+	playerID == 2 ? gField->RestartSecondPlayer(), gField->usesUI_nlifes() //when restart
 		: 0;
 	mtx.unlock();
 
@@ -104,14 +110,6 @@ void GameField::RestartFirstPlayer(const bool flag)
 	firstPlayer->setPosObj(posFirstPlayer.x, posFirstPlayer.y);
 	firstPlayer->loadIndex(100); // One hundred - just a constant variable for firstPlayer
 
-	//load from last level
-	if (save_counter1) {
-		firstPlayer->numLife() = life_counter1;
-		firstPlayer->numStar() = star_counter1;
-		save_counter1 = false;
-		PerfectionPlayer(*firstPlayer);
-	}
-
 	if (flag == true)
 	{
 		!firstPlayer->Presence() ? firstPlayer->Presence() = true : NULL;
@@ -129,7 +127,7 @@ void GameField::RestartFirstPlayer(const bool flag)
 	threadPlayerL->detach();
 
 	lPlayer_BS->Spawn() = true;
-	usesUI_nlifes();
+	
 	return;
 }
 
@@ -140,14 +138,6 @@ void GameField::RestartSecondPlayer(const bool flag)
 	secondPlayer->loadTank(GREEN, playerModA, UP, false);
 	secondPlayer->setPosObj(posSecondPlayer.x, posSecondPlayer.y);
 	secondPlayer->loadIndex(200); // Two hundred - just a constant variable for secondPlayer
-
-	//load from last level
-	if (save_counter2) {
-		secondPlayer->numLife() = life_counter2;
-		secondPlayer->numStar() = star_counter2;
-		save_counter2 = false;
-		PerfectionPlayer(*secondPlayer);
-	}
 
 	if (flag == true)
 	{
@@ -166,7 +156,7 @@ void GameField::RestartSecondPlayer(const bool flag)
 	threadPlayerR->detach();
 
 	rPlayer_BS->Spawn() = true;
-	usesUI_nlifes();
+	
 	return;
 }
 
@@ -479,5 +469,39 @@ void GameField::updPlayers()
 	}
 
 	//--------------------------------------
+	return;
+}
+
+
+////////////////////////////////////////////////////////////////////////
+// Load Save Reset
+////////////////////////////////////////////////////////////////////////
+void GameField::Load_Lifes_and_Stars()
+{
+	firstPlayer->numLife() = life_counter1;
+	firstPlayer->numStar() = star_counter1;
+	secondPlayer->numLife() = life_counter2;
+	secondPlayer->numStar() = star_counter2;
+
+	firstPlayer->numLife() ? PerfectionPlayer(*firstPlayer) : 0;
+	secondPlayer->numLife() ? PerfectionPlayer(*secondPlayer) : 0;
+	return;
+}
+
+void GameField::Save_Lifes_and_Stars()
+{
+	life_counter1 = firstPlayer->numLife();
+	star_counter1 = firstPlayer->numStar();
+	life_counter2 = secondPlayer->numLife();
+	star_counter2 = secondPlayer->numStar();
+	return;
+}
+
+void GameField::Reset_Lifes_and_Stars()
+{
+	life_counter1 = 3;
+	star_counter1 = 0;
+	life_counter2 = 3;
+	star_counter2 = 0;
 	return;
 }

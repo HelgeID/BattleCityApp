@@ -27,6 +27,12 @@ void GameEvent::UpdateEvent(T* game)
 				no_close = false;
 			game->winStyle(window, sf::Style::Titlebar);
 			p_level = 1;
+
+			//reset life & stars
+			life_counter1 = 3;
+			star_counter1 = 0;
+			life_counter2 = 3;
+			star_counter2 = 0;
 		}
 		//!p_showframe ? p_showframe = true : p_showframe = false;
 		if (event.type == sf::Event::KeyPressed)

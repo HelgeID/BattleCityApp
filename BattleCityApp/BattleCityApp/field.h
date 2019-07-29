@@ -230,6 +230,10 @@ class GameField
 	void MonitoringKeys();
 	void CheckPlayerBang(Player&, const bool off = false);
 	void PerfectionPlayer(Player&);
+
+	void Load_Lifes_and_Stars();
+	void Save_Lifes_and_Stars();
+	void Reset_Lifes_and_Stars();
 	
 	struct AnimPlayer
 	{
@@ -328,6 +332,7 @@ class GameField
 	void usesUI_tank();
 	void usesUI_nflags();
 	void usesUI_nlifes();
+	void usesUI_nlifes_off();
 	void usesUI_nalltanks();
 	void usesUI_ntanksforplayer1();
 	void usesUI_ntanksforplayer2();

@@ -30,6 +30,7 @@ GameField::GameField(sf::RenderWindow &window, sf::Texture &texture)
 	MonitoringElements();
 
 	usesUI_nlifes();
+	usesUI_nlifes_off();
 	usesUI_nflags();
 	usesUI_nalltanks();
 	usesUI_ntanksforplayer1();
@@ -209,6 +210,7 @@ void GameField::GameOver()
 		return;
 	}));
 	CLOSE_THREAD->detach();
+	Reset_Lifes_and_Stars();
 	return;
 }
 
@@ -226,19 +228,11 @@ void GameField::GameWinning()
 			p_level = p_level + 1;
 			if (p_level > 35)
 				p_level = 1;
-
-			{ //save life and star for next level
-				life_counter1 = firstPlayer->numLife();
-				star_counter1 = firstPlayer->numStar();
-				life_counter2 = secondPlayer->numLife();
-				star_counter2 = secondPlayer->numStar();
-				save_counter1 = true;
-				save_counter2 = true;
-			}
 		}
 		return;
 	}));
 	CLOSE_THREAD->detach();
+	Save_Lifes_and_Stars();
 	return;
 }
 
