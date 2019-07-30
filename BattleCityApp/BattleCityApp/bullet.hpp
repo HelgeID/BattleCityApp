@@ -1,11 +1,12 @@
-﻿#pragma once
+﻿//FINAL
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include "general.hpp"
 #include "object.hpp"
 #include "frame.hpp"
 
-#define BulletSpeed 300
+#define BulletSpeed 400
 
 class Bullet : public Object, public Frame
 {
@@ -47,10 +48,10 @@ public:
 	void move(const float time = 10)
 	{
 		float x, y;
-		if (dir == UP) { x = 0.f; y = -0.1f*time; goto exit; }
-		if (dir == LEFT) { x = -0.1f*time; y = 0.f; goto exit; }
-		if (dir == DOWN) { x = 0.f; y = 0.1f*time; goto exit; }
-		if (dir == RIGHT) { x = 0.1f*time; y = 0.f; goto exit; }
+		if (dir == UP) { x = 0.f; y = -0.08f*time; goto exit; }
+		if (dir == LEFT) { x = -0.08f*time; y = 0.f; goto exit; }
+		if (dir == DOWN) { x = 0.f; y = 0.08f*time; goto exit; }
+		if (dir == RIGHT) { x = 0.08f*time; y = 0.f; goto exit; }
 
 	exit: ;
 

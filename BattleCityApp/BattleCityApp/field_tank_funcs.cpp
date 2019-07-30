@@ -1,4 +1,5 @@
-﻿#include "field.h"
+﻿//FINAL
+#include "field.h"
 #include "general.hpp"
 #include "baza_enemy.h"
 #include <map>
@@ -216,7 +217,6 @@ bool GameField::DistanceTank(Tank& tank1, Tank& tank2, const float distance)
 	return range;
 }
 
-//todo fun
 void GameField::ControlTank_onFrame(Tank& tank)
 {
 	tank.takeObj().getPosition().y < field.getPosition().y ? tank.moveObj(0.f, 1.f) : NULL;

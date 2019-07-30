@@ -1,4 +1,5 @@
-﻿#include "field.h"
+﻿//FINAL
+#include "field.h"
 #include "general.hpp"
 #include "map.h"
 #include <time.h>
@@ -111,7 +112,6 @@ void GameField::CheckOnCollisionFrame(Tank& tank)
 		tank.takeObj().getPosition().x + 16 > field.getPosition().x + field.getSize().x
 		? (collisionFrameRotation(tank)) : NULL;
 
-	//todo
 	ControlTank_onFrame(tank);
 
 	return;

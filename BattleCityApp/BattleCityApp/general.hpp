@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿//FINAL
+#pragma once
 #define TITLE "BattleCity"
 
 extern bool p_zoom;
@@ -18,7 +19,7 @@ extern bool p_showframe;
 extern bool p_showfps;
 
 //consts
-extern int SizeCell; //todo
+extern int SizeCell;
 extern float SizeField;
 
 //signals

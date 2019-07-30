@@ -1,4 +1,5 @@
-﻿#ifndef MSG_H
+﻿//FINAL
+#ifndef MSG_H
 #define MSG_H
 
 #include <SFML/Graphics.hpp>

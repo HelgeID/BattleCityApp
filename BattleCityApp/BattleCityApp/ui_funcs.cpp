@@ -1,4 +1,5 @@
-﻿#include "field.h"
+﻿//FINAL
+#include "field.h"
 #include <vector>
 
 void parse_number(std::vector<unsigned int>& vecNumber, int number)
@@ -56,7 +57,8 @@ void GameField::usesUI_tank()
 void GameField::usesUI_nlifes()
 {
 	number_lifes_first.uiNumber->UPD_UINumber(firstPlayer->numLife() - 1);
-	number_lifes_second.uiNumber->UPD_UINumber(secondPlayer->numLife() - 1);
+	TwoPlayer() ?
+		number_lifes_second.uiNumber->UPD_UINumber(secondPlayer->numLife() - 1) : 0;
 	return;
 }
 

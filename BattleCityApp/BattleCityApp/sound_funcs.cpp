@@ -1,4 +1,5 @@
-﻿#include "sound.h"
+﻿//FINAL
+#include "sound.h"
 
 void ShootSnd(Sound* obj, const int value)
 {

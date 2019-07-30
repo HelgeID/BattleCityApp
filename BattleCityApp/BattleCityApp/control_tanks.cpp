@@ -1,4 +1,5 @@
-﻿#include "field.h"
+﻿//FINAL
+#include "field.h"
 #include "general.hpp"
 #include <time.h>
 
@@ -362,8 +363,11 @@ void LOAD_TANK(GameField* gField)
 	size_t ind = create_anim(pos);
 
 	//waiting for the animation to finish
-	while (gField->tankAnimArr[ind].tankBirth != nullptr)
-		;
+	while (true) {
+		if (gField->tankAnimArr[ind].tankBirth == nullptr)
+			break;
+		sf::sleep(sf::milliseconds(50));
+	}
 
 	switch (place)
 	{

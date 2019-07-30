@@ -1,4 +1,5 @@
-﻿#include <thread>
+﻿//FINAL
+#include <thread>
 #include <random>
 #include "field.h"
 #include "general.hpp"

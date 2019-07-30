@@ -1,4 +1,5 @@
-﻿#include "field.h"
+﻿//FINAL
+#include "field.h"
 #include "general.hpp"
 
 void GameField::CreateAnimBirth(const sf::Vector2f point, const int index)

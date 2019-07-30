@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿//FINAL
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <time.h>
@@ -17,9 +18,9 @@ enum Model { playerModA, playerModB, playerModC, playerModD, enemyModA, enemyMod
 #define CoefReloadPlayerModC 8
 #define CoefReloadPlayerModD 8
 
-#define CoefReloadEnemyModA 6
-#define CoefReloadEnemyModB 10
-#define CoefReloadEnemyModC 6
+#define CoefReloadEnemyModA 2
+#define CoefReloadEnemyModB 8
+#define CoefReloadEnemyModC 2
 #define CoefReloadEnemyModD 16
 
 namespace spaceTank
@@ -146,7 +147,12 @@ public:
 	spaceTank::MapPosition mapPos;
 	spaceTank::SettingsFM optFM;
 
-	void loadTank(Color col, Model mod, Direction dir, bool bonus)
+	void loadTank(
+		Color col = RED, 
+		Model mod = enemyModA, 
+		Direction dir = DOWN, 
+		bool bonus = false
+	)
 	{
 		srand((unsigned)time(NULL));
 
@@ -181,10 +187,10 @@ public:
 		case playerModB: optTank.step_speed = 0.f; optTank.coef_reload = CoefReloadPlayerModB; break;
 		case playerModC: optTank.step_speed = 0.f; optTank.coef_reload = CoefReloadPlayerModC; break;
 		case playerModD: optTank.step_speed = 0.f; optTank.coef_reload = CoefReloadPlayerModD; break;
-		case enemyModA: optTank.step_speed = 0.3f; optTank.coef_reload = CoefReloadEnemyModA; break;
-		case enemyModB: optTank.step_speed = 0.5f; optTank.coef_reload = CoefReloadEnemyModB; break;
-		case enemyModC: optTank.step_speed = 0.35f; optTank.coef_reload = CoefReloadEnemyModC; break;
-		case enemyModD: optTank.step_speed = 0.2f; optTank.coef_reload = CoefReloadEnemyModD; break;
+		case enemyModA: optTank.step_speed = 0.5f; optTank.coef_reload = CoefReloadEnemyModA; break;
+		case enemyModB: optTank.step_speed = 0.9f; optTank.coef_reload = CoefReloadEnemyModB; break;
+		case enemyModC: optTank.step_speed = 0.6f; optTank.coef_reload = CoefReloadEnemyModC; break;
+		case enemyModD: optTank.step_speed = 0.3f; optTank.coef_reload = CoefReloadEnemyModD; break;
 		}
 
 		return;

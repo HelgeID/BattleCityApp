@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿//FINAL
+#pragma once
 #include "animation.h"
 
 struct Time

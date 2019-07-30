@@ -1,4 +1,5 @@
-﻿#include "part_bricks_map.h"
+﻿//FINAL
+#include "part_bricks_map.h"
 #include "general.hpp"
 
 void Part_Bricks_Map::fillMap(const sf::RectangleShape &element)

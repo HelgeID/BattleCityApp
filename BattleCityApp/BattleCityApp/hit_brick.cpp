@@ -1,4 +1,5 @@
-﻿#include "block.hpp"
+﻿//FINAL
+#include "block.hpp"
 
 void Block::loadParamPartsBrick(std::vector<sf::RectangleShape> &partsBrickVec, Part_Bricks_Map &pbmap)
 {

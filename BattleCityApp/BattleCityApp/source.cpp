@@ -1,4 +1,5 @@
-﻿#include <SFML\Graphics.hpp>
+﻿//FINAL
+#include <SFML\Graphics.hpp>
 #include "game.h"
 #include "general.hpp"
 

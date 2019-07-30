@@ -1,4 +1,5 @@
-﻿#ifndef MAP_H
+﻿//FINAL
+#ifndef MAP_H
 #define MAP_H
 
 #include <SFML\System.hpp>

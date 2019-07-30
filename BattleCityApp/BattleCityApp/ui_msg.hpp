@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿//FINAL
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
@@ -214,8 +215,8 @@ inline void UIStageMSG::InitUIStageMSG()
 
 	//set position on display
 	msgStage->setPosObj(stagePosX, stagePosY);
-	msgNum1->setPosObj(stagePosX + sizeStage.x + 4, stagePosY);//todo
-	msgNum2->setPosObj(stagePosX + sizeStage.x + 12, stagePosY);//todo
+	msgNum1->setPosObj(stagePosX + sizeStage.x + 4, stagePosY);
+	msgNum2->setPosObj(stagePosX + sizeStage.x + 12, stagePosY);
 
 	std::stack<int> stack;
 	p_level <= 99 ? form_the_stack(stack, p_level) : 0;

@@ -1,4 +1,5 @@
-﻿#include "game.h"
+﻿//FINAL
+#include "game.h"
 #include "general.hpp"
 #include "events.h"
 #include "field.h"
@@ -31,7 +32,7 @@ auto Console_Note = []() {
 Game::Game(sf::RenderWindow &window)
 	: window(window), texture(new sf::Texture())
 {
-	window.setFramerateLimit(90);
+	window.setFramerateLimit(60);
 	window.setVerticalSyncEnabled(true);
 	loadTexture();
 	loadIcon();
@@ -56,7 +57,7 @@ void Game::InitParamsGame()
 	//p_showframe = true;
 
 	//show fps
-	p_showfps = true;
+	//p_showfps = true;
 
 	return;
 }
@@ -160,8 +161,8 @@ void Game::GameMenu()
 	//-------
 	BattleCity_Console_Choice_Number_Players();
 	BattleCity_Console_Choice_Level();
-	//if (IsConsoleVisible())
-	//	HideConsole();
+	if (IsConsoleVisible())
+		HideConsole();
 	return;
 }
 
@@ -203,8 +204,8 @@ void Game::GameLaunch()
 	//undying_hit_on_player = true;
 	//blocking_firing = true;
 
-	undying_emblem_hit_by_tank = true;
-	undying_emblem_boom_by_tank = true;
+	//undying_emblem_hit_by_tank = true;
+	//undying_emblem_boom_by_tank = true;
 	//undying_emblem_absence_players = true;
 
 	// Game PTRS

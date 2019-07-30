@@ -1,4 +1,5 @@
-﻿#include <thread>
+﻿//FINAL
+#include <thread>
 #include "field.h"
 #include "general.hpp"
 
@@ -484,7 +485,9 @@ void GameField::Load_Lifes_and_Stars()
 	secondPlayer->numStar() = star_counter2;
 
 	firstPlayer->numLife() ? PerfectionPlayer(*firstPlayer) : 0;
-	secondPlayer->numLife() ? PerfectionPlayer(*secondPlayer) : 0;
+
+	TwoPlayer() ?
+		secondPlayer->numLife() ? PerfectionPlayer(*secondPlayer) : 0 : 0;
 	return;
 }
 

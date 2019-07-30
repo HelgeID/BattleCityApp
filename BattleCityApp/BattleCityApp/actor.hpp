@@ -1,11 +1,12 @@
-﻿#pragma once
+﻿//FINAL
+#pragma once
 
 #include <SFML/Graphics.hpp>
 
 #include "general.hpp"
 #include "tank.hpp"
 
-#define PlayerSpeed (0.4f)
+#define PlayerSpeed (0.65f)
 #define PlayerRechargeTime (2.f)
 #define PlayerRechargeTime_Star (0.5f)
 

@@ -1,4 +1,5 @@
-﻿#ifndef CURTAIN_H
+﻿//FINAL
+#ifndef CURTAIN_H
 #define CURTAIN_H
 
 #include <SFML/Graphics.hpp>

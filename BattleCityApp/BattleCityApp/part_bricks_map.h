@@ -1,4 +1,5 @@
-﻿#ifndef PART_BRICKS_MAP_H
+﻿//FINAL
+#ifndef PART_BRICKS_MAP_H
 #define PART_BRICKS_MAP_H
 
 #include <SFML/Graphics.hpp>

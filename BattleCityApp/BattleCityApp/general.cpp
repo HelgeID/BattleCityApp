@@ -1,4 +1,5 @@
-﻿#include "general.hpp"
+﻿//FINAL
+#include "general.hpp"
 
 bool p_zoom = false;
 bool p_no_sound = false;

@@ -1,4 +1,5 @@
-﻿#ifndef EVENTS_H
+﻿//FINAL
+#ifndef EVENTS_H
 #define EVENTS_H
 
 #include <SFML\Graphics.hpp>

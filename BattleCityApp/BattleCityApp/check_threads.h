@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿//FINAL
+#pragma once
 
 #include <thread>
 #include <chrono>
@@ -31,7 +32,7 @@ class ManagerThreads
 	void indicateTread(std::vector<ThreadsCheck*>&, std::thread::id);
 
 public:
-	void startControlThreads(); //todo add to project
+	void startControlThreads();
 
 	template <typename T>
 	void callFuncInNewThread(Func<void, T> func, T obj, const int value = 0)

@@ -1,4 +1,5 @@
-﻿//READDATAOBJ
+﻿//FINAL
+//READDATAOBJ
 
 //The data should be as:
 //1) position on the map

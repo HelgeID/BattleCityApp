@@ -1,4 +1,5 @@
-﻿#include "field.h"
+﻿//FINAL
+#include "field.h"
 #include "general.hpp"
 #include <random>
 #include <iostream>

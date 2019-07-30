@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿//FINAL
+#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <vector>
@@ -31,7 +32,7 @@ public:
 	void setSpriteObj(const int posX, const int posY)
 	{
 		xRect = posX; yRect = posY;
-		sf::IntRect rectInit(posX, posY, this->size.x, this->size.y);
+		sf::IntRect rectInit(posX, posY, (int)this->size.x, (int)this->size.y);
 		sprite.setTextureRect(rectInit);
 		return;
 	}
@@ -49,8 +50,8 @@ public:
 		const sf::IntRect rectInit(
 			(int)sizeTexture.x - this->size.x,
 			(int)sizeTexture.y - this->size.y,
-			this->size.x,
-			this->size.y
+			static_cast<int>(this->size.x),
+			static_cast<int>(this->size.y)
 		);
 		sprite.setTextureRect(rectInit);
 		return;
@@ -62,8 +63,8 @@ public:
 		const sf::IntRect rectInit(
 			(int)sizeTexture.x - this->size.x,
 			(int)sizeTexture.y - this->size.y,
-			this->size.x,
-			this->size.y
+			static_cast<int>(this->size.x),
+			static_cast<int>(this->size.y)
 		);
 
 		const sf::IntRect rectObj = sprite.getTextureRect();

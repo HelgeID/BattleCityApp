@@ -1,4 +1,5 @@
-﻿#ifndef TAPE_BLOCKS_LEVEL_H
+﻿//FINAL
+#ifndef TAPE_BLOCKS_LEVEL_H
 #define TAPE_BLOCKS_LEVEL_H
 
 #include <SFML\Graphics.hpp>
@@ -139,7 +140,7 @@ void TakeTapeBlocksSpeciallyForLevel(LoadLevel* ptrll, int& value, const int i, 
 		valBlock = 2;
 	else if (allsumm == 70016)
 		valBlock = 3;
-	else if (allsumm == 108928)
+	else if (allsumm == 107840 || allsumm == 115080 || allsumm == 108928)
 		valBlock = 4;
 	else if (allsumm == 146124)
 		valBlock = 5;
